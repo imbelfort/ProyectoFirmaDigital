@@ -89,6 +89,7 @@ public class SendEmail {
                 System.out.println("SMTP: " + reader.readLine());
 
                 command = "MAIL FROM:" + user_emisor + "\r\n";
+                command = "MAIL FROM:<" + user_emisor.trim() + ">\r\n";
                 writer.writeBytes(command);
                 writer.flush();
                 System.out.println("SMTP: " + reader.readLine());
