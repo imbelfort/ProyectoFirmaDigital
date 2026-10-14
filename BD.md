@@ -388,8 +388,8 @@ INSERT INTO usuario (registro, ci, password, nombre, apellidos, email, telefono,
 ('1001', '1234567', '1234567', 'Reinerio', 'Vargas', 'vicerrector@uagrm.edu.bo', '71000001', 'VICERRECTOR', 'Vicerrectorado', 'Vicerrector General'),
 ('1002', '2345678', '2345678', 'Carlos', 'Mendoza', 'encargado.firma@uagrm.edu.bo', '71000002', 'ENCARGADO', 'Despacho Vicerrectorado', 'Encargado de Despacho y Firma'),
 ('1045', '3456789', '3456789', 'Alberto', 'Guzman', 'aguzman@uagrm.edu.bo', '71000003', 'DOCENTE', 'Facultad de Ingenieria en Ciencias de la Computacion', 'Docente Titular'),
-('219064748', '4567890', '4567890', 'Juan', 'Perez Rodriguez', 'juan.perez@alu.uagrm.edu.bo', '71000004', 'ALUMNO', 'Ingenieria Informatica', 'Estudiante Regular'),
-('220015482', '5678901', '5678901', 'Maria', 'Lopez Flores', 'maria.lopez@alu.uagrm.edu.bo', '71000005', 'ALUMNO', 'Ingenieria en Sistemas', 'Estudiante Regular');
+('219064748', '4567890', '4567890', 'Juan', 'Perez Rodriguez', 'juan.perez@alu.uagrm.edu.bo', '71000004', 'ALUMNO', 'Facultad de Ingenieria en Ciencias de la Computacion', 'Ingenieria Informatica'),
+('220015482', '5678901', '5678901', 'Maria', 'Lopez Flores', 'maria.lopez@alu.uagrm.edu.bo', '71000005', 'ALUMNO', 'Facultad de Ingenieria en Ciencias de la Computacion', 'Ingenieria en Sistemas');
 
 INSERT INTO autoridad (id_autoridad, tipo_autoridad, resolucion_nombramiento, fecha_posesion) VALUES
 (1, 'VICERRECTOR', 'RES-VR-2022-001', '2022-01-10'),

@@ -12,13 +12,14 @@
 ## CU1. Gestion de Usuarios (Vicerrector, Encargado, Docentes, Alumnos)
 - **usuario help**
 - **usuario listar**
-- **usuario agregar** `[nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo]`
-  - *Ejemplo Alumno:* `usuario agregar [Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;Informatica;Estudiante]`
-  - *Ejemplo Docente:* `usuario agregar [Alberto;Guzman;3456789;1045;aguzman@uagrm.edu.bo;DOCENTE;71000003;Informatica;Docente Titular]`
-  - *Ejemplo Autoridad:* `usuario agregar [Carlos;Mendoza;2345678;1002;cmendoza@uagrm.edu.bo;ENCARGADO;71000002;Despacho;Encargado]`
-  - *Nota:* La contraseña se genera automáticamente igual al CI. No lleva letras en el registro.
+- **usuario agregar** `[nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo]`
+  - *Ejemplo Alumno:* `usuario agregar [Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;FICCT;Ingenieria Informatica]`
+    *(Nota: Los alumnos **no tienen cargo**, se registra directamente su Facultad y la Carrera que estudian).*
+  - *Ejemplo Docente:* `usuario agregar [Alberto;Guzman;3456789;1045;aguzman@uagrm.edu.bo;DOCENTE;71000003;FICCT;Docente Titular]`
+  - *Ejemplo Autoridad:* `usuario agregar [Carlos;Mendoza;2345678;1002;cmendoza@uagrm.edu.bo;ENCARGADO;71000002;Despacho Vicerrectorado;Encargado de Firma]`
+  - *Nota de Acceso:* La contraseña se genera automáticamente igual al CI. El registro o código es puramente numérico (sin letras).
   - *Roles permitidos:* `VICERRECTOR`, `ENCARGADO`, `DOCENTE`, `ALUMNO`, `ADMINISTRATIVO`.
-- **usuario modificar** `[id_usuario;nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo;estado]`
+- **usuario modificar** `[id_usuario;nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo;estado]`
 - **usuario eliminar** `[id_usuario]`
 
 ---

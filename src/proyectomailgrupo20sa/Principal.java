@@ -1,6 +1,7 @@
 package proyectomailgrupo20sa;
 
 import Comunication.Home;
+import Comunication.HtmlBuilder;
 import Utils.Email;
 import Comunication.SendEmail;
 import Database.InicializarDB;
@@ -199,15 +200,18 @@ public class Principal extends javax.swing.JFrame {
         String subject = tf_subject.getText().trim();
 
         if (mailfrom.isEmpty() || rcptto.isEmpty() || subject.isEmpty()) {
-            String errorMsg =
-                    "<html><body style='font-family: Arial; padding: 20px;'>" +
-                    "<h2 style='color: #d9534f;'>Error</h2>" +
-                    "<p style='font-size: 14px;'>Por favor complete todos los campos:</p>" +
-                    "<ul>" +
-                    "<li><b>MAIL FROM:</b> Correo del remitente</li>" +
-                    "<li><b>RCPT TO:</b> Correo del destinatario</li>" +
-                    "<li><b>SUBJECT:</b> Comando o asunto. Ejemplo: usuario listar, help, categoria listar</li>" +
-                    "</ul></body></html>";
+            StringBuilder faltantes = new StringBuilder();
+            if (mailfrom.isEmpty()) faltantes.append("• <b>MAIL FROM:</b> Correo del remitente (ej. usuario@uagrm.edu.bo)<br>");
+            if (rcptto.isEmpty()) faltantes.append("• <b>RCPT TO:</b> Correo del servidor receptor (ej. grupo20sa@tecnoweb.org.bo)<br>");
+            if (subject.isEmpty()) faltantes.append("• <b>SUBJECT:</b> Comando a ejecutar (ej. usuario listar, tramite listar, help)<br>");
+
+            String errorMsg = HtmlBuilder.generateDetailedError(
+                    subject.isEmpty() ? "(vacío)" : subject,
+                    "Campos Obligatorios Incompletos en el Panel",
+                    "No se puede enviar el comando porque faltan los siguientes campos obligatorios:<br>" + faltantes.toString(),
+                    "Completar todos los campos antes de hacer clic en 'Enviar'",
+                    "MAIL FROM: usuario@uagrm.edu.bo | RCPT TO: grupo20sa@tecnoweb.org.bo | SUBJECT: usuario listar"
+            );
 
             Home.mostraRespuesta(errorMsg);
             return;
@@ -215,10 +219,9 @@ public class Principal extends javax.swing.JFrame {
 
         String processingMsg =
                 "<html><body style='font-family: Arial; padding: 20px;'>" +
-                "<h2 style='color: #5bc0de;'>Procesando comando...</h2>" +
+                "<h3 style='color: #0275d8;'>[PROCESANDO] Comando en ejecucion...</h3>" +
                 "<p><b>Comando:</b> " + subject + "</p>" +
-                "<p><b>De:</b> " + mailfrom + "</p>" +
-                "<p><b>Para:</b> " + rcptto + "</p>" +
+                "<p><b>De:</b> " + mailfrom + " &rarr; <b>Para:</b> " + rcptto + "</p>" +
                 "</body></html>";
 
         Home.mostraRespuesta(processingMsg);
@@ -230,11 +233,13 @@ public class Principal extends javax.swing.JFrame {
 
             System.out.println("[OK] Comando procesado y correo enviado desde el panel grafico");
         } catch (Exception e) {
-            String errorMsg =
-                    "<html><body style='font-family: Arial; padding: 20px;'>" +
-                    "<h2 style='color: #d9534f;'>Error al procesar</h2>" +
-                    "<p>" + e.getMessage() + "</p>" +
-                    "</body></html>";
+            String errorMsg = HtmlBuilder.generateDetailedError(
+                    subject,
+                    "Error de Conexión o Envío de Correo",
+                    e.getMessage() != null ? e.getMessage() : e.toString(),
+                    "Verifique la conexión de red o el servidor SMTP",
+                    "Envie un comando simple como: help  ó  usuario listar"
+            );
 
             Home.mostraRespuesta(errorMsg);
             e.printStackTrace();

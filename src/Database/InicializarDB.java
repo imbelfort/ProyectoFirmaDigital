@@ -423,8 +423,13 @@ public class InicializarDB {
                     "WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE registro = '1045')",
 
                     "INSERT INTO usuario (registro, ci, password, nombre, apellidos, email, telefono, rol, unidad_academica, cargo) " +
-                    "SELECT '219064748', '4567890', '4567890', 'Juan', 'Perez Rodriguez', 'juan.perez@alu.uagrm.edu.bo', '71000004', 'ALUMNO', 'Ingenieria Informatica', 'Estudiante Regular' " +
+                    "SELECT '219064748', '4567890', '4567890', 'Juan', 'Perez Rodriguez', 'juan.perez@alu.uagrm.edu.bo', '71000004', 'ALUMNO', 'Facultad de Ingenieria en Ciencias de la Computacion (FICCT)', 'Ingenieria Informatica' " +
                     "WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE registro = '219064748')",
+
+                    "INSERT INTO alumno (id_alumno, carrera, facultad, semestre, estado_academico) " +
+                    "SELECT id_usuario, 'Ingenieria Informatica', 'Facultad de Ingenieria en Ciencias de la Computacion (FICCT)', 8, 'REGULAR' " +
+                    "FROM usuario WHERE registro = '219064748' " +
+                    "ON CONFLICT (id_alumno) DO NOTHING",
 
                     "INSERT INTO tipo_tramite (codigo, nombre, descripcion, tiempo_sla_horas, costo_bs) " +
                     "SELECT 'DIPLOMA_ACAD', 'Diploma Academico', 'Emision y firma digital de Diploma Academico de Grado', 72, 350.00 " +

@@ -2,6 +2,7 @@ package Services;
 
 import DAO.CertificadoDAO;
 import Models.CertificadoOficial;
+import Utils.ParamValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,13 +17,12 @@ public class CertificadoService {
     }
 
     public void generarCertificado(List<String> params) throws SQLException {
-        // [id_tramite; id_firma; titulo]
-        if (params.size() < 3) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: certificado generar [id_tramite;id_firma;titulo]");
-        }
-        int idTramite = Integer.parseInt(params.get(0).trim());
-        int idFirma = Integer.parseInt(params.get(1).trim());
-        String titulo = params.get(2).trim();
+        String sintaxis = "certificado generar [id_tramite;id_firma;titulo]";
+        String ejemplo = "certificado generar [1;1;Certificado Oficial de Calificaciones]";
+
+        int idTramite = ParamValidator.requireInt(params, 0, "id_tramite", sintaxis, ejemplo);
+        int idFirma = ParamValidator.requireInt(params, 1, "id_firma", sintaxis, ejemplo);
+        String titulo = ParamValidator.requireString(params, 2, "titulo", sintaxis, ejemplo);
 
         String uuid = UUID.randomUUID().toString();
         String portalUrl = "http://validar.uagrm.edu.bo/cert/" + uuid;
@@ -45,6 +45,13 @@ public class CertificadoService {
     }
 
     public String[] consultarCertificado(String codigo) throws SQLException {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Falta el código de verificación del certificado.\n" +
+                    "• Sintaxis requerida: certificado consultar [codigo_verificacion]\n" +
+                    "• Ejemplo válido: certificado consultar [4f2a1b9c-8d3e-4f5a-b6c7-d8e9f0a1b2c3]"
+            );
+        }
         return certDAO.consultarPorCodigo(codigo.trim());
     }
 

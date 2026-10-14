@@ -2,6 +2,7 @@ package Services;
 
 import DAO.FirmaDAO;
 import Models.FirmaDigital;
+import Utils.ParamValidator;
 
 import java.sql.SQLException;
 import java.util.Base64;
@@ -16,13 +17,12 @@ public class FirmaService {
     }
 
     public void ejecutarFirma(List<String> params, String tipoFirma) throws SQLException {
-        // [id_tramite; id_firmante; numero_certificado]
-        if (params.size() < 3) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: firma " + tipoFirma.toLowerCase() + " [id_tramite;id_firmante;numero_certificado]");
-        }
-        int idTramite = Integer.parseInt(params.get(0).trim());
-        int idFirmante = Integer.parseInt(params.get(1).trim());
-        String cert = params.get(2).trim();
+        String sintaxis = "firma " + tipoFirma.toLowerCase() + " [id_tramite;id_firmante;numero_certificado]";
+        String ejemplo = "firma " + tipoFirma.toLowerCase() + " [1;1;CERT-ADSIB-2026-991]";
+
+        int idTramite = ParamValidator.requireInt(params, 0, "id_tramite", sintaxis, ejemplo);
+        int idFirmante = ParamValidator.requireInt(params, 1, "id_firmante", sintaxis, ejemplo);
+        String cert = ParamValidator.requireString(params, 2, "numero_certificado", sintaxis, ejemplo);
 
         String hash = Long.toHexString(System.currentTimeMillis()) + "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
         String valorFirma = Base64.getEncoder().encodeToString(("DIGITAL-SIGNATURE-" + idTramite + "-" + idFirmante + "-" + System.currentTimeMillis()).getBytes());

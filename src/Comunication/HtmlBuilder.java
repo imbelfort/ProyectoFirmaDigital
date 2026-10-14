@@ -22,8 +22,8 @@ public class HtmlBuilder {
         "EMAIL",
         "TELEFONO",
         "ROL",
-        "UNIDAD_ACADEMICA",
-        "CARGO",
+        "FACULTAD_O_UNIDAD",
+        "CARRERA_O_CARGO",
         "ESTADO"
     };
 
@@ -630,6 +630,65 @@ private static String detectarMimeBase64(String base64) {
 }
 
     
+    public static String generateDetailedError(
+            String comandoRecibido,
+            String causaPrincipal,
+            String detalleFallo,
+            String sintaxisCorrecta,
+            String ejemploValido
+    ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div style='font-family: Arial, sans-serif; max-width: 800px; margin: 15px auto; border: 2px solid #D32F2F; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>");
+
+        // Header
+        sb.append("<div style='background-color: #D32F2F; color: white; padding: 12px 18px;'>");
+        sb.append("<h2 style='margin: 0; font-size: 18px; font-weight: bold;'>[ERROR EN COMANDO] — ").append(escapeHtml(causaPrincipal)).append("</h2>");
+        sb.append("<span style='font-size: 12px; opacity: 0.9;'>Sistema de Firma Digital del Vicerrectorado (Grupo 20 SA)</span>");
+        sb.append("</div>");
+
+        // Body
+        sb.append("<div style='background-color: #FFFFFF; padding: 18px;'>");
+
+        // Comando recibido
+        if (comandoRecibido != null && !comandoRecibido.trim().isEmpty()) {
+            sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #424242; font-size: 13px;'>Comando recibido:</p>");
+            sb.append("<div style='background: #FFEBEE; color: #C62828; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 13px; margin-bottom: 14px; border-left: 4px solid #D32F2F;'>");
+            sb.append(escapeHtml(comandoRecibido));
+            sb.append("</div>");
+        }
+
+        // Detalle del fallo
+        sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #D32F2F; font-size: 13px;'>¿Qué falló exactamente?:</p>");
+        sb.append("<div style='background: #FFF8E1; color: #E65100; padding: 10px 14px; border-radius: 6px; font-size: 13px; line-height: 1.5; margin-bottom: 14px; border-left: 4px solid #FFA000; white-space: pre-wrap;'>");
+        sb.append(escapeHtml(detalleFallo));
+        sb.append("</div>");
+
+        // Sintaxis esperada
+        if (sintaxisCorrecta != null && !sintaxisCorrecta.trim().isEmpty()) {
+            sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #2E7D32; font-size: 13px;'>Sintaxis requerida:</p>");
+            sb.append("<div style='background: #E8F5E9; color: #2E7D32; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 13px; margin-bottom: 14px; border-left: 4px solid #4CAF50;'>");
+            sb.append(escapeHtml(sintaxisCorrecta));
+            sb.append("</div>");
+        }
+
+        // Ejemplo válido
+        if (ejemploValido != null && !ejemploValido.trim().isEmpty()) {
+            sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #1565C0; font-size: 13px;'>Ejemplo de cómo debe enviarse:</p>");
+            sb.append("<div style='background: #E3F2FD; color: #0D47A1; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 13px; margin-bottom: 14px; border-left: 4px solid #1E88E5;'>");
+            sb.append(escapeHtml(ejemploValido));
+            sb.append("</div>");
+        }
+
+        sb.append("<p style='margin: 10px 0 0 0; font-size: 12px; color: #757575; text-align: center;'>");
+        sb.append("Envie <b>help</b> para consultar la lista de todos los comandos disponibles.");
+        sb.append("</p>");
+
+        sb.append("</div>");
+        sb.append("</div>");
+
+        return insertInHtml(sb.toString());
+    }
+
     private static String escapeHtml(String value) {
         if (value == null) {
             return "";

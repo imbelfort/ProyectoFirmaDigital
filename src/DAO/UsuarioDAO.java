@@ -41,6 +41,10 @@ public class UsuarioDAO {
                     usuario.setIdUsuario(rs.getInt(1));
                 }
             }
+
+            if (usuario.getIdUsuario() > 0) {
+                sincronizarPerfilEspecifico(con, usuario);
+            }
         }
     }
 
@@ -112,6 +116,7 @@ public class UsuarioDAO {
             ps.setInt(11, usuario.getIdUsuario());
 
             ps.executeUpdate();
+            sincronizarPerfilEspecifico(con, usuario);
         }
     }
 
@@ -196,5 +201,48 @@ public class UsuarioDAO {
                 rs.getString("cargo") != null ? rs.getString("cargo") : "",
                 rs.getString("estado") != null ? rs.getString("estado") : ""
         };
+    }
+
+    private void sincronizarPerfilEspecifico(Connection con, Usuario usuario) {
+        if (usuario.getRol() == null) return;
+        String rol = usuario.getRol().trim().toUpperCase();
+
+        try {
+            if (rol.equals("ALUMNO")) {
+                // Para el alumno: unidad_academica almacena su facultad y cargo almacena la carrera que estudia
+                String sql = "INSERT INTO alumno (id_alumno, carrera, facultad, semestre, estado_academico) " +
+                             "VALUES (?, ?, ?, 1, 'REGULAR') " +
+                             "ON CONFLICT (id_alumno) DO UPDATE SET carrera = EXCLUDED.carrera, facultad = EXCLUDED.facultad";
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, usuario.getIdUsuario());
+                    ps.setString(2, usuario.getCargo() != null ? usuario.getCargo() : "CARRERA NO ASIGNADA");
+                    ps.setString(3, usuario.getUnidadAcademica() != null ? usuario.getUnidadAcademica() : "FACULTAD NO ASIGNADA");
+                    ps.executeUpdate();
+                }
+            } else if (rol.equals("DOCENTE")) {
+                String sql = "INSERT INTO docente (id_docente, facultad, departamento, categoria_docente) " +
+                             "VALUES (?, ?, ?, ?) " +
+                             "ON CONFLICT (id_docente) DO UPDATE SET facultad = EXCLUDED.facultad, categoria_docente = EXCLUDED.categoria_docente";
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, usuario.getIdUsuario());
+                    ps.setString(2, usuario.getUnidadAcademica() != null ? usuario.getUnidadAcademica() : "UAGRM");
+                    ps.setString(3, "Docencia");
+                    ps.setString(4, usuario.getCargo() != null ? usuario.getCargo() : "DOCENTE");
+                    ps.executeUpdate();
+                }
+            } else if (rol.equals("VICERRECTOR") || rol.equals("ENCARGADO") || rol.equals("ADMINISTRATIVO")) {
+                String sql = "INSERT INTO autoridad (id_autoridad, tipo_autoridad, resolucion_nombramiento, fecha_posesion) " +
+                             "VALUES (?, ?, ?, CURRENT_DATE) " +
+                             "ON CONFLICT (id_autoridad) DO UPDATE SET tipo_autoridad = EXCLUDED.tipo_autoridad";
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, usuario.getIdUsuario());
+                    ps.setString(2, rol);
+                    ps.setString(3, "RES-" + usuario.getRegistro());
+                    ps.executeUpdate();
+                }
+            }
+        } catch (SQLException ignored) {
+            // No bloquea la creación/actualización del usuario principal si la tabla auxiliar tiene algún detalle
+        }
     }
 }

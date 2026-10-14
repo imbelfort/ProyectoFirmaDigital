@@ -2,6 +2,7 @@ package Services;
 
 import DAO.SlaDAO;
 import Models.MonitoreoSLA;
+import Utils.ParamValidator;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -34,13 +35,18 @@ public class SlaService {
         return slaDAO.listAll();
     }
 
-    public void verificarSla(int idTramite) throws SQLException {
+    public void verificarSla(List<String> params) throws SQLException {
+        String sintaxis = "sla verificar [id_tramite]";
+        String ejemplo = "sla verificar [1]";
+
+        int idTramite = ParamValidator.requireInt(params, 0, "id_tramite", sintaxis, ejemplo);
         slaDAO.verificarYActualizarSla(idTramite);
     }
 
     public String getComandosSla() {
         return "Comandos Monitoreo SLA 72 Horas Habiles (CU7):\n" +
                 "- sla listar\n" +
-                "- sla verificar [id_tramite]";
+                "- sla verificar [id_tramite]\n\n" +
+                "El sistema calcula las 72 horas hábiles y genera alertas de vencimiento.";
     }
 }

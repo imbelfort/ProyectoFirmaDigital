@@ -5,10 +5,12 @@ import Interfaces.ITokenCasoUsoEventListener;
 import Services.*;
 import Utils.Email;
 import Utils.Interpreter;
+import Utils.ParamValidator;
 import Utils.Token;
 import proyectomailgrupo20sa.Principal;
 
 import javax.swing.SwingUtilities;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Home {
@@ -48,6 +50,12 @@ public class Home {
 
         String subjectText = email.getSubject() != null ? email.getSubject().trim() : "";
 
+        // Si el asunto está completamente vacío o es directamente help
+        if (subjectText.equalsIgnoreCase("help") || subjectText.equalsIgnoreCase("ayuda")) {
+            mostrarYEnviarHELPGeneral(email, respuesta);
+            return;
+        }
+
         Interpreter interpreter = new Interpreter(subjectText, email.getFrom());
         interpreter.setListener(new ITokenCasoUsoEventListener() {
 
@@ -69,8 +77,9 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Usuario modificado exitosamente", "Lista de Usuarios", HtmlBuilder.HEADERS_USER, usuarioService.listarUsuarios());
                             break;
                         case Token.ELIMINAR:
-                            usuarioService.eliminarUsuario(Integer.parseInt(event.getParams().get(0).trim()));
-                            enviarMensajeYTabla(email, respuesta, "Usuario eliminado exitosamente", "Lista de Usuarios", HtmlBuilder.HEADERS_USER, usuarioService.listarUsuarios());
+                            int id = ParamValidator.requireInt(event.getParams(), 0, "id_usuario", "usuario eliminar [id_usuario]", "usuario eliminar [4]");
+                            usuarioService.eliminarUsuario(id);
+                            enviarMensajeYTabla(email, respuesta, "Usuario con ID " + id + " eliminado exitosamente", "Lista de Usuarios", HtmlBuilder.HEADERS_USER, usuarioService.listarUsuarios());
                             break;
                         case Token.HELP:
                         default:
@@ -78,7 +87,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "usuario");
                 }
             }
 
@@ -99,8 +108,9 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Delegacion actualizada exitosamente", "Lista de Delegaciones", HtmlBuilder.HEADERS_DELEGACION, delegacionService.listarDelegaciones());
                             break;
                         case Token.ELIMINAR:
-                            delegacionService.eliminarDelegacion(Integer.parseInt(event.getParams().get(0).trim()));
-                            enviarMensajeYTabla(email, respuesta, "Delegacion eliminada exitosamente", "Lista de Delegaciones", HtmlBuilder.HEADERS_DELEGACION, delegacionService.listarDelegaciones());
+                            int id = ParamValidator.requireInt(event.getParams(), 0, "id_delegacion", "delegacion eliminar [id_delegacion]", "delegacion eliminar [1]");
+                            delegacionService.eliminarDelegacion(id);
+                            enviarMensajeYTabla(email, respuesta, "Delegacion con ID " + id + " eliminada exitosamente", "Lista de Delegaciones", HtmlBuilder.HEADERS_DELEGACION, delegacionService.listarDelegaciones());
                             break;
                         case Token.HELP:
                         default:
@@ -108,7 +118,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "delegacion");
                 }
             }
 
@@ -121,7 +131,11 @@ public class Home {
                             break;
                         case Token.AGREGAR:
                             indicadorService.crearIndicador(event.getParams());
-                            enviarMensajeYTabla(email, respuesta, "Indicador registrado", "Indicadores de Gestion", HtmlBuilder.HEADERS_INDICADOR, indicadorService.listarIndicadores());
+                            enviarMensajeYTabla(email, respuesta, "Indicador registrado exitosamente", "Indicadores de Gestion", HtmlBuilder.HEADERS_INDICADOR, indicadorService.listarIndicadores());
+                            break;
+                        case Token.MODIFICAR:
+                            indicadorService.modificarIndicador(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Indicador actualizado exitosamente", "Indicadores de Gestion", HtmlBuilder.HEADERS_INDICADOR, indicadorService.listarIndicadores());
                             break;
                         case Token.HELP:
                         default:
@@ -129,7 +143,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "indicador");
                 }
             }
 
@@ -150,8 +164,9 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Tramite modificado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
                             break;
                         case Token.ELIMINAR:
-                            tramiteService.eliminarTramite(Integer.parseInt(event.getParams().get(0).trim()));
-                            enviarMensajeYTabla(email, respuesta, "Tramite eliminado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
+                            int id = ParamValidator.requireInt(event.getParams(), 0, "id_tramite", "tramite eliminar [id_tramite]", "tramite eliminar [1]");
+                            tramiteService.eliminarTramite(id);
+                            enviarMensajeYTabla(email, respuesta, "Tramite con ID " + id + " eliminado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
                             break;
                         case Token.HELP:
                         default:
@@ -159,7 +174,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "tramite");
                 }
             }
 
@@ -184,7 +199,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "documento");
                 }
             }
 
@@ -205,7 +220,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "tipo_tramite");
                 }
             }
 
@@ -227,7 +242,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "flujo");
                 }
             }
 
@@ -253,7 +268,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "firma");
                 }
             }
 
@@ -274,7 +289,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "despacho");
                 }
             }
 
@@ -291,11 +306,12 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Certificado Oficial con QR generado exitosamente", "Certificados Emitidos", HtmlBuilder.HEADERS_CERTIFICADO, certificadoService.listarCertificados());
                             break;
                         case Token.CONSULTAR:
-                            String[] cert = certificadoService.consultarCertificado(event.getParams().get(0).trim());
+                            String cod = ParamValidator.requireString(event.getParams(), 0, "codigo_verificacion", "certificado consultar [codigo_verificacion]", "certificado consultar [4f2a1b9c-8d3e-4f5a-b6c7-d8e9f0a1b2c3]");
+                            String[] cert = certificadoService.consultarCertificado(cod);
                             if (cert != null) {
-                                enviarRespuesta(email, respuesta, "Certificado Oficial Valido", HtmlBuilder.HEADERS_CERTIFICADO, List.of(cert));
+                                enviarRespuesta(email, respuesta, "Certificado Oficial Valido", HtmlBuilder.HEADERS_CERTIFICADO, java.util.Collections.singletonList(cert));
                             } else {
-                                enviarMensaje(email, respuesta, "No se encontro ningun certificado con el codigo de verificacion indicado.");
+                                throw new SQLException("No se encontró ningún certificado con el código de verificación: '" + cod + "'. Verifique el código.");
                             }
                             break;
                         case Token.HELP:
@@ -304,7 +320,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "certificado");
                 }
             }
 
@@ -312,12 +328,20 @@ public class Home {
             public void portal(TokenEvent event) {
                 try {
                     switch (event.getAction()) {
+                        case Token.LISTAR:
+                            enviarRespuesta(email, respuesta, "Portales de Seguimiento Estudiantil Activos", HtmlBuilder.HEADERS_PORTAL, portalService.listarPortales());
+                            break;
+                        case Token.AGREGAR:
+                            portalService.habilitarPortal(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Portal de seguimiento habilitado exitosamente", "Portales de Seguimiento", HtmlBuilder.HEADERS_PORTAL, portalService.listarPortales());
+                            break;
                         case Token.CONSULTAR:
-                            String[] portalInfo = portalService.consultarPorPin(event.getParams().get(0).trim());
+                            String pin = ParamValidator.requireString(event.getParams(), 0, "pin_seguimiento", "portal consultar [pin_seguimiento]", "portal consultar [PIN-8841]");
+                            String[] portalInfo = portalService.consultarPorPin(pin);
                             if (portalInfo != null) {
-                                enviarRespuesta(email, respuesta, "Seguimiento de Tramite Estudiantil", HtmlBuilder.HEADERS_PORTAL, List.of(portalInfo));
+                                enviarRespuesta(email, respuesta, "Seguimiento de Tramite Estudiantil", HtmlBuilder.HEADERS_PORTAL, java.util.Collections.singletonList(portalInfo));
                             } else {
-                                enviarMensaje(email, respuesta, "PIN de seguimiento no valido o no registrado.");
+                                throw new SQLException("No se encontró ningún trámite con el PIN de seguimiento: '" + pin + "'. Verifique el código.");
                             }
                             break;
                         case Token.HELP:
@@ -326,7 +350,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "portal");
                 }
             }
 
@@ -339,9 +363,8 @@ public class Home {
                             enviarRespuesta(email, respuesta, "Monitoreo de Tiempos y Alertas SLA (72 Horas)", HtmlBuilder.HEADERS_SLA, slaService.listarMonitoreo());
                             break;
                         case Token.VERIFICAR:
-                            int idTramite = Integer.parseInt(event.getParams().get(0).trim());
-                            slaService.verificarSla(idTramite);
-                            enviarMensajeYTabla(email, respuesta, "SLA verificado y actualizado", "Monitoreo SLA", HtmlBuilder.HEADERS_SLA, slaService.listarMonitoreo());
+                            slaService.verificarSla(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "SLA verificado y actualizado exitosamente", "Monitoreo SLA", HtmlBuilder.HEADERS_SLA, slaService.listarMonitoreo());
                             break;
                         case Token.HELP:
                         default:
@@ -349,7 +372,7 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "sla");
                 }
             }
 
@@ -373,18 +396,44 @@ public class Home {
                             break;
                     }
                 } catch (Exception ex) {
-                    manejarExcepcion(email, respuesta, ex);
+                    manejarExcepcion(email, respuesta, ex, subjectText, "reporte");
                 }
             }
 
             @Override
             public void error(TokenEvent event) {
-                mostrarYEnviarHELPGeneral(email, respuesta);
+                String cmd = event.getParams().size() > 0 ? event.getParams().get(0) : subjectText;
+                String lexeme = event.getParams().size() > 1 ? event.getParams().get(1) : "término desconocido";
+
+                String htmlError = HtmlBuilder.generateDetailedError(
+                        cmd,
+                        "Error de Sintaxis en Comando",
+                        "El término o palabra '" + lexeme + "' no es un comando o acción reconocida por el sistema.\n"
+                        + "Verifique que la entidad y la acción estén escritas correctamente (en minúsculas y sin acentos).",
+                        "<caso_de_uso> <accion> [parametro1;parametro2;...]",
+                        "usuario listar  ó  tramite listar  ó  help"
+                );
+                mostraRespuesta(htmlError);
+                respuesta.responseUser(email, htmlError);
             }
 
             @Override
             public void posibleserrores(TokenEvent event) {
-                mostrarYEnviarHELPGeneral(email, respuesta);
+                if (subjectText.equalsIgnoreCase("help") || subjectText.equalsIgnoreCase("ayuda")) {
+                    mostrarYEnviarHELPGeneral(email, respuesta);
+                    return;
+                }
+
+                String htmlError = HtmlBuilder.generateDetailedError(
+                        subjectText,
+                        "Comando No Reconocido",
+                        "No se reconoce la entidad o caso de uso en el comando enviado: '" + subjectText + "'.\n"
+                        + "Las entidades disponibles son: usuario, delegacion, indicador, tramite, documento, tipo_tramite, flujo, firma, despacho, certificado, portal, sla, reporte.",
+                        "<entidad> <accion> [parametros]",
+                        "usuario listar  ó  tramite agregar [...]  ó  help"
+                );
+                mostraRespuesta(htmlError);
+                respuesta.responseUser(email, htmlError);
             }
         });
 
@@ -405,22 +454,157 @@ public class Home {
         respuesta.responseUser(email, s);
     }
 
-    private static void enviarMensaje(Email email, SendEmail respuesta, String mensaje) {
-        String html = "<html><body style='font-family: Arial; padding: 20px;'>" +
-                "<h3 style='color: #0275d8;'>" + mensaje + "</h3>" +
-                "</body></html>";
-        mostraRespuesta(html);
-        respuesta.responseUser(email, html);
+    private static void manejarExcepcion(Email email, SendEmail respuesta, Exception ex, String comandoOriginal, String casoUso) {
+        String causaPrincipal;
+        String detalleFallo;
+        String sintaxisCorrecta = obtenerSintaxisCasoUso(casoUso);
+        String ejemploValido = obtenerEjemploCasoUso(casoUso);
+
+        if (ex instanceof IllegalArgumentException) {
+            causaPrincipal = "Parámetros incorrectos o faltantes";
+            detalleFallo = ex.getMessage();
+        } else if (ex instanceof SQLException) {
+            String sqlMsg = ex.getMessage() != null ? ex.getMessage() : "";
+            causaPrincipal = "Restricción de Base de Datos";
+
+            if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_tramite_solicitante")) {
+                detalleFallo = "El usuario solicitante especificado no existe en la base de datos de usuarios.\n"
+                        + "Debe ingresar el ID de un usuario existente. Verifique los IDs con 'usuario listar'.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_tramite_tipo")) {
+                detalleFallo = "El tipo de trámite especificado no existe en el catálogo.\n"
+                        + "Verifique los tipos disponibles con 'tipo_tramite listar'.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_delegacion_titular")) {
+                detalleFallo = "La autoridad titular especificada no existe en la base de datos de usuarios.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_delegacion_delegado")) {
+                detalleFallo = "La autoridad delegada especificada no existe en la base de datos de usuarios.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && (sqlMsg.contains("fk_doc_tramite") || sqlMsg.contains("fk_flujo_tramite") || sqlMsg.contains("fk_firma_tramite") || sqlMsg.contains("fk_despacho_tramite") || sqlMsg.contains("fk_cert_tramite"))) {
+                detalleFallo = "El ID de trámite especificado no existe en el sistema.\n"
+                        + "Verifique los trámites registrados mediante 'tramite listar'.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_firma_firmante")) {
+                detalleFallo = "El usuario firmante especificado no existe en la base de datos de usuarios.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_despacho_usuario")) {
+                detalleFallo = "El usuario despachador especificado no existe en la base de datos de usuarios.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("ci")) {
+                detalleFallo = "El C.I. ingresado ya pertenece a otro usuario registrado. Cada usuario debe tener un C.I. único.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("registro")) {
+                detalleFallo = "El Registro o Código numérico ya pertenece a otro usuario registrado.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("email")) {
+                detalleFallo = "El correo electrónico ingresado ya está asociado a otra cuenta.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("codigo_tramite")) {
+                detalleFallo = "El código de trámite ya existe. Cada trámite debe tener un código numérico único.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("numero_despacho")) {
+                detalleFallo = "El número de despacho ya existe.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("codigo_verificacion")) {
+                detalleFallo = "El código de verificación ya existe.";
+            } else {
+                detalleFallo = sqlMsg;
+            }
+        } else {
+            causaPrincipal = "Error durante el procesamiento";
+            detalleFallo = ex.getMessage() != null ? ex.getMessage() : ex.toString();
+        }
+
+        String htmlError = HtmlBuilder.generateDetailedError(
+                comandoOriginal,
+                causaPrincipal,
+                detalleFallo,
+                sintaxisCorrecta,
+                ejemploValido
+        );
+
+        mostraRespuesta(htmlError);
+        respuesta.responseUser(email, htmlError);
     }
 
-    private static void manejarExcepcion(Email email, SendEmail respuesta, Exception ex) {
-        String html = "<html><body style='font-family: Arial; padding: 20px;'>" +
-                "<h3 style='color: #d9534f;'>Error al procesar comando</h3>" +
-                "<p>" + ex.getMessage() + "</p>" +
-                "<p>Use <b>help</b> para ver la sintaxis de los comandos disponibles.</p>" +
-                "</body></html>";
-        mostraRespuesta(html);
-        respuesta.responseUser(email, html);
+    private static String obtenerSintaxisCasoUso(String casoUso) {
+        if (casoUso == null) return "<caso_de_uso> <accion> [parametros]";
+        switch (casoUso.toLowerCase()) {
+            case "usuario":
+                return "usuario agregar [nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo]\n"
+                     + "usuario modificar [id;nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo;estado]\n"
+                     + "usuario eliminar [id]\n"
+                     + "usuario listar";
+            case "delegacion":
+                return "delegacion agregar [id_titular;id_delegado;resolucion;motivo;fecha_inicio;fecha_fin;alcance]\n"
+                     + "delegacion modificar [id;resolucion;motivo;fecha_inicio;fecha_fin;alcance;estado]\n"
+                     + "delegacion eliminar [id]\n"
+                     + "delegacion listar";
+            case "indicador":
+                return "indicador agregar [codigo;nombre;descripcion;meta;unidad;periodo]\n"
+                     + "indicador modificar [id;meta;valor_actual;estado]\n"
+                     + "indicador listar";
+            case "tramite":
+                return "tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]\n"
+                     + "tramite modificar [id;asunto;prioridad;estado]\n"
+                     + "tramite eliminar [id]\n"
+                     + "tramite listar";
+            case "documento":
+                return "documento agregar [id_tramite;id_requisito;nombre_documento;tipo;url]\n"
+                     + "documento validar [id_documento;estado_validacion;observacion]\n"
+                     + "documento listar";
+            case "tipo_tramite":
+                return "tipo_tramite agregar [codigo;nombre;descripcion;tiempo_sla;costo]\n"
+                     + "tipo_tramite listar";
+            case "flujo":
+                return "flujo avanzar [id_tramite;etapa_actual;id_usuario_responsable]\n"
+                     + "flujo listar";
+            case "firma":
+                return "firma consolidada [id_tramite;id_firmante;numero_certificado]\n"
+                     + "firma remota [id_tramite;id_firmante;numero_certificado]\n"
+                     + "firma listar";
+            case "despacho":
+                return "despacho agregar [id_tramite;id_usuario_despachador;numero_despacho;tipo_entrega]\n"
+                     + "despacho listar";
+            case "certificado":
+                return "certificado generar [id_tramite;id_firma;titulo]\n"
+                     + "certificado consultar [codigo_verificacion]\n"
+                     + "certificado listar";
+            case "portal":
+                return "portal consultar [pin_seguimiento]\n"
+                     + "portal habilitar [id_tramite;pin_seguimiento]\n"
+                     + "portal listar";
+            case "sla":
+                return "sla verificar [id_tramite]\n"
+                     + "sla listar";
+            case "reporte":
+                return "reporte tramites | reporte sla | reporte firmas";
+            default:
+                return "<caso_de_uso> <accion> [parametros]";
+        }
+    }
+
+    private static String obtenerEjemploCasoUso(String casoUso) {
+        if (casoUso == null) return "help";
+        switch (casoUso.toLowerCase()) {
+            case "usuario":
+                return "usuario agregar [Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;FICCT;Ingenieria Informatica]";
+            case "delegacion":
+                return "delegacion agregar [1;2;R-VR-012/2026;Viaje academico;2026-10-15;2026-10-25;TOTAL]";
+            case "indicador":
+                return "indicador agregar [IND-01;Tasa Tramites 72h;Porcentaje cumplido;95.00;PORCENTAJE;MENSUAL]";
+            case "tramite":
+                return "tramite agregar [2026001;4;1;Solicitud de Certificado de Notas;NORMAL]";
+            case "documento":
+                return "documento agregar [1;1;Cedula_Identidad.pdf;PDF;http://docs.uagrm.edu.bo/1/ci.pdf]";
+            case "tipo_tramite":
+                return "tipo_tramite agregar [TT-01;Certificado de Calificaciones;Emision oficial firmada;72;50.00]";
+            case "flujo":
+                return "flujo avanzar [1;REVISION_LEGAL;2]";
+            case "firma":
+                return "firma consolidada [1;1;CERT-ADSIB-2026-991]";
+            case "despacho":
+                return "despacho agregar [1;2;DESP-2026-001;DIGITAL_CORREO]";
+            case "certificado":
+                return "certificado generar [1;1;Certificado Oficial de Calificaciones]";
+            case "portal":
+                return "portal consultar [PIN-8841]";
+            case "sla":
+                return "sla verificar [1]";
+            case "reporte":
+                return "reporte tramites";
+            default:
+                return "help";
+        }
     }
 
     public static void mostraRespuesta(String textoHtml) {
@@ -457,7 +641,7 @@ public class Home {
                 "  despacho help | despacho listar\n\n" +
                 "CU6. Certificado Oficial con QR y Seguimiento:\n" +
                 "  certificado help | certificado listar\n" +
-                "  portal help\n\n" +
+                "  portal help | portal listar\n\n" +
                 "CU7. Monitoreo SLA (72 Horas Habiles):\n" +
                 "  sla help | sla listar\n\n" +
                 "CU8. Reportes y Estadisticas:\n" +

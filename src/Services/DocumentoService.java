@@ -2,6 +2,7 @@ package Services;
 
 import DAO.DocumentoDAO;
 import Models.DocumentoExpediente;
+import Utils.ParamValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,19 +16,18 @@ public class DocumentoService {
     }
 
     public void crearDocumento(List<String> params) throws SQLException {
-        // [id_tramite; id_requisito; nombre_documento; tipo; url]
-        if (params.size() < 3) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: documento agregar [id_tramite;id_requisito;nombre_documento;tipo;url]");
-        }
-        int idTramite = Integer.parseInt(params.get(0).trim());
-        int idReq = params.size() > 1 && !params.get(1).trim().isEmpty() ? Integer.parseInt(params.get(1).trim()) : 0;
-        String nombre = params.get(2).trim();
-        String tipo = params.size() > 3 ? params.get(3).trim() : "PDF";
-        String url = params.size() > 4 ? params.get(4).trim() : "";
+        String sintaxis = "documento agregar [id_tramite;id_requisito;nombre_documento;tipo;url]";
+        String ejemplo = "documento agregar [1;1;Cedula_Identidad.pdf;PDF;http://docs.uagrm.edu.bo/1/ci.pdf]";
+
+        int idTramite = ParamValidator.requireInt(params, 0, "id_tramite", sintaxis, ejemplo);
+        int idReq = ParamValidator.optionalInt(params, 1, 0, "id_requisito", sintaxis, ejemplo);
+        String nombre = ParamValidator.requireString(params, 2, "nombre_documento", sintaxis, ejemplo);
+        String tipo = ParamValidator.optionalString(params, 3, "PDF");
+        String url = ParamValidator.optionalString(params, 4, "");
 
         DocumentoExpediente doc = new DocumentoExpediente();
         doc.setIdTramite(idTramite);
-        doc.setIdRequisito(idReq);
+        doc.setIdRequisito(idReq > 0 ? idReq : 0);
         doc.setNombreDocumento(nombre);
         doc.setTipoDocumento(tipo);
         doc.setArchivoUrl(url);
@@ -42,13 +42,21 @@ public class DocumentoService {
     }
 
     public void validarDocumento(List<String> params) throws SQLException {
-        // [id_documento; estado_validacion; observacion]
-        if (params.size() < 2) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: documento validar [id_documento;estado_validacion;observacion]");
+        String sintaxis = "documento validar [id_documento;estado_validacion;observacion]";
+        String ejemplo = "documento validar [1;APROBADO;Documento legible y verificado]";
+
+        int id = ParamValidator.requireInt(params, 0, "id_documento", sintaxis, ejemplo);
+        String estado = ParamValidator.requireString(params, 1, "estado_validacion", sintaxis, ejemplo).toUpperCase();
+        String obs = ParamValidator.optionalString(params, 2, "Sin observaciones");
+
+        if (!estado.equals("APROBADO") && !estado.equals("OBSERVADO") && !estado.equals("RECHAZADO") && !estado.equals("PENDIENTE")) {
+            throw new IllegalArgumentException(
+                    "Estado de validación inválido: '" + estado + "'.\n" +
+                    "• Estados permitidos: APROBADO, OBSERVADO, RECHAZADO, PENDIENTE.\n" +
+                    "• Sintaxis requerida: " + sintaxis + "\n" +
+                    "• Ejemplo válido: " + ejemplo
+            );
         }
-        int id = Integer.parseInt(params.get(0).trim());
-        String estado = params.get(1).trim().toUpperCase();
-        String obs = params.size() > 2 ? params.get(2).trim() : "";
 
         documentoDAO.validarDocumento(id, estado, obs);
     }
@@ -57,6 +65,7 @@ public class DocumentoService {
         return "Comandos Expediente y Documentos (CU3):\n" +
                 "- documento listar\n" +
                 "- documento agregar [id_tramite;id_requisito;nombre_documento;tipo;url]\n" +
-                "- documento validar [id_documento;estado_validacion;observacion]";
+                "- documento validar [id_documento;estado_validacion;observacion]\n\n" +
+                "Estados de validación: APROBADO, OBSERVADO, RECHAZADO.";
     }
 }

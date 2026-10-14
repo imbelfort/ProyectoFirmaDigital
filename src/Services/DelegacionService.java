@@ -2,6 +2,7 @@ package Services;
 
 import DAO.DelegacionDAO;
 import Models.Delegacion;
+import Utils.ParamValidator;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -16,17 +17,24 @@ public class DelegacionService {
     }
 
     public void crearDelegacion(List<String> params) throws SQLException {
-        // [id_titular; id_delegado; resolucion; motivo; fecha_inicio; fecha_fin; alcance]
-        if (params.size() < 6) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: delegacion agregar [id_titular;id_delegado;resolucion;motivo;fecha_inicio;fecha_fin;alcance]");
+        String sintaxis = "delegacion agregar [id_titular;id_delegado;resolucion;motivo;fecha_inicio;fecha_fin;alcance]";
+        String ejemplo = "delegacion agregar [1;2;R-VR-012/2026;Viaje academico;2026-10-15;2026-10-25;TOTAL]";
+
+        int titular = ParamValidator.requireInt(params, 0, "id_titular", sintaxis, ejemplo);
+        int delegado = ParamValidator.requireInt(params, 1, "id_delegado", sintaxis, ejemplo);
+        String res = ParamValidator.requireString(params, 2, "resolucion", sintaxis, ejemplo);
+        String motivo = ParamValidator.requireString(params, 3, "motivo", sintaxis, ejemplo);
+        Date fi = ParamValidator.requireDate(params, 4, "fecha_inicio", sintaxis, ejemplo);
+        Date ff = ParamValidator.requireDate(params, 5, "fecha_fin", sintaxis, ejemplo);
+        String alcance = ParamValidator.optionalString(params, 6, "TOTAL");
+
+        if (fi.after(ff)) {
+            throw new IllegalArgumentException(
+                    "Inconsistencia en fechas: La fecha_inicio (" + fi + ") no puede ser posterior a la fecha_fin (" + ff + ").\n" +
+                    "• Sintaxis requerida: " + sintaxis + "\n" +
+                    "• Ejemplo válido: " + ejemplo
+            );
         }
-        int titular = Integer.parseInt(params.get(0).trim());
-        int delegado = Integer.parseInt(params.get(1).trim());
-        String res = params.get(2).trim();
-        String motivo = params.get(3).trim();
-        Date fi = Date.valueOf(params.get(4).trim());
-        Date ff = Date.valueOf(params.get(5).trim());
-        String alcance = params.size() > 6 ? params.get(6).trim() : "TOTAL";
 
         Delegacion d = new Delegacion();
         d.setIdAutoridadTitular(titular);
@@ -46,16 +54,16 @@ public class DelegacionService {
     }
 
     public void modificarDelegacion(List<String> params) throws SQLException {
-        if (params.size() < 7) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: delegacion modificar [id;resolucion;motivo;fecha_inicio;fecha_fin;alcance;estado]");
-        }
-        int id = Integer.parseInt(params.get(0).trim());
-        String res = params.get(1).trim();
-        String motivo = params.get(2).trim();
-        Date fi = Date.valueOf(params.get(3).trim());
-        Date ff = Date.valueOf(params.get(4).trim());
-        String alcance = params.get(5).trim();
-        String estado = params.get(6).trim();
+        String sintaxis = "delegacion modificar [id;resolucion;motivo;fecha_inicio;fecha_fin;alcance;estado]";
+        String ejemplo = "delegacion modificar [1;R-VR-012/2026;Viaje extendido;2026-10-15;2026-10-30;TOTAL;ACTIVA]";
+
+        int id = ParamValidator.requireInt(params, 0, "id_delegacion", sintaxis, ejemplo);
+        String res = ParamValidator.requireString(params, 1, "resolucion", sintaxis, ejemplo);
+        String motivo = ParamValidator.requireString(params, 2, "motivo", sintaxis, ejemplo);
+        Date fi = ParamValidator.requireDate(params, 3, "fecha_inicio", sintaxis, ejemplo);
+        Date ff = ParamValidator.requireDate(params, 4, "fecha_fin", sintaxis, ejemplo);
+        String alcance = ParamValidator.optionalString(params, 5, "TOTAL");
+        String estado = ParamValidator.optionalString(params, 6, "ACTIVA");
 
         Delegacion d = new Delegacion();
         d.setId(id);

@@ -2,6 +2,7 @@ package Services;
 
 import DAO.UsuarioDAO;
 import Models.Usuario;
+import Utils.ParamValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,49 +20,32 @@ public class UsuarioService {
     }
 
     public void crearUsuario(List<String> params, String fotoPerfil) throws SQLException {
-        // Formato esperado: nombre, apellidos, ci, registro, email, rol, telefono, unidad_academica, cargo
-        if (params.size() < 6) {
-            throw new IllegalArgumentException(
-                    "Parametros insuficientes. Formato: usuario agregar [nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo]"
-            );
-        }
+        String sintaxis = "usuario agregar [nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo]";
+        String ejemplo = "usuario agregar [Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;FICCT;Ingenieria Informatica]";
 
-        String nombre = params.get(0) != null ? params.get(0).trim() : "";
-        String apellidos = params.get(1) != null ? params.get(1).trim() : "";
-        String ci = params.get(2) != null ? params.get(2).trim().toUpperCase() : "";
-        String registro = params.get(3) != null ? params.get(3).trim() : "";
-        String email = params.get(4) != null ? params.get(4).trim().toLowerCase() : "";
-        String rol = params.get(5) != null ? params.get(5).trim().toUpperCase() : "ALUMNO";
-        String telefono = params.size() > 6 && params.get(6) != null ? params.get(6).trim() : "";
-        String unidad = params.size() > 7 && params.get(7) != null ? params.get(7).trim() : "UAGRM";
-        String cargo = params.size() > 8 && params.get(8) != null ? params.get(8).trim() : rol;
-
-        if (nombre.isEmpty() || apellidos.isEmpty()) {
-            throw new IllegalArgumentException("El nombre y apellidos son obligatorios");
-        }
-
-        if (ci.isEmpty()) {
-            throw new IllegalArgumentException("El CI es obligatorio. (Actua como contraseña inicial)");
-        }
-
-        if (registro.isEmpty()) {
-            throw new IllegalArgumentException("El Registro / Codigo es obligatorio para Alumnos, Docentes y Funcionarios");
-        }
-
-        if (!registro.matches("^\\d+$")) {
-            throw new IllegalArgumentException("El registro o código debe ser puramente numérico (sin letras). Ej: 219064748 para alumno, 1045 para docente, 1001 para autoridad.");
-        }
+        String nombre = ParamValidator.requireString(params, 0, "nombre", sintaxis, ejemplo);
+        String apellidos = ParamValidator.requireString(params, 1, "apellidos", sintaxis, ejemplo);
+        String ci = ParamValidator.requireString(params, 2, "ci", sintaxis, ejemplo).toUpperCase();
+        String registro = ParamValidator.requireNumericCode(params, 3, "registro", sintaxis, ejemplo);
+        String email = ParamValidator.requireString(params, 4, "email", sintaxis, ejemplo).toLowerCase();
+        String rol = ParamValidator.optionalString(params, 5, "ALUMNO").toUpperCase();
+        String telefono = ParamValidator.optionalString(params, 6, "");
+        
+        // Regla: Para ALUMNO, parámetro 7 es su Facultad y parámetro 8 es su Carrera (los alumnos no tienen cargo).
+        // Para DOCENTE/AUTORIDAD, parámetro 7 es su Facultad/Unidad y parámetro 8 es su Cargo oficial.
+        String facultadOUnidad = ParamValidator.optionalString(params, 7, rol.equals("ALUMNO") ? "FICCT" : "UAGRM");
+        String carreraOCargo = ParamValidator.optionalString(params, 8, rol.equals("ALUMNO") ? "Ingenieria Informatica" : rol);
 
         if (usuarioDAO.existsByCi(ci)) {
-            throw new SQLException("Ya existe un usuario registrado con el CI: " + ci);
+            throw new SQLException("Ya existe un usuario registrado con el CI: " + ci + ". El C.I. debe ser único en el sistema.");
         }
 
         if (usuarioDAO.existsByRegistro(registro)) {
-            throw new SQLException("Ya existe un usuario registrado con el Registro: " + registro);
+            throw new SQLException("Ya existe un usuario registrado con el Registro / Código: " + registro + ". El código debe ser único.");
         }
 
         if (usuarioDAO.existsByEmail(email)) {
-            throw new SQLException("Ya existe un usuario registrado con el email: " + email);
+            throw new SQLException("Ya existe un usuario registrado con el correo: " + email + ".");
         }
 
         // Regla: Contraseña inicial = CI
@@ -73,8 +57,8 @@ public class UsuarioService {
         usuario.setEmail(email);
         usuario.setRol(rol);
         usuario.setTelefono(telefono);
-        usuario.setUnidadAcademica(unidad);
-        usuario.setCargo(cargo);
+        usuario.setUnidadAcademica(facultadOUnidad);
+        usuario.setCargo(carreraOCargo);
         usuario.setContrasena(ci);
         usuario.setEstado("ACTIVO");
 
@@ -82,7 +66,11 @@ public class UsuarioService {
     }
 
     public String[] obtenerUsuarioPorId(int id) throws SQLException {
-        return usuarioDAO.readById(id);
+        String[] data = usuarioDAO.readById(id);
+        if (data == null) {
+            throw new SQLException("No se encontró ningún usuario con el ID: " + id);
+        }
+        return data;
     }
 
     public List<String[]> listarUsuarios() throws SQLException {
@@ -94,26 +82,23 @@ public class UsuarioService {
     }
 
     public void actualizarUsuario(List<String> params, String fotoPerfil) throws SQLException {
-        if (params.size() < 7) {
-            throw new IllegalArgumentException(
-                    "Parametros insuficientes. Formato: usuario modificar [id;nombre;apellidos;ci;registro;email;rol;telefono;unidad;cargo;estado]"
-            );
-        }
+        String sintaxis = "usuario modificar [id;nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo;estado]";
+        String ejemplo = "usuario modificar [4;Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;FICCT;Ingenieria Informatica;ACTIVO]";
 
-        int idUsuario = Integer.parseInt(params.get(0).trim());
-        String nombre = params.get(1) != null ? params.get(1).trim() : "";
-        String apellidos = params.get(2) != null ? params.get(2).trim() : "";
-        String ci = params.get(3) != null ? params.get(3).trim().toUpperCase() : "";
-        String registro = params.get(4) != null ? params.get(4).trim() : "";
-        String email = params.get(5) != null ? params.get(5).trim().toLowerCase() : "";
-        String rol = params.get(6) != null ? params.get(6).trim().toUpperCase() : "ALUMNO";
-        String telefono = params.size() > 7 && params.get(7) != null ? params.get(7).trim() : "";
-        String unidad = params.size() > 8 && params.get(8) != null ? params.get(8).trim() : "";
-        String cargo = params.size() > 9 && params.get(9) != null ? params.get(9).trim() : "";
-        String estado = params.size() > 10 && params.get(10) != null ? params.get(10).trim().toUpperCase() : "ACTIVO";
+        int idUsuario = ParamValidator.requireInt(params, 0, "id_usuario", sintaxis, ejemplo);
+        String nombre = ParamValidator.requireString(params, 1, "nombre", sintaxis, ejemplo);
+        String apellidos = ParamValidator.requireString(params, 2, "apellidos", sintaxis, ejemplo);
+        String ci = ParamValidator.requireString(params, 3, "ci", sintaxis, ejemplo).toUpperCase();
+        String registro = ParamValidator.requireNumericCode(params, 4, "registro", sintaxis, ejemplo);
+        String email = ParamValidator.requireString(params, 5, "email", sintaxis, ejemplo).toLowerCase();
+        String rol = ParamValidator.optionalString(params, 6, "ALUMNO").toUpperCase();
+        String telefono = ParamValidator.optionalString(params, 7, "");
+        String facultadOUnidad = ParamValidator.optionalString(params, 8, "");
+        String carreraOCargo = ParamValidator.optionalString(params, 9, "");
+        String estado = ParamValidator.optionalString(params, 10, "ACTIVO").toUpperCase();
 
         if (!usuarioDAO.existsById(idUsuario)) {
-            throw new SQLException("No existe ningun usuario con el ID: " + idUsuario);
+            throw new SQLException("No existe ningún usuario registrado con el ID: " + idUsuario + ". Verifique los IDs con 'usuario listar'.");
         }
 
         Usuario usuario = new Usuario();
@@ -125,8 +110,8 @@ public class UsuarioService {
         usuario.setEmail(email);
         usuario.setRol(rol);
         usuario.setTelefono(telefono);
-        usuario.setUnidadAcademica(unidad);
-        usuario.setCargo(cargo);
+        usuario.setUnidadAcademica(facultadOUnidad);
+        usuario.setCargo(carreraOCargo);
         usuario.setEstado(estado);
 
         usuarioDAO.update(usuario);
@@ -134,7 +119,7 @@ public class UsuarioService {
 
     public void eliminarUsuario(int id) throws SQLException {
         if (!usuarioDAO.existsById(id)) {
-            throw new SQLException("No existe ningun usuario con el ID: " + id);
+            throw new SQLException("No existe ningún usuario registrado con el ID: " + id + ". Verifique con 'usuario listar'.");
         }
         usuarioDAO.delete(id);
     }
@@ -142,8 +127,14 @@ public class UsuarioService {
     public String getComandosUsuario() {
         return "Comandos Gestion de Usuarios (CU1):\n" +
                 "- usuario listar\n" +
-                "- usuario agregar [nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo]\n" +
-                "- usuario modificar [id;nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo;estado]\n" +
+                "- usuario agregar [nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo]\n" +
+                "  • Alumnos: Los alumnos NO tienen cargo; se registra su facultad y la carrera que estudian.\n" +
+                "    Ejemplo: usuario agregar [Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;FICCT;Ingenieria Informatica]\n" +
+                "  • Docentes: Se registra su facultad y su cargo docente.\n" +
+                "    Ejemplo: usuario agregar [Alberto;Guzman;3456789;1045;aguzman@uagrm.edu.bo;DOCENTE;71000003;FICCT;Docente Titular]\n" +
+                "  • Autoridades: Se registra su unidad y cargo oficial.\n" +
+                "    Ejemplo: usuario agregar [Carlos;Mendoza;2345678;1002;cmendoza@uagrm.edu.bo;ENCARGADO;71000002;Despacho Vicerrectorado;Encargado de Firma]\n" +
+                "- usuario modificar [id;nombre;apellidos;ci;registro;email;rol;telefono;facultad_o_unidad;carrera_o_cargo;estado]\n" +
                 "- usuario eliminar [id]\n\n" +
                 "Nota: Códigos puramente numéricos sin letras (ej. 219064748 para Alumno, 1045 para Docente de 4 dígitos, 1001 para Autoridad).\n" +
                 "Su CI es su contraseña inicial.\n" +

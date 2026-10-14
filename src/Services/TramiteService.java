@@ -2,6 +2,7 @@ package Services;
 
 import DAO.TramiteDAO;
 import Models.Tramite;
+import Utils.ParamValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,15 +16,14 @@ public class TramiteService {
     }
 
     public void crearTramite(List<String> params) throws SQLException {
-        // [codigo_tramite; id_solicitante; id_tipo; asunto; prioridad]
-        if (params.size() < 4) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]");
-        }
-        String codigo = params.get(0).trim();
-        int solicitante = Integer.parseInt(params.get(1).trim());
-        int tipo = Integer.parseInt(params.get(2).trim());
-        String asunto = params.get(3).trim();
-        String prioridad = params.size() > 4 ? params.get(4).trim().toUpperCase() : "NORMAL";
+        String sintaxis = "tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]";
+        String ejemplo = "tramite agregar [2026001;4;1;Solicitud de Certificado de Notas;NORMAL]";
+
+        String codigo = ParamValidator.requireNumericCode(params, 0, "codigo_tramite", sintaxis, ejemplo);
+        int solicitante = ParamValidator.requireInt(params, 1, "id_solicitante", sintaxis, ejemplo);
+        int tipo = ParamValidator.requireInt(params, 2, "id_tipo", sintaxis, ejemplo);
+        String asunto = ParamValidator.requireString(params, 3, "asunto", sintaxis, ejemplo);
+        String prioridad = ParamValidator.optionalString(params, 4, "NORMAL").toUpperCase();
 
         Tramite t = new Tramite();
         t.setCodigoTramite(codigo);
@@ -41,14 +41,13 @@ public class TramiteService {
     }
 
     public void modificarTramite(List<String> params) throws SQLException {
-        // [id; asunto; prioridad; estado]
-        if (params.size() < 4) {
-            throw new IllegalArgumentException("Parametros insuficientes. Formato: tramite modificar [id;asunto;prioridad;estado]");
-        }
-        int id = Integer.parseInt(params.get(0).trim());
-        String asunto = params.get(1).trim();
-        String prioridad = params.get(2).trim();
-        String estado = params.get(3).trim();
+        String sintaxis = "tramite modificar [id;asunto;prioridad;estado]";
+        String ejemplo = "tramite modificar [1;Solicitud rectificada;ALTA;EN_PROCESO]";
+
+        int id = ParamValidator.requireInt(params, 0, "id_tramite", sintaxis, ejemplo);
+        String asunto = ParamValidator.requireString(params, 1, "asunto", sintaxis, ejemplo);
+        String prioridad = ParamValidator.optionalString(params, 2, "NORMAL").toUpperCase();
+        String estado = ParamValidator.optionalString(params, 3, "INICIADO").toUpperCase();
 
         tramiteDAO.update(id, asunto, prioridad, estado);
     }
@@ -62,6 +61,7 @@ public class TramiteService {
                 "- tramite listar\n" +
                 "- tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]\n" +
                 "- tramite modificar [id;asunto;prioridad;estado]\n" +
-                "- tramite eliminar [id]";
+                "- tramite eliminar [id]\n\n" +
+                "Nota: El código de trámite es numérico (ej. 2026001).";
     }
 }
