@@ -55,119 +55,42 @@ public class Interpreter implements Runnable {
             case Token.USUARIO:
                 listener.usuario(tokenEvent);
                 break;
-
-            case Token.CLIENTE:
-                listener.cliente(tokenEvent);
+            case Token.DELEGACION:
+                listener.delegacion(tokenEvent);
                 break;
-
-            case Token.VENDEDOR:
-                listener.vendedor(tokenEvent);
+            case Token.INDICADOR:
+                listener.indicador(tokenEvent);
                 break;
-
-            case Token.PROPIETARIO:
-                listener.propietario(tokenEvent);
+            case Token.TRAMITE:
+                listener.tramite(tokenEvent);
                 break;
-
-            case Token.PROVEEDOR:
-                listener.proveedor(tokenEvent);
+            case Token.DOCUMENTO:
+                listener.documento(tokenEvent);
                 break;
-
-            case Token.CATEGORIA:
-                listener.categoria(tokenEvent);
+            case Token.TIPO_TRAMITE:
+                listener.tipoTramite(tokenEvent);
                 break;
-
-            case Token.PRODUCTO:
-                listener.producto(tokenEvent);
+            case Token.FLUJO:
+                listener.flujo(tokenEvent);
                 break;
-
-            case Token.PRODUCTO_VARIANTE:
-                listener.productoVariante(tokenEvent);
+            case Token.FIRMA:
+                listener.firma(tokenEvent);
                 break;
-
-            case Token.TECNICA_INVENTARIO:
-                listener.tecnicaInventario(tokenEvent);
+            case Token.DESPACHO:
+                listener.despacho(tokenEvent);
                 break;
-
-            case Token.TECNICA_COSTO:
-                listener.tecnicaCosto(tokenEvent);
+            case Token.CERTIFICADO:
+                listener.certificado(tokenEvent);
                 break;
-
-            case Token.PROMOCION:
-                listener.promocion(tokenEvent);
+            case Token.PORTAL:
+                listener.portal(tokenEvent);
                 break;
-
-            case Token.PROMOCION_CATEGORIA:
-                listener.promocionCategoria(tokenEvent);
+            case Token.SLA:
+                listener.sla(tokenEvent);
                 break;
-
-            case Token.PROMOCION_PRODUCTO:
-                listener.promocionProducto(tokenEvent);
-                break;
-
-            case Token.COMPRA:
-                listener.compra(tokenEvent);
-                break;
-
-            case Token.DETALLE_COMPRA:
-                listener.detalleCompra(tokenEvent);
-                break;
-
-            case Token.CARRITO:
-                listener.carrito(tokenEvent);
-                break;
-
-            case Token.CARRITO_DETALLE:
-                listener.carritoDetalle(tokenEvent);
-                break;
-
-            case Token.LOTE_INVENTARIO:
-                listener.loteInventario(tokenEvent);
-                break;
-
-            case Token.PEDIDO:
-                listener.pedido(tokenEvent);
-                break;
-
-            case Token.DETALLE_PEDIDO:
-                listener.pedidoDetalle(tokenEvent);
-                break;
-
-            case Token.VENTA:
-                listener.venta(tokenEvent);
-                break;
-
-            case Token.DETALLE_VENTA:
-                listener.detalleVenta(tokenEvent);
-                break;
-
-            case Token.SALIDA_LOTE:
-                listener.salidaLote(tokenEvent);
-                break;
-
-            case Token.MOVIMIENTO_INVENTARIO:
-                listener.movimientoInventario(tokenEvent);
-                break;
-
-            case Token.METODO_PAGO:
-                listener.metodoPago(tokenEvent);
-                break;
-
-            case Token.PAGO_CONTADO:
-                listener.pagoContado(tokenEvent);
-                break;
-
-            case Token.CREDITO:
-                listener.credito(tokenEvent);
-                break;
-
-            case Token.PAGO_CUOTA:
-                listener.pagoCuota(tokenEvent);
-                break;
-
             case Token.REPORTE:
                 listener.reporte(tokenEvent);
                 break;
-
             default:
                 listener.posibleserrores(tokenEvent);
                 break;

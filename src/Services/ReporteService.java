@@ -7,39 +7,28 @@ import java.util.List;
 
 public class ReporteService {
 
-    private final ReporteDAO reporteDAO;
+    private ReporteDAO reporteDAO;
 
     public ReporteService() {
         this.reporteDAO = new ReporteDAO();
     }
 
-    public List<String[]> reporteVentasUltimoMes() throws SQLException {
-        return reporteDAO.ventasUltimoMes();
+    public List<String[]> reporteTramitesPorEstado() throws SQLException {
+        return reporteDAO.reporteTramitesPorEstado();
     }
 
-    public List<String[]> reporteVentasUltimoTrimestre() throws SQLException {
-        return reporteDAO.ventasUltimoTrimestre();
+    public List<String[]> reporteCumplimientoSla() throws SQLException {
+        return reporteDAO.reporteCumplimientoSla();
     }
 
-    public List<String[]> reporteVentasUltimoAnio() throws SQLException {
-        return reporteDAO.ventasUltimoAnio();
-    }
-
-    public List<String[]> reporteClientesUltimoMes() throws SQLException {
-        return reporteDAO.clientesRegistradosUltimoMes();
-    }
-
-    public List<String[]> reporteVentasUltimoAnioPorMetodoPago() throws SQLException {
-        return reporteDAO.ventasUltimoAnioPorMetodoPago();
+    public List<String[]> reporteFirmasPorVicerrector() throws SQLException {
+        return reporteDAO.reporteFirmasPorVicerrector();
     }
 
     public String getComandosReporte() {
-        return "Comandos Reporte:\n" +
-                "- reporte listar ventas_mes\n" +
-                "- reporte listar ventas_trimestre\n" +
-                "- reporte listar ventas_anio\n" +
-                "- reporte listar clientes_mes\n" +
-                "- reporte listar ventas_anio_metodo_pago\n" +
-                "- reporte help";
+        return "Comandos Reportes y Estadisticas (CU8):\n" +
+                "- reporte tramites\n" +
+                "- reporte sla\n" +
+                "- reporte firmas";
     }
 }

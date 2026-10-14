@@ -20,10 +20,11 @@ Sistema automatizado de gestión y firma digital de trámites académicos y admi
 
 ---
 
-### Política de Credenciales y Autenticación
-- **Alumnos:** Su identificador es su **Registro Universitario** y su contraseña inicial es su **C.I.**
-- **Docentes:** Su identificador es su **Código de Docente** y su contraseña inicial es su **C.I.**
-- **Vicerrector y Personal Administrativo / Encargados:** Su identificador es su **Código de Funcionario** y su contraseña inicial es su **C.I.**
+### Política de Credenciales y Autenticación (Estrictamente Numéricos, Sin Letras)
+- **Alumnos:** Su identificador es su **Registro Universitario numérico** (ej. `219064748`) y su contraseña inicial es su **C.I.**
+- **Docentes:** Su identificador es su **Código de Docente de 4 dígitos** (ej. `1045`) y su contraseña inicial es su **C.I.**
+- **Vicerrector y Personal Administrativo / Encargados:** Su identificador es su **Código numérico de 4 dígitos** (ej. `1001`, `1002`) y su contraseña inicial es su **C.I.**
+- **Sin letras:** Ningún código o registro contiene letras ni prefijos.
 
 ---
 

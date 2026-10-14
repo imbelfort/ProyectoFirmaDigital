@@ -48,6 +48,10 @@ public class UsuarioService {
             throw new IllegalArgumentException("El Registro / Codigo es obligatorio para Alumnos, Docentes y Funcionarios");
         }
 
+        if (!registro.matches("^\\d+$")) {
+            throw new IllegalArgumentException("El registro o código debe ser puramente numérico (sin letras). Ej: 219064748 para alumno, 1045 para docente, 1001 para autoridad.");
+        }
+
         if (usuarioDAO.existsByCi(ci)) {
             throw new SQLException("Ya existe un usuario registrado con el CI: " + ci);
         }
@@ -141,7 +145,8 @@ public class UsuarioService {
                 "- usuario agregar [nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo]\n" +
                 "- usuario modificar [id;nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo;estado]\n" +
                 "- usuario eliminar [id]\n\n" +
-                "Nota: Para Alumnos, Docentes y Administrativos, su login es su Registro y su CI es su contraseña inicial.\n" +
+                "Nota: Códigos puramente numéricos sin letras (ej. 219064748 para Alumno, 1045 para Docente de 4 dígitos, 1001 para Autoridad).\n" +
+                "Su CI es su contraseña inicial.\n" +
                 "Roles: VICERRECTOR, ENCARGADO, DOCENTE, ALUMNO, ADMINISTRATIVO.";
     }
 }

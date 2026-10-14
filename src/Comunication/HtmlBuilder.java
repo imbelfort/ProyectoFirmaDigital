@@ -27,212 +27,62 @@ public class HtmlBuilder {
         "ESTADO"
     };
 
-    public static final String[] HEADERS_CLIENTE = {
-            "ID_CLIENTE", "TIPO_CLIENTE", "LIMITE_CREDITO",
-            "CREDITO_DISPONIBLE", "CREDITO_UTILIZADO"
+    public static final String[] HEADERS_DELEGACION = {
+        "ID", "TITULAR", "DELEGADO", "RESOLUCION", "MOTIVO", "FECHA_INICIO", "FECHA_FIN", "ALCANCE", "ESTADO"
     };
 
-    public static final String[] HEADERS_VENDEDOR = {
-            "ID_VENDEDOR", "COMISION_PORCENTAJE", "TOTAL_VENTAS"
+    public static final String[] HEADERS_INDICADOR = {
+        "ID", "CODIGO", "NOMBRE", "META", "VALOR_ACTUAL", "UNIDAD", "PERIODO", "ESTADO"
     };
 
-    public static final String[] HEADERS_PROPIETARIO = {
-            "ID_PROPIETARIO", "NIVEL_ACCESO"
+    public static final String[] HEADERS_TIPO_TRAMITE = {
+        "ID", "CODIGO", "NOMBRE", "DESCRIPCION", "SLA_HORAS", "COSTO_BS", "ESTADO"
     };
 
-    public static final String[] HEADERS_PROVEEDOR = {
-            "ID", "NOMBRE", "NIT", "TELEFONO", "EMAIL", "DIRECCION",
-            "ESTADO", "FECHA_CREACION", "FECHA_MODIFICACION"
+    public static final String[] HEADERS_TRAMITE = {
+        "ID", "CODIGO", "REGISTRO", "SOLICITANTE", "TIPO_TRAMITE", "ASUNTO", "ESTADO", "PRIORIDAD", "FECHA"
     };
 
-    public static final String[] HEADERS_CATEGORIA = {
-            "ID", "ID_PROPIETARIO", "NOMBRE", "DESCRIPCION", "IMAGEN",
-            "FECHA_CREACION", "FECHA_MODIFICACION"
+    public static final String[] HEADERS_DOCUMENTO = {
+        "ID", "COD_TRAMITE", "DOCUMENTO", "TIPO", "ARCHIVO_URL", "ESTADO_VALIDACION", "FECHA_VALIDACION"
     };
 
-    public static final String[] HEADERS_PRODUCTO = {
-            "ID",
-            "ID_CATEGORIA",
-            "NOMBRE",
-            "CODIGO",
-            "IMAGEN",
-            "QR",
-            "DESCRIPCION",
-            "MARCA",
-            "GENERO",
-            "PRECIO_VENTA_BASE",
-            "PRECIO_VENTA_MAYORISTA_BASE",
-            "ESTADO",
-            "FECHA_CREACION",
-            "FECHA_MODIFICACION"
+    public static final String[] HEADERS_FLUJO = {
+        "ID", "COD_TRAMITE", "ETAPA_ACTUAL", "RESPONSABLE", "FECHA_INICIO", "FECHA_FIN", "ESTADO"
     };
 
-    
-    public static final String[] HEADERS_PRODUCTO_VARIANTE = {
-            "ID",
-            "ID_PRODUCTO",
-            "SKU",
-            "TALLA",
-            "COLOR",
-            "PRECIO_COMPRA",
-            "PRECIO_VENTA",
-            "PRECIO_VENTA_MAYORISTA",
-            "STOCK_ACTUAL",
-            "STOCK_MINIMO",
-            "PUNTO_REORDEN",
-            "COSTO_PROMEDIO",
-            "ID_TECNICA_INVENTARIO",
-            "ID_TECNICA_COSTO",
-            "ESTADO",
-            "FECHA_CREACION",
-            "FECHA_MODIFICACION"
+    public static final String[] HEADERS_FIRMA = {
+        "ID", "COD_TRAMITE", "FIRMANTE", "TIPO_FIRMA", "ALGORITMO", "CERTIFICADO", "FECHA_FIRMA", "VALIDEZ"
     };
 
-
-    public static final String[] HEADERS_TECNICA_INVENTARIO = {
-            "ID", "NOMBRE", "CODIGO", "DESCRIPCION", "ESTADO"
+    public static final String[] HEADERS_DESPACHO = {
+        "ID", "COD_TRAMITE", "DESPACHADOR", "NRO_DESPACHO", "TIPO_ENTREGA", "FECHA_DESPACHO", "ESTADO"
     };
 
-    public static final String[] HEADERS_TECNICA_COSTO = {
-            "ID", "NOMBRE", "CODIGO", "DESCRIPCION", "ESTADO"
+    public static final String[] HEADERS_CERTIFICADO = {
+        "ID", "COD_TRAMITE", "COD_VERIFICACION", "TITULO", "PORTAL_URL", "FECHA_EMISION", "ESTADO"
     };
 
-    public static final String[] HEADERS_PROMOCION = {
-            "ID", "ID_PROPIETARIO", "NOMBRE", "DESCRIPCION",
-            "PORCENTAJE_DESCUENTO", "FECHA_INICIO", "FECHA_FIN",
-            "ESTADO", "FECHA_CREACION", "FECHA_MODIFICACION"
+    public static final String[] HEADERS_PORTAL = {
+        "ID", "COD_TRAMITE", "REGISTRO", "ESTUDIANTE", "TRAMITE", "ASUNTO", "ESTADO", "PRIORIDAD", "FECHA", "VISITAS"
     };
 
-    public static final String[] HEADERS_PROMOCION_CATEGORIA = {
-            "ID_PROMOCION", "ID_CATEGORIA", "APLICA_MAYORISTA", "APLICA_MINORISTA"
+    public static final String[] HEADERS_SLA = {
+        "ID", "COD_TRAMITE", "LIMITE_HORAS", "HORAS_TRANSCURRIDAS", "ESTADO_SLA", "INICIO", "LIMITE", "ALERTAS"
     };
 
-    public static final String[] HEADERS_PROMOCION_PRODUCTO = {
-            "ID_PROMOCION", "ID_PRODUCTO", "APLICA_MAYORISTA", "APLICA_MINORISTA"
+    public static final String[] HEADERS_REPORTE_ESTADO = {
+        "ESTADO", "TOTAL_TRAMITES", "PORCENTAJE"
     };
 
-    public static final String[] HEADERS_COMPRA = {
-            "ID", "ID_PROPIETARIO", "ID_PROVEEDOR", "NUM_COMPRA",
-            "PRECIO_TOTAL", "FECHA_COMPRA"
+    public static final String[] HEADERS_REPORTE_SLA = {
+        "ESTADO_SLA", "CANTIDAD", "TASA_CUMPLIMIENTO"
     };
 
-    public static final String[] HEADERS_DETALLE_COMPRA = {
-            "ID_DETALLE", "ID_COMPRA", "ID_PRODUCTO_VARIANTE",
-            "CANTIDAD", "PRECIO", "DESCUENTO", "SUBTOTAL"
+    public static final String[] HEADERS_REPORTE_FIRMAS = {
+        "FIRMANTE", "TIPO_FIRMA", "TOTAL_FIRMADOS"
     };
 
-    public static final String[] HEADERS_LOTE_INVENTARIO = {
-            "ID", "ID_PRODUCTO_VARIANTE", "ID_DETALLE_COMPRA",
-            "FECHA_INGRESO", "CANTIDAD_INICIAL", "CANTIDAD_DISPONIBLE",
-            "COSTO_UNITARIO", "ESTADO"
-    };
-
-    public static final String[] HEADERS_CARRITO = {
-            "ID", "ID_CLIENTE", "FECHA_CREACION", "FECHA_ACTUALIZACION"
-    };
-
-    public static final String[] HEADERS_CARRITO_DETALLE = {
-            "ID_CARRITO", "ID_PRODUCTO_VARIANTE", "CANTIDAD",
-            "PRECIO_UNITARIO", "DESCUENTO"
-    };
-
-    public static final String[] HEADERS_PEDIDO = {
-            "ID", "ID_CLIENTE", "ID_CARRITO", "NUMERO_PEDIDO",
-            "FECHA_PEDIDO", "FECHA_PAGO", "FECHA_ENVIO", "FECHA_ENTREGA",
-            "FECHA_RECIBIDO_CONFORME", "TIPO_VENTA", "SUBTOTAL",
-            "DESCUENTO", "TOTAL", "ESTADO", "DIRECCION_ENTREGA", "OBSERVACIONES"
-    };
-
-    public static final String[] HEADERS_PEDIDO_DETALLE = {
-            "ID_DETALLE", "ID_PEDIDO", "ID_PRODUCTO_VARIANTE",
-            "CANTIDAD", "PRECIO_UNITARIO", "SUBTOTAL", "DESCUENTO"
-    };
-
-        public static final String[] HEADERS_VENTA = {
-                "ID", "ID_VENDEDOR", "ID_CLIENTE", "ID_PEDIDO",
-                "NUMERO_VENTA", "TIPO", "ORIGEN", "TIPO_PAGO",
-                "TOTAL", "ESTADO", "OBSERVACIONES", "FECHA_VENTA"
-        };
-
-        public static final String[] HEADERS_DETALLE_VENTA = {
-                "ID_DETALLE",
-                "ID_VENTA",
-                "ID_PRODUCTO_VARIANTE",
-                "CANTIDAD",
-                "PRECIO_UNITARIO",
-                "SUBTOTAL",
-                "DESCUENTO"
-        };
-
-        public static final String[] HEADERS_SALIDA_LOTE = {
-                "ID",
-                "ID_DETALLE_VENTA",
-                "ID_LOTE",
-                "CANTIDAD",
-                "COSTO_UNITARIO_APLICADO",
-                "COSTO_TOTAL",
-                "FECHA_SALIDA"
-        };
-
-        public static final String[] HEADERS_MOVIMIENTO_INVENTARIO = {
-                "ID", "ID_PRODUCTO_VARIANTE", "ID_TECNICA_INVENTARIO",
-                "ID_TECNICA_COSTO", "TIPO_MOVIMIENTO", "MOTIVO",
-                "CANTIDAD", "COSTO_UNITARIO", "COSTO_TOTAL",
-                "STOCK_ANTERIOR", "STOCK_RESULTANTE", "FECHA", "OBSERVACION"
-        };
-
-        public static final String[] HEADERS_METODO_PAGO = {
-                "ID",
-                "NOMBRE",
-                "DESCRIPCION"
-        };
-
-
-        public static final String[] HEADERS_PAGO_CONTADO = {
-                "ID", "ID_VENTA", "ID_METODO_PAGO", "FECHA",
-                "MONTO_PAGO", "INTERES_MORA_COBRADO", "RECARGO_EXTRA", "OBSERVACIONES", "ESTADO"
-        };
-
-        public static final String[] HEADERS_CREDITO = {
-                "ID", "ID_VENTA", "MONTO_CREDITO", "MONTO_PENDIENTE",
-                "MONTO_PAGADO", "FECHA_OTORGAMIENTO", "FECHA_VENCIMIENTO",
-                "INTERES", "ESTADO", "CUOTAS_TOTAL", "DIAS_MORA",
-                "FECHA_CREACION", "FECHA_ACTUALIZACION"
-        };
-
-        public static final String[] HEADERS_PAGO_CUOTA = {
-                "ID", "ID_CREDITO", "ID_METODO_PAGO", "NUMERO_CUOTA",
-                "INTERES_CUOTA", "FECHA_VENCIMIENTO", "FECHA_PAGO",
-                "MONTO_PAGADO", "DIAS_MORA", "MONTO_PENDIENTE",
-                "ESTADO", "FECHA_CREACION", "FECHA_ACTUALIZACION"
-        };
-
-        public static final String[] HEADERS_REPORTE = {
-                "ID", "ID_USUARIO", "TIPO_REPORTE", "FECHA_GENERACION",
-                "PARAMETROS", "FECHA_CREACION", "FECHA_ACTUALIZACION"
-        };
-
-        public static final String[] HEADERS_NOTIFICACION = {
-                "ID", "ID_USUARIO", "TIPO", "TITULO", "MENSAJE",
-                "FECHA_CREACION", "ESTADO"
-        };
-
-        public static final String[] HEADERS_REPORTE_VENTAS_RESUMEN = {
-                "PERIODO",
-                "CANTIDAD_VENTAS",
-                "MONTO_TOTAL"
-        };
-
-        public static final String[] HEADERS_REPORTE_CLIENTES_MES = {
-                "PERIODO",
-                "CANTIDAD_CLIENTES"
-        };
-
-        public static final String[] HEADERS_REPORTE_VENTAS_METODO_PAGO = {
-                "METODO_PAGO",
-                "CANTIDAD_PAGOS",
-                "MONTO_TOTAL"
-        };
 
     // ============================================================
     // GENERAR TABLA GENERAL
@@ -623,8 +473,40 @@ private static String generateTableContent(String title, String[] headers, List<
     private static String getDescripcionComando(String linea) {
         String comando = linea.toLowerCase();
 
-        if (comando.contains("listar_por_producto")) {
-            return "Lista las variantes pertenecientes a un producto especi­fico";
+        if (comando.contains("firmar")) {
+            return "Ejecuta la firma digital consolidada o remota";
+        }
+
+        if (comando.contains("despachar")) {
+            return "Registra el despacho oficial del legajo o expediente";
+        }
+
+        if (comando.contains("compilar")) {
+            return "Compila y valida los documentos del expediente digital";
+        }
+
+        if (comando.contains("validar")) {
+            return "Valida los requisitos y estado de un documento";
+        }
+
+        if (comando.contains("observar")) {
+            return "Registra una observacion o bloqueo en la bitacora del tramite";
+        }
+
+        if (comando.contains("avanzar")) {
+            return "Avanza el flujo procesal a la siguiente etapa";
+        }
+
+        if (comando.contains("monitorear")) {
+            return "Monitorea los tiempos de atencion y cumplimiento de SLA (72h)";
+        }
+
+        if (comando.contains("alerta")) {
+            return "Genera o gestiona alertas de vencimiento de tramite";
+        }
+
+        if (comando.contains("reporte")) {
+            return "Genera reporte consolidado o estadistico del vicerrectorado";
         }
 
         if (comando.contains("listar")) {
@@ -632,11 +514,11 @@ private static String generateTableContent(String title, String[] headers, List<
         }
 
         if (comando.contains("ver")) {
-            return "Muestra un registro especi­fico por ID";
+            return "Muestra un registro especifico por ID o codigo";
         }
 
-        if (comando.contains("agregar")) {
-            return "Agrega un nuevo registro con los parametros especificados";
+        if (comando.contains("agregar") || comando.contains("iniciar")) {
+            return "Agrega o inicia un nuevo registro con los parametros especificados";
         }
 
         if (comando.contains("modificar")) {
@@ -647,7 +529,7 @@ private static String generateTableContent(String title, String[] headers, List<
             return "Elimina un registro por su ID";
         }
 
-        return "Comando disponible";
+        return "Comando de gestion disponible";
     }
 
 private static String formatValueByHeader(String header, String value) {

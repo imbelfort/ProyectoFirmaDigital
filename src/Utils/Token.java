@@ -11,55 +11,39 @@ public class Token {
     public static final int END = 3;
     public static final int ERROR = 4;
 
+    // Entidades del Vicerrectorado (100 - 199)
     public static final int USUARIO = 100;
-    public static final int CLIENTE = 101;
-    public static final int VENDEDOR = 102;
-    public static final int PROPIETARIO = 103;
+    public static final int DELEGACION = 101;
+    public static final int INDICADOR = 102;
+    public static final int TRAMITE = 103;
+    public static final int DOCUMENTO = 104;
+    public static final int TIPO_TRAMITE = 105;
+    public static final int FLUJO = 106;
+    public static final int OBSERVACION = 107;
+    public static final int BITACORA = 108;
+    public static final int FIRMA = 109;
+    public static final int DESPACHO = 110;
+    public static final int CERTIFICADO = 111;
+    public static final int PORTAL = 112;
+    public static final int SLA = 113;
+    public static final int ALERTA = 114;
+    public static final int REPORTE = 115;
 
-    public static final int PROVEEDOR = 104;
-    public static final int CATEGORIA = 105;
-    public static final int PRODUCTO = 106;
-    public static final int PRODUCTO_VARIANTE = 107;
-
-    public static final int TECNICA_INVENTARIO = 108;
-    public static final int TECNICA_COSTO = 109;
-
-    public static final int PROMOCION = 110;
-    public static final int PROMOCION_CATEGORIA = 111;
-    public static final int PROMOCION_PRODUCTO = 112;
-
-    public static final int COMPRA = 113;
-    public static final int DETALLE_COMPRA = 114;
-
-    public static final int CARRITO = 115;
-    public static final int CARRITO_DETALLE = 130;
-
-    public static final int PEDIDO = 116;
-    public static final int DETALLE_PEDIDO = 117;
-
-    public static final int VENTA = 118;
-    public static final int DETALLE_VENTA = 119;
-
-    public static final int MOVIMIENTO_INVENTARIO = 120;
-
-    public static final int METODO_PAGO = 121;
-    public static final int PAGO_CONTADO = 122;
-    public static final int CREDITO = 123;
-    public static final int PAGO_CUOTA = 124;
-
-    public static final int REPORTE = 125;
-
-    public static final int LOTE_INVENTARIO = 126;
-    public static final int SALIDA_LOTE = 127;
-
-    public static final int ELIMINAR = 200;
-    public static final int MODIFICAR = 201;
-    public static final int LISTAR = 202;
-    public static final int AGREGAR = 203;
-    public static final int MOSTRAR = 204;
-    public static final int GENERAR = 205;
-    public static final int HELP = 206;
-    public static final int CONSULTAR = 207;
+    // Acciones de Comandos (200 - 299)
+    public static final int LISTAR = 200;
+    public static final int AGREGAR = 201;
+    public static final int MODIFICAR = 202;
+    public static final int ELIMINAR = 203;
+    public static final int HELP = 204;
+    public static final int VALIDAR = 205;
+    public static final int AVANZAR = 206;
+    public static final int CONSOLIDADA = 207;
+    public static final int REMOTA = 208;
+    public static final int GENERAR = 209;
+    public static final int CONSULTAR = 210;
+    public static final int VERIFICAR = 211;
+    public static final int TRAMITES = 212;
+    public static final int FIRMAS = 213;
 
     public static final int ERROR_COMMAND = 300;
     public static final int ERROR_CHARACTER = 301;
@@ -71,51 +55,36 @@ public class Token {
     public static final String LEXEME_ERROR = "error";
 
     public static final String LEXEME_USUARIO = "usuario";
-    public static final String LEXEME_CLIENTE = "cliente";
-    public static final String LEXEME_VENDEDOR = "vendedor";
-    public static final String LEXEME_PROPIETARIO = "propietario";
-
-    public static final String LEXEME_PROVEEDOR = "proveedor";
-    public static final String LEXEME_CATEGORIA = "categoria";
-    public static final String LEXEME_PRODUCTO = "producto";
-    public static final String LEXEME_PRODUCTO_VARIANTE = "producto_variante";
-
-    public static final String LEXEME_TECNICA_INVENTARIO = "tecnica_inventario";
-    public static final String LEXEME_TECNICA_COSTO = "tecnica_costo";
-
-    public static final String LEXEME_PROMOCION = "promocion";
-    public static final String LEXEME_PROMOCION_CATEGORIA = "promocion_categoria";
-    public static final String LEXEME_PROMOCION_PRODUCTO = "promocion_producto";
-
-    public static final String LEXEME_COMPRA = "compra";
-    public static final String LEXEME_DETALLE_COMPRA = "detalle_compra";
-
-    public static final String LEXEME_CARRITO = "carrito";
-
-    public static final String LEXEME_CARRITO_DETALLE = "carrito_detalle";
-    public static final String LEXEME_PEDIDO = "pedido";
-    public static final String LEXEME_DETALLE_PEDIDO = "pedido_detalle";
-
-    public static final String LEXEME_VENTA = "venta";
-    public static final String LEXEME_DETALLE_VENTA = "detalle_venta";
-    public static final String LEXEME_SALIDA_LOTE = "salida_lote";
-    public static final String LEXEME_MOVIMIENTO_INVENTARIO = "movimiento_inventario";
-    public static final String LEXEME_LOTE_INVENTARIO = "lote_inventario";
-    public static final String LEXEME_METODO_PAGO = "metodo_pago";
-    public static final String LEXEME_PAGO_CONTADO = "pago_contado";
-    public static final String LEXEME_CREDITO = "credito";
-    public static final String LEXEME_PAGO_CUOTA = "pago_cuota";
-
+    public static final String LEXEME_DELEGACION = "delegacion";
+    public static final String LEXEME_INDICADOR = "indicador";
+    public static final String LEXEME_TRAMITE = "tramite";
+    public static final String LEXEME_DOCUMENTO = "documento";
+    public static final String LEXEME_TIPO_TRAMITE = "tipo_tramite";
+    public static final String LEXEME_FLUJO = "flujo";
+    public static final String LEXEME_OBSERVACION = "observacion";
+    public static final String LEXEME_BITACORA = "bitacora";
+    public static final String LEXEME_FIRMA = "firma";
+    public static final String LEXEME_DESPACHO = "despacho";
+    public static final String LEXEME_CERTIFICADO = "certificado";
+    public static final String LEXEME_PORTAL = "portal";
+    public static final String LEXEME_SLA = "sla";
+    public static final String LEXEME_ALERTA = "alerta";
     public static final String LEXEME_REPORTE = "reporte";
 
-    public static final String LEXEME_ELIMINAR = "eliminar";
-    public static final String LEXEME_MODIFICAR = "modificar";
     public static final String LEXEME_LISTAR = "listar";
     public static final String LEXEME_AGREGAR = "agregar";
-    public static final String LEXEME_MOSTRAR = "mostrar";
+    public static final String LEXEME_MODIFICAR = "modificar";
+    public static final String LEXEME_ELIMINAR = "eliminar";
+    public static final String LEXEME_HELP = "help";
+    public static final String LEXEME_VALIDAR = "validar";
+    public static final String LEXEME_AVANZAR = "avanzar";
+    public static final String LEXEME_CONSOLIDADA = "consolidada";
+    public static final String LEXEME_REMOTA = "remota";
     public static final String LEXEME_GENERAR = "generar";
     public static final String LEXEME_CONSULTAR = "consultar";
-    public static final String LEXEME_HELP = "help";
+    public static final String LEXEME_VERIFICAR = "verificar";
+    public static final String LEXEME_TRAMITES = "tramites";
+    public static final String LEXEME_FIRMAS = "firmas";
 
     public static final String LEXEME_ERROR_COMMAND = "UNKNOWN COMMAND";
     public static final String LEXEME_ERROR_CHARACTER = "UNKNOWN CHARACTER";
@@ -179,120 +148,52 @@ public class Token {
         } else if (name == 4) {
             return "< " + getStringToken(name) + " , " + getStringToken(attribute) + ">";
         }
-
         return "< TOKEN , DESCONOCIDO>";
     }
 
     public String getStringToken(int token) {
         switch (token) {
-            case CU:
-                return LEXEME_CU;
-            case ACTION:
-                return LEXEME_ACTION;
-            case PARAMS:
-                return LEXEME_PARAMS;
-            case END:
-                return LEXEME_END;
-            case ERROR:
-                return LEXEME_ERROR;
+            case CU: return LEXEME_CU;
+            case ACTION: return LEXEME_ACTION;
+            case PARAMS: return LEXEME_PARAMS;
+            case END: return LEXEME_END;
+            case ERROR: return LEXEME_ERROR;
 
-            case USUARIO:
-                return LEXEME_USUARIO;
-            case CLIENTE:
-                return LEXEME_CLIENTE;
-            case VENDEDOR:
-                return LEXEME_VENDEDOR;
-            case PROPIETARIO:
-                return LEXEME_PROPIETARIO;
+            case USUARIO: return LEXEME_USUARIO;
+            case DELEGACION: return LEXEME_DELEGACION;
+            case INDICADOR: return LEXEME_INDICADOR;
+            case TRAMITE: return LEXEME_TRAMITE;
+            case DOCUMENTO: return LEXEME_DOCUMENTO;
+            case TIPO_TRAMITE: return LEXEME_TIPO_TRAMITE;
+            case FLUJO: return LEXEME_FLUJO;
+            case OBSERVACION: return LEXEME_OBSERVACION;
+            case BITACORA: return LEXEME_BITACORA;
+            case FIRMA: return LEXEME_FIRMA;
+            case DESPACHO: return LEXEME_DESPACHO;
+            case CERTIFICADO: return LEXEME_CERTIFICADO;
+            case PORTAL: return LEXEME_PORTAL;
+            case SLA: return LEXEME_SLA;
+            case ALERTA: return LEXEME_ALERTA;
+            case REPORTE: return LEXEME_REPORTE;
 
-            case PROVEEDOR:
-                return LEXEME_PROVEEDOR;
-            case CATEGORIA:
-                return LEXEME_CATEGORIA;
-            case PRODUCTO:
-                return LEXEME_PRODUCTO;
-            case PRODUCTO_VARIANTE:
-                return LEXEME_PRODUCTO_VARIANTE;
+            case LISTAR: return LEXEME_LISTAR;
+            case AGREGAR: return LEXEME_AGREGAR;
+            case MODIFICAR: return LEXEME_MODIFICAR;
+            case ELIMINAR: return LEXEME_ELIMINAR;
+            case HELP: return LEXEME_HELP;
+            case VALIDAR: return LEXEME_VALIDAR;
+            case AVANZAR: return LEXEME_AVANZAR;
+            case CONSOLIDADA: return LEXEME_CONSOLIDADA;
+            case REMOTA: return LEXEME_REMOTA;
+            case GENERAR: return LEXEME_GENERAR;
+            case CONSULTAR: return LEXEME_CONSULTAR;
+            case VERIFICAR: return LEXEME_VERIFICAR;
+            case TRAMITES: return LEXEME_TRAMITES;
+            case FIRMAS: return LEXEME_FIRMAS;
 
-            
-            case LOTE_INVENTARIO:
-                return LEXEME_LOTE_INVENTARIO; 
-
-            case TECNICA_INVENTARIO:
-                return LEXEME_TECNICA_INVENTARIO;
-            case TECNICA_COSTO:
-                return LEXEME_TECNICA_COSTO;
-
-            case PROMOCION:
-                return LEXEME_PROMOCION;
-            case PROMOCION_CATEGORIA:
-                return LEXEME_PROMOCION_CATEGORIA;
-            case PROMOCION_PRODUCTO:
-                return LEXEME_PROMOCION_PRODUCTO;
-
-            case COMPRA:
-                return LEXEME_COMPRA;
-            case DETALLE_COMPRA:
-                return LEXEME_DETALLE_COMPRA;
-
-            case CARRITO:
-                return LEXEME_CARRITO;
-            
-            case CARRITO_DETALLE:
-                return LEXEME_CARRITO_DETALLE;
-
-
-            case PEDIDO:
-                return LEXEME_PEDIDO;
-            case DETALLE_PEDIDO:
-                return LEXEME_DETALLE_PEDIDO;
-
-            case VENTA:
-                return LEXEME_VENTA;
-            case DETALLE_VENTA:
-                return LEXEME_DETALLE_VENTA;
-
-            case SALIDA_LOTE:
-                return LEXEME_SALIDA_LOTE;
-
-            case MOVIMIENTO_INVENTARIO:
-                return LEXEME_MOVIMIENTO_INVENTARIO;
-
-            case METODO_PAGO:
-                return LEXEME_METODO_PAGO;
-            case PAGO_CONTADO:
-                return LEXEME_PAGO_CONTADO;
-            case CREDITO:
-                return LEXEME_CREDITO;
-            case PAGO_CUOTA:
-                return LEXEME_PAGO_CUOTA;
-
-            case REPORTE:
-                return LEXEME_REPORTE;
-
-            case AGREGAR:
-                return LEXEME_AGREGAR;
-            case ELIMINAR:
-                return LEXEME_ELIMINAR;
-            case MODIFICAR:
-                return LEXEME_MODIFICAR;
-            case LISTAR:
-                return LEXEME_LISTAR;
-            case MOSTRAR:
-                return LEXEME_MOSTRAR;
-            case GENERAR:
-                return LEXEME_GENERAR;
-            case CONSULTAR:
-                return LEXEME_CONSULTAR;
-            case HELP:
-                return LEXEME_HELP;
-
-            case ERROR_COMMAND:
-                return LEXEME_ERROR_COMMAND;
-            case ERROR_CHARACTER:
-                return LEXEME_ERROR_CHARACTER;
-            default:
-                return "N: " + token;
+            case ERROR_COMMAND: return LEXEME_ERROR_COMMAND;
+            case ERROR_CHARACTER: return LEXEME_ERROR_CHARACTER;
+            default: return "N: " + token;
         }
     }
 
@@ -304,125 +205,45 @@ public class Token {
         String normalized = lexeme.trim().toLowerCase();
 
         switch (normalized) {
-            case LEXEME_CU:
-                return CU;
-            case LEXEME_ACTION:
-                return ACTION;
-            case LEXEME_PARAMS:
-                return PARAMS;
-            case LEXEME_END:
-                return END;
-            case LEXEME_ERROR:
-                return ERROR;
+            case LEXEME_CU: return CU;
+            case LEXEME_ACTION: return ACTION;
+            case LEXEME_PARAMS: return PARAMS;
+            case LEXEME_END: return END;
+            case LEXEME_ERROR: return ERROR;
 
-            case LEXEME_USUARIO:
-                return USUARIO;
-            case LEXEME_CLIENTE:
-                return CLIENTE;
-            case LEXEME_VENDEDOR:
-                return VENDEDOR;
-            case LEXEME_PROPIETARIO:
-                return PROPIETARIO;
+            case LEXEME_USUARIO: return USUARIO;
+            case LEXEME_DELEGACION: return DELEGACION;
+            case LEXEME_INDICADOR: return INDICADOR;
+            case LEXEME_TRAMITE: return TRAMITE;
+            case LEXEME_DOCUMENTO: return DOCUMENTO;
+            case LEXEME_TIPO_TRAMITE: return TIPO_TRAMITE;
+            case LEXEME_FLUJO: return FLUJO;
+            case LEXEME_OBSERVACION: return OBSERVACION;
+            case LEXEME_BITACORA: return BITACORA;
+            case LEXEME_FIRMA: return FIRMA;
+            case LEXEME_DESPACHO: return DESPACHO;
+            case LEXEME_CERTIFICADO: return CERTIFICADO;
+            case LEXEME_PORTAL: return PORTAL;
+            case LEXEME_SLA: return SLA;
+            case LEXEME_ALERTA: return ALERTA;
+            case LEXEME_REPORTE: return REPORTE;
 
-            case LEXEME_PROVEEDOR:
-                return PROVEEDOR;
-            case LEXEME_CATEGORIA:
-                return CATEGORIA;
-            case LEXEME_PRODUCTO:
-                return PRODUCTO;
-            case LEXEME_PRODUCTO_VARIANTE:
-                return PRODUCTO_VARIANTE;
+            case LEXEME_LISTAR: return LISTAR;
+            case LEXEME_AGREGAR: return AGREGAR;
+            case LEXEME_MODIFICAR: return MODIFICAR;
+            case LEXEME_ELIMINAR: return ELIMINAR;
+            case LEXEME_HELP: return HELP;
+            case LEXEME_VALIDAR: return VALIDAR;
+            case LEXEME_AVANZAR: return AVANZAR;
+            case LEXEME_CONSOLIDADA: return CONSOLIDADA;
+            case LEXEME_REMOTA: return REMOTA;
+            case LEXEME_GENERAR: return GENERAR;
+            case LEXEME_CONSULTAR: return CONSULTAR;
+            case LEXEME_VERIFICAR: return VERIFICAR;
+            case LEXEME_TRAMITES: return TRAMITES;
+            case LEXEME_FIRMAS: return FIRMAS;
 
-            case LEXEME_TECNICA_INVENTARIO:
-                return TECNICA_INVENTARIO;
-            case LEXEME_TECNICA_COSTO:
-                return TECNICA_COSTO;
-
-            case LEXEME_PROMOCION:
-                return PROMOCION;
-            case LEXEME_PROMOCION_CATEGORIA:
-                return PROMOCION_CATEGORIA;
-            case LEXEME_PROMOCION_PRODUCTO:
-                return PROMOCION_PRODUCTO;
-
-            case LEXEME_COMPRA:
-                return COMPRA;
-            case LEXEME_DETALLE_COMPRA:
-                return DETALLE_COMPRA;
-
-            case LEXEME_LOTE_INVENTARIO:
-                return LOTE_INVENTARIO;
-
-            case LEXEME_CARRITO:
-                return CARRITO;
-
-            case LEXEME_CARRITO_DETALLE:
-                return CARRITO_DETALLE;
-
-            case LEXEME_PEDIDO:
-                return PEDIDO;
-
-            case LEXEME_DETALLE_PEDIDO:
-                return DETALLE_PEDIDO;
-
-            case LEXEME_VENTA:
-                return VENTA;
-
-            case LEXEME_DETALLE_VENTA:
-                return DETALLE_VENTA;
-
-            case LEXEME_SALIDA_LOTE:
-                return SALIDA_LOTE;
-
-            case LEXEME_MOVIMIENTO_INVENTARIO:
-                return MOVIMIENTO_INVENTARIO;
-
-            case LEXEME_METODO_PAGO:
-                return METODO_PAGO;
-
-            case LEXEME_PAGO_CONTADO:
-                return PAGO_CONTADO;
-
-            case LEXEME_CREDITO:
-                return CREDITO;
-
-            case LEXEME_PAGO_CUOTA:
-                return PAGO_CUOTA;
-
-            case LEXEME_REPORTE:
-                return REPORTE;
-
-            case LEXEME_ELIMINAR:
-                return ELIMINAR;
-
-            case LEXEME_MODIFICAR:
-                return MODIFICAR;
-
-            case LEXEME_LISTAR:
-                return LISTAR;
-
-            case LEXEME_AGREGAR:
-                return AGREGAR;
-
-            case LEXEME_MOSTRAR:
-                return MOSTRAR;
-
-            case LEXEME_GENERAR:
-                return GENERAR;
-
-            case LEXEME_CONSULTAR:
-                return CONSULTAR;
-
-            case LEXEME_HELP:
-                return HELP;
-
-            case LEXEME_ERROR_COMMAND:
-                return ERROR_COMMAND;
-
-            case LEXEME_ERROR_CHARACTER:
-                return ERROR_CHARACTER;
-            default:
-                return -1;
+            default: return -1;
         }
     }
 }

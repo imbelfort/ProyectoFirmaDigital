@@ -1,10 +1,11 @@
 # GUIA DE COMANDOS POR CORREO - VICERRECTORADO FIRMA DIGITAL
 ### SERVIDOR: `grupo20sa@tecnoweb.org.bo` | GRUPO 20 SA
 
-> **REGLA DE ACCESO Y CREDENCIALES:**
-> - **Alumnos:** Su identificador es su **Registro Universitario** y su contraseña inicial es su **C.I.**
-> - **Docentes:** Su identificador es su **Código de Docente** y su contraseña inicial es su **C.I.**
-> - **Vicerrector y Personal Administrativo/Encargado:** Su identificador es su **Código de Funcionario** y su contraseña inicial es su **C.I.**
+> **REGLA DE ACCESO Y CREDENCIALES (SOLO NUMEROS, SIN LETRAS):**
+> - **Alumnos:** Su login es su **Registro Universitario numérico** (ej. `219064748`, `218055412`) y su contraseña inicial es su **C.I.**
+> - **Docentes:** Su login es su **Código de Docente numérico de 4 dígitos** (ej. `1045`, `2034`) y su contraseña inicial es su **C.I.**
+> - **Vicerrector y Personal Administrativo/Encargado:** Su login es su **Código numérico de 4 dígitos** (ej. `1001`, `1002`) y su contraseña inicial es su **C.I.**
+> - **No se utilizan letras ni prefijos** en los registros ni en los códigos.
 
 ---
 
@@ -12,7 +13,10 @@
 - **usuario help**
 - **usuario listar**
 - **usuario agregar** `[nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo]`
-  - *Nota:* La contraseña se genera automáticamente igual al CI.
+  - *Ejemplo Alumno:* `usuario agregar [Juan;Perez;4567890;219064748;juan@alu.uagrm.edu.bo;ALUMNO;71000004;Informatica;Estudiante]`
+  - *Ejemplo Docente:* `usuario agregar [Alberto;Guzman;3456789;1045;aguzman@uagrm.edu.bo;DOCENTE;71000003;Informatica;Docente Titular]`
+  - *Ejemplo Autoridad:* `usuario agregar [Carlos;Mendoza;2345678;1002;cmendoza@uagrm.edu.bo;ENCARGADO;71000002;Despacho;Encargado]`
+  - *Nota:* La contraseña se genera automáticamente igual al CI. No lleva letras en el registro.
   - *Roles permitidos:* `VICERRECTOR`, `ENCARGADO`, `DOCENTE`, `ALUMNO`, `ADMINISTRATIVO`.
 - **usuario modificar** `[id_usuario;nombre;apellidos;ci;registro;email;rol;telefono;unidad_academica;cargo;estado]`
 - **usuario eliminar** `[id_usuario]`

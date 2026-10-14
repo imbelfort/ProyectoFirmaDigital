@@ -4,65 +4,36 @@ import Comunication.TokenEvent;
 
 public interface ITokenCasoUsoEventListener {
 
+    // CU1. Gestion de Usuarios
     void usuario(TokenEvent event);
 
-    void cliente(TokenEvent event);
+    // CU2. Delegacion de Autoridad e Indicadores
+    void delegacion(TokenEvent event);
+    void indicador(TokenEvent event);
 
-    void vendedor(TokenEvent event);
+    // CU3. Tramites, Documentos y Expediente
+    void tramite(TokenEvent event);
+    void documento(TokenEvent event);
+    void tipoTramite(TokenEvent event);
 
-    void propietario(TokenEvent event);
+    // CU4. Enrutamiento de Flujo y Guia Procesal
+    void flujo(TokenEvent event);
 
-    void proveedor(TokenEvent event);
+    // CU5. Firma Digital y Despacho
+    void firma(TokenEvent event);
+    void despacho(TokenEvent event);
 
-    void categoria(TokenEvent event);
+    // CU6. Certificado Oficial y Portal Estudiantil
+    void certificado(TokenEvent event);
+    void portal(TokenEvent event);
 
-    void producto(TokenEvent event);
+    // CU7. Monitoreo SLA y Alertas
+    void sla(TokenEvent event);
 
-    void productoVariante(TokenEvent event);
-
-    void tecnicaInventario(TokenEvent event);
-
-    void tecnicaCosto(TokenEvent event);
-
-    void promocion(TokenEvent event);
-
-    void promocionCategoria(TokenEvent event);
-
-    void promocionProducto(TokenEvent event);
-
-    void compra(TokenEvent event);
-
-    void detalleCompra(TokenEvent event);
-
-    void loteInventario(TokenEvent event);
-
-    void carrito(TokenEvent event);
-
-    void carritoDetalle(TokenEvent event);
-
-    void pedido(TokenEvent event);
-
-    void pedidoDetalle(TokenEvent event);
-
-    void venta(TokenEvent event);
-
-    void detalleVenta(TokenEvent event);
-
-    void movimientoInventario(TokenEvent event);
-
-    void salidaLote(TokenEvent event);
-
-    void metodoPago(TokenEvent event);
-
-    void pagoContado(TokenEvent event);
-
-    void credito(TokenEvent event);
-
-    void pagoCuota(TokenEvent event);
-
+    // CU8. Reportes y Estadisticas
     void reporte(TokenEvent event);
 
+    // Manejo de Errores y Help
     void error(TokenEvent event);
-
     void posibleserrores(TokenEvent event);
 }
