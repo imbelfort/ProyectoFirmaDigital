@@ -6,6 +6,8 @@
 package Utils;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class Extractor {
     
     
     public static Email getEmail(String plain_text){
-        String normalizedText = plain_text == null ? "" : plain_text.stripLeading();
+        String normalizedText = plain_text == null ? "" : plain_text.replaceFirst("^\\s+", "");
         Email email = new Email(getFrom(normalizedText), getSubject(normalizedText));
         List<Email.Attachment> attachments = extractAttachments(normalizedText);
         email.setAttachments(attachments);
@@ -86,7 +88,7 @@ public class Extractor {
         boolean looksLikeAttachment = !isTextPart
             && (Part.ATTACHMENT.equalsIgnoreCase(disposition)
             || Part.INLINE.equalsIgnoreCase(disposition)
-            || (fileName != null && !fileName.isBlank())
+            || (fileName != null && !fileName.trim().isEmpty())
             || part.isMimeType("image/*")
             || contentType.startsWith("image/")
             || contentType.startsWith("application/"));
@@ -95,7 +97,15 @@ public class Extractor {
             return;
         }
 
-        byte[] bytes = part.getInputStream().readAllBytes();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[1024];
+        InputStream is = part.getInputStream();
+        while ((nRead = is.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+        buffer.flush();
+        byte[] bytes = buffer.toByteArray();
         if (bytes.length == 0) {
             return;
         }
@@ -104,7 +114,7 @@ public class Extractor {
     }
 
     private static List<Email.Attachment> extractAttachmentsFromRawText(String plainText) {
-        if (plainText == null || plainText.isBlank()) {
+        if (plainText == null || plainText.trim().isEmpty()) {
             return new ArrayList<>();
         }
 
@@ -170,7 +180,7 @@ public class Extractor {
                 .replaceAll("\\s+", "")
                 .trim();
 
-        if (base64Block.isBlank()) {
+        if (base64Block.trim().isEmpty()) {
             return new ArrayList<>();
         }
 
