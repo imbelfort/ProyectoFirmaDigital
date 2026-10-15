@@ -111,9 +111,15 @@ public class Interpreter implements Runnable {
         TokenCommand tokenCommand = new TokenCommand();
         Token token;
 
+        boolean cuSet = false;
         while ((token = analex.Preanalisis()).getName() != Token.END && token.getName() != Token.ERROR) {
             if (token.getName() == Token.CU) {
-                tokenCommand.setName(token.getAttribute());
+                if (!cuSet) {
+                    tokenCommand.setName(token.getAttribute());
+                    cuSet = true;
+                } else {
+                    tokenCommand.setAction(token.getAttribute());
+                }
             } else if (token.getName() == Token.ACTION) {
                 tokenCommand.setAction(token.getAttribute());
             } else if (token.getName() == Token.PARAMS) {

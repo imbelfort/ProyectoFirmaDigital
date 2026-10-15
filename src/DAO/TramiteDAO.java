@@ -86,4 +86,24 @@ public class TramiteDAO {
             }
         }
     }
+
+    public void updateEstado(int id, String estado) throws SQLException {
+        String sql = "UPDATE tramite SET estado = ? WHERE id = ?";
+        try (Connection con = Conexion.getInstancia().EstablecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, estado);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
+    public void updateEstadoFinalizado(int id, String estado) throws SQLException {
+        String sql = "UPDATE tramite SET estado = ?, fecha_finalizacion = CURRENT_TIMESTAMP WHERE id = ?";
+        try (Connection con = Conexion.getInstancia().EstablecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, estado);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
 }

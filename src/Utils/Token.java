@@ -44,6 +44,7 @@ public class Token {
     public static final int VERIFICAR = 211;
     public static final int TRAMITES = 212;
     public static final int FIRMAS = 213;
+    public static final int HABILITAR = 214;
 
     public static final int ERROR_COMMAND = 300;
     public static final int ERROR_CHARACTER = 301;
@@ -85,6 +86,7 @@ public class Token {
     public static final String LEXEME_VERIFICAR = "verificar";
     public static final String LEXEME_TRAMITES = "tramites";
     public static final String LEXEME_FIRMAS = "firmas";
+    public static final String LEXEME_HABILITAR = "habilitar";
 
     public static final String LEXEME_ERROR_COMMAND = "UNKNOWN COMMAND";
     public static final String LEXEME_ERROR_CHARACTER = "UNKNOWN CHARACTER";
@@ -190,6 +192,7 @@ public class Token {
             case VERIFICAR: return LEXEME_VERIFICAR;
             case TRAMITES: return LEXEME_TRAMITES;
             case FIRMAS: return LEXEME_FIRMAS;
+            case HABILITAR: return LEXEME_HABILITAR;
 
             case ERROR_COMMAND: return LEXEME_ERROR_COMMAND;
             case ERROR_CHARACTER: return LEXEME_ERROR_CHARACTER;
@@ -242,6 +245,7 @@ public class Token {
             case LEXEME_VERIFICAR: return VERIFICAR;
             case LEXEME_TRAMITES: return TRAMITES;
             case LEXEME_FIRMAS: return FIRMAS;
+            case LEXEME_HABILITAR: return HABILITAR;
 
             default: return -1;
         }

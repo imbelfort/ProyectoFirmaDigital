@@ -33,6 +33,12 @@ public class DespachoService {
         d.setEstado("DESPACHADO");
 
         despachoDAO.create(d);
+
+        try {
+            new DAO.TramiteDAO().updateEstadoFinalizado(idTramite, "DESPACHADO");
+            new DAO.SlaDAO().cerrarSla(idTramite);
+        } catch (Exception ignored) {
+        }
     }
 
     public List<String[]> listarDespachos() throws SQLException {

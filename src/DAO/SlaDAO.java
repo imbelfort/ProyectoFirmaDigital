@@ -69,4 +69,31 @@ public class SlaDAO {
             }
         }
     }
+
+    public void createDefaultSla(int idTramite, int horasLimite) throws SQLException {
+        String sql = "INSERT INTO monitoreo_sla (id_tramite, horas_sla_limite, fecha_inicio_sla, fecha_limite_sla, horas_transcurridas, estado_sla) " +
+                     "VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + (? || ' hours')::interval, 0.0, 'EN_TIEMPO') " +
+                     "ON CONFLICT (id_tramite) DO NOTHING";
+        try (Connection con = Conexion.getInstancia().EstablecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idTramite);
+            ps.setInt(2, horasLimite);
+            ps.setInt(3, horasLimite);
+            ps.executeUpdate();
+        }
+    }
+
+    public void cerrarSla(int idTramite) throws SQLException {
+        String sql = "UPDATE monitoreo_sla SET " +
+                     "horas_transcurridas = ROUND(CAST(EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - fecha_inicio_sla)) / 3600 AS numeric), 2), " +
+                     "estado_sla = CASE " +
+                     "  WHEN CURRENT_TIMESTAMP <= fecha_limite_sla THEN 'CUMPLIDO_EN_TIEMPO' " +
+                     "  ELSE 'CUMPLIDO_FUERA_DE_TIEMPO' END " +
+                     "WHERE id_tramite = ?";
+        try (Connection con = Conexion.getInstancia().EstablecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idTramite);
+            ps.executeUpdate();
+        }
+    }
 }

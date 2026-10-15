@@ -38,6 +38,11 @@ public class FirmaService {
         f.setValido(true);
 
         firmaDAO.create(f);
+
+        try {
+            new DAO.TramiteDAO().updateEstado(idTramite, "FIRMADO");
+        } catch (Exception ignored) {
+        }
     }
 
     public List<String[]> listarFirmas() throws SQLException {

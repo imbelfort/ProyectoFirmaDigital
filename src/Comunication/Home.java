@@ -398,6 +398,7 @@ public class Home {
                             enviarRespuesta(email, respuesta, "Portales de Seguimiento Estudiantil Activos", HtmlBuilder.HEADERS_PORTAL, portalService.listarPortales());
                             break;
                         case Token.AGREGAR:
+                        case Token.HABILITAR:
                             portalService.habilitarPortal(event.getParams());
                             enviarMensajeYTabla(email, respuesta, "Portal de seguimiento habilitado exitosamente", "Portales de Seguimiento", HtmlBuilder.HEADERS_PORTAL, portalService.listarPortales());
                             break;

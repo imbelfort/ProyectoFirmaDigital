@@ -34,6 +34,12 @@ public class TramiteService {
         t.setEstado("INICIADO");
 
         tramiteDAO.create(t);
+
+        try {
+            new DAO.SlaDAO().createDefaultSla(t.getId(), 72);
+        } catch (Exception ignored) {
+            // SLA ya inicializado o tolerante a fallas
+        }
     }
 
     public List<String[]> listarTramites() throws SQLException {

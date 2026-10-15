@@ -9,7 +9,8 @@ import java.util.List;
 public class ReporteDAO {
 
     public List<String[]> reporteTramitesPorEstado() throws SQLException {
-        String sql = "SELECT estado, COUNT(*) AS total, ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM tramite), 2) AS porcentaje " +
+        String sql = "SELECT estado, COUNT(*) AS total, " +
+                     "COALESCE(ROUND(COUNT(*) * 100.0 / NULLIF((SELECT COUNT(*) FROM tramite), 0), 2), 0) AS porcentaje " +
                      "FROM tramite GROUP BY estado ORDER BY total DESC";
         List<String[]> lista = new ArrayList<>();
         try (Connection con = Conexion.getInstancia().EstablecerConexion();
@@ -28,7 +29,7 @@ public class ReporteDAO {
 
     public List<String[]> reporteCumplimientoSla() throws SQLException {
         String sql = "SELECT estado_sla, COUNT(*) AS cantidad, " +
-                     "ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM monitoreo_sla), 2) AS tasa_porcentaje " +
+                     "COALESCE(ROUND(COUNT(*) * 100.0 / NULLIF((SELECT COUNT(*) FROM monitoreo_sla), 0), 2), 0) AS tasa_porcentaje " +
                      "FROM monitoreo_sla GROUP BY estado_sla ORDER BY cantidad DESC";
         List<String[]> lista = new ArrayList<>();
         try (Connection con = Conexion.getInstancia().EstablecerConexion();
