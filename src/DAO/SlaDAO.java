@@ -63,7 +63,10 @@ public class SlaDAO {
         try (Connection con = Conexion.getInstancia().EstablecerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idTramite);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("No se encontró monitoreo SLA para el trámite con ID: " + idTramite + ". Verifique con 'sla listar'.");
+            }
         }
     }
 }

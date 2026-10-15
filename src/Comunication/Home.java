@@ -50,7 +50,23 @@ public class Home {
 
         String subjectText = email.getSubject() != null ? email.getSubject().trim() : "";
 
-        // Si el asunto está completamente vacío o es directamente help
+        // Si el asunto está completamente vacío
+        if (subjectText.isEmpty()) {
+            String htmlError = HtmlBuilder.generateDetailedError(
+                    "(Asunto vacío)",
+                    "Comando Vacío o No Proporcionado",
+                    "El correo o mensaje recibido no contiene ningún comando en el Asunto (Subject).\n" +
+                    "• El sistema requiere que el comando se escriba en el Asunto del correo.\n" +
+                    "• Ingrese un comando como 'help' para consultar la guía completa o 'usuario listar' para consultar registros.",
+                    "<entidad> <accion> [parametros]",
+                    "usuario listar  ó  tramite listar  ó  help"
+            );
+            mostraRespuesta(htmlError);
+            respuesta.responseUser(email, htmlError);
+            return;
+        }
+
+        // Si es directamente help o ayuda general
         if (subjectText.equalsIgnoreCase("help") || subjectText.equalsIgnoreCase("ayuda")) {
             mostrarYEnviarHELPGeneral(email, respuesta);
             return;
@@ -82,9 +98,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Usuario con ID " + id + " eliminado exitosamente", "Lista de Usuarios", HtmlBuilder.HEADERS_USER, usuarioService.listarUsuarios());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Gestion de Usuarios (CU1)", usuarioService.getComandosUsuario());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'usuario'.\n" +
+                                "• Acciones válidas: listar, agregar, modificar, eliminar, help.\n" +
+                                "• Envie 'usuario help' para ver la sintaxis y ejemplos de cada acción."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "usuario");
@@ -113,9 +134,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Delegacion con ID " + id + " eliminada exitosamente", "Lista de Delegaciones", HtmlBuilder.HEADERS_DELEGACION, delegacionService.listarDelegaciones());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Delegacion (CU2)", delegacionService.getComandosDelegacion());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'delegacion'.\n" +
+                                "• Acciones válidas: listar, agregar, modificar, eliminar, help.\n" +
+                                "• Envie 'delegacion help' para ver la sintaxis y ejemplos de cada acción."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "delegacion");
@@ -138,9 +164,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Indicador actualizado exitosamente", "Indicadores de Gestion", HtmlBuilder.HEADERS_INDICADOR, indicadorService.listarIndicadores());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Indicadores (CU2)", indicadorService.getComandosIndicador());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'indicador'.\n" +
+                                "• Acciones válidas: listar, agregar, modificar, help.\n" +
+                                "• Envie 'indicador help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "indicador");
@@ -169,9 +200,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Tramite con ID " + id + " eliminado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Tramites (CU3)", tramiteService.getComandosTramite());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'tramite'.\n" +
+                                "• Acciones válidas: listar, agregar, modificar, eliminar, help.\n" +
+                                "• Envie 'tramite help' para ver la sintaxis y ejemplos de cada acción."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "tramite");
@@ -194,9 +230,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Documento validado correctamente", "Documentos del Expediente", HtmlBuilder.HEADERS_DOCUMENTO, documentoService.listarDocumentos());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Documentos (CU3)", documentoService.getComandosDocumento());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'documento'.\n" +
+                                "• Acciones válidas: listar, agregar, validar, help.\n" +
+                                "• Envie 'documento help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "documento");
@@ -215,9 +256,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Tipo de tramite registrado", "Catalogo de Tramites", HtmlBuilder.HEADERS_TIPO_TRAMITE, tipoTramiteService.listarTipos());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Tipos de Tramite (CU3)", tipoTramiteService.getComandosTipoTramite());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'tipo_tramite'.\n" +
+                                "• Acciones válidas: listar, agregar, help.\n" +
+                                "• Envie 'tipo_tramite help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "tipo_tramite");
@@ -237,9 +283,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Etapa del tramite actualizada", "Flujo de Tramites", HtmlBuilder.HEADERS_FLUJO, flujoService.listarFlujo());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Flujo (CU4)", flujoService.getComandosFlujo());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'flujo'.\n" +
+                                "• Acciones válidas: listar, avanzar, help.\n" +
+                                "• Envie 'flujo help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "flujo");
@@ -263,9 +314,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Firma digital remota vicerrectoral ejecutada exitosamente", "Firmas Digitales", HtmlBuilder.HEADERS_FIRMA, firmaService.listarFirmas());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Firma Digital (CU5)", firmaService.getComandosFirma());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'firma'.\n" +
+                                "• Acciones válidas: listar, consolidada, remota, help.\n" +
+                                "• Envie 'firma help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "firma");
@@ -284,9 +340,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "Legajo despachado oficialmente", "Despachos Oficiales", HtmlBuilder.HEADERS_DESPACHO, despachoService.listarDespachos());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Despacho (CU5)", despachoService.getComandosDespacho());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'despacho'.\n" +
+                                "• Acciones válidas: listar, agregar, help.\n" +
+                                "• Envie 'despacho help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "despacho");
@@ -315,9 +376,14 @@ public class Home {
                             }
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Certificado QR (CU6)", certificadoService.getComandosCertificado());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'certificado'.\n" +
+                                "• Acciones válidas: listar, generar, consultar, help.\n" +
+                                "• Envie 'certificado help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "certificado");
@@ -345,9 +411,14 @@ public class Home {
                             }
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Portal (CU6)", portalService.getComandosPortal());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'portal'.\n" +
+                                "• Acciones válidas: listar, agregar, consultar, help.\n" +
+                                "• Envie 'portal help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "portal");
@@ -367,9 +438,14 @@ public class Home {
                             enviarMensajeYTabla(email, respuesta, "SLA verificado y actualizado exitosamente", "Monitoreo SLA", HtmlBuilder.HEADERS_SLA, slaService.listarMonitoreo());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Monitoreo SLA (CU7)", slaService.getComandosSla());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'sla'.\n" +
+                                "• Acciones válidas: listar, verificar, help.\n" +
+                                "• Envie 'sla help' para ver la sintaxis y ejemplos."
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "sla");
@@ -391,9 +467,14 @@ public class Home {
                             enviarRespuesta(email, respuesta, "Reporte de Firmas por Autoridad Vicerrectoral", HtmlBuilder.HEADERS_REPORTE_FIRMAS, reporteService.reporteFirmasPorVicerrector());
                             break;
                         case Token.HELP:
-                        default:
                             mostrarYEnviarHELP(email, respuesta, "Comandos Reportes y Estadisticas (CU8)", reporteService.getComandosReporte());
                             break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Reporte o acción no reconocida para 'reporte'.\n" +
+                                "• Reportes disponibles: reporte tramites, reporte sla, reporte firmas, reporte help.\n" +
+                                "• Ejemplo: reporte tramites"
+                            );
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "reporte");
@@ -407,10 +488,12 @@ public class Home {
 
                 String htmlError = HtmlBuilder.generateDetailedError(
                         cmd,
-                        "Error de Sintaxis en Comando",
-                        "El término o palabra '" + lexeme + "' no es un comando o acción reconocida por el sistema.\n"
-                        + "Verifique que la entidad y la acción estén escritas correctamente (en minúsculas y sin acentos).",
-                        "<caso_de_uso> <accion> [parametro1;parametro2;...]",
+                        "Error de Sintaxis o Carácter Inválido en Comando",
+                        "El término, carácter o palabra '" + lexeme + "' no es reconocido por el analizador del sistema.\n"
+                        + "• Verifique que la entidad y la acción estén escritas en minúsculas y sin acentos (ej. 'tramite listar').\n"
+                        + "• Recuerde que los parámetros deben ir entre corchetes [ ] y separados con punto y coma (;).\n"
+                        + "• No use caracteres especiales ni signos extraños fuera de los corchetes.",
+                        "<entidad> <accion> [parametro1;parametro2;...]",
                         "usuario listar  ó  tramite listar  ó  help"
                 );
                 mostraRespuesta(htmlError);
@@ -426,9 +509,23 @@ public class Home {
 
                 String htmlError = HtmlBuilder.generateDetailedError(
                         subjectText,
-                        "Comando No Reconocido",
-                        "No se reconoce la entidad o caso de uso en el comando enviado: '" + subjectText + "'.\n"
-                        + "Las entidades disponibles son: usuario, delegacion, indicador, tramite, documento, tipo_tramite, flujo, firma, despacho, certificado, portal, sla, reporte.",
+                        "Entidad o Comando Principal No Reconocido",
+                        "No se reconoce la entidad o comando principal: '" + subjectText + "'.\n"
+                        + "• Entidades válidas del sistema:\n"
+                        + "  - usuario (gestión de usuarios, alumnos, docentes, autoridades)\n"
+                        + "  - tramite (iniciar, modificar, listar, eliminar)\n"
+                        + "  - documento (anexar y validar documentos del expediente)\n"
+                        + "  - delegacion (delegaciones de firma de autoridades)\n"
+                        + "  - indicador (indicadores de gestión vicerrectoral)\n"
+                        + "  - tipo_tramite (catálogo oficial de trámites)\n"
+                        + "  - flujo (enrutamiento y avance de etapas)\n"
+                        + "  - firma (emisión de firma consolidada o remota)\n"
+                        + "  - despacho (registro de despachos oficiales)\n"
+                        + "  - certificado (emisión y consulta de certificados con QR)\n"
+                        + "  - portal (seguimiento público de trámites con PIN)\n"
+                        + "  - sla (monitoreo de 72 horas hábiles y alertas)\n"
+                        + "  - reporte (estadísticas de trámites, firmas y SLA)\n"
+                        + "• Envie únicamente la palabra 'help' en el Asunto para recibir el manual general.",
                         "<entidad> <accion> [parametros]",
                         "usuario listar  ó  tramite agregar [...]  ó  help"
                 );
@@ -461,46 +558,94 @@ public class Home {
         String ejemploValido = obtenerEjemploCasoUso(casoUso);
 
         if (ex instanceof IllegalArgumentException) {
-            causaPrincipal = "Parámetros incorrectos o faltantes";
+            causaPrincipal = "Parámetros Incorrectos o Faltantes en el Comando";
             detalleFallo = ex.getMessage();
         } else if (ex instanceof SQLException) {
             String sqlMsg = ex.getMessage() != null ? ex.getMessage() : "";
-            causaPrincipal = "Restricción de Base de Datos";
 
-            if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_tramite_solicitante")) {
-                detalleFallo = "El usuario solicitante especificado no existe en la base de datos de usuarios.\n"
-                        + "Debe ingresar el ID de un usuario existente. Verifique los IDs con 'usuario listar'.";
+            if (sqlMsg.startsWith("No se encontró") || sqlMsg.startsWith("No existe")) {
+                causaPrincipal = "Registro No Encontrado en Base de Datos";
+                detalleFallo = sqlMsg;
+            } else if (sqlMsg.startsWith("Ya existe")) {
+                causaPrincipal = "Registro Duplicado en Base de Datos";
+                detalleFallo = sqlMsg;
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_tramite_solicitante")) {
+                causaPrincipal = "Usuario Solicitante No Encontrado";
+                detalleFallo = "El ID de solicitante ingresado no existe en la base de datos de usuarios.\n"
+                        + "• Debe ingresar el ID de un usuario previamente registrado.\n"
+                        + "• Consulte los usuarios registrados mediante 'usuario listar'.";
             } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_tramite_tipo")) {
-                detalleFallo = "El tipo de trámite especificado no existe en el catálogo.\n"
-                        + "Verifique los tipos disponibles con 'tipo_tramite listar'.";
+                causaPrincipal = "Tipo de Trámite No Encontrado";
+                detalleFallo = "El ID de tipo de trámite ingresado no existe en el catálogo.\n"
+                        + "• Verifique los tipos disponibles mediante 'tipo_tramite listar'.";
             } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_delegacion_titular")) {
-                detalleFallo = "La autoridad titular especificada no existe en la base de datos de usuarios.";
+                causaPrincipal = "Autoridad Titular No Encontrada";
+                detalleFallo = "El ID de autoridad titular no existe en la base de datos de usuarios. Verifique con 'usuario listar'.";
             } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_delegacion_delegado")) {
-                detalleFallo = "La autoridad delegada especificada no existe en la base de datos de usuarios.";
-            } else if (sqlMsg.contains("violates foreign key constraint") && (sqlMsg.contains("fk_doc_tramite") || sqlMsg.contains("fk_flujo_tramite") || sqlMsg.contains("fk_firma_tramite") || sqlMsg.contains("fk_despacho_tramite") || sqlMsg.contains("fk_cert_tramite"))) {
+                causaPrincipal = "Autoridad Delegada No Encontrada";
+                detalleFallo = "El ID de autoridad delegada no existe en la base de datos de usuarios. Verifique con 'usuario listar'.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && (sqlMsg.contains("fk_doc_tramite") || sqlMsg.contains("fk_flujo_tramite") || sqlMsg.contains("fk_firma_tramite") || sqlMsg.contains("fk_despacho_tramite") || sqlMsg.contains("fk_cert_tramite") || sqlMsg.contains("fk_portal_tramite") || sqlMsg.contains("fk_sla_tramite") || sqlMsg.contains("fk_obs_tramite") || sqlMsg.contains("fk_bitacora_tramite"))) {
+                causaPrincipal = "Trámite No Encontrado en el Sistema";
                 detalleFallo = "El ID de trámite especificado no existe en el sistema.\n"
-                        + "Verifique los trámites registrados mediante 'tramite listar'.";
+                        + "• Debe asociar la operación a un trámite existente.\n"
+                        + "• Verifique los trámites registrados mediante 'tramite listar'.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_doc_requisito")) {
+                causaPrincipal = "Requisito No Encontrado";
+                detalleFallo = "El ID de requisito especificado no existe en el catálogo de requisitos.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_flujo_responsable")) {
+                causaPrincipal = "Usuario Responsable No Encontrado";
+                detalleFallo = "El ID de usuario responsable para la etapa de flujo no existe en la base de datos de usuarios.\n"
+                        + "• Verifique los IDs disponibles mediante 'usuario listar'.";
             } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_firma_firmante")) {
-                detalleFallo = "El usuario firmante especificado no existe en la base de datos de usuarios.";
+                causaPrincipal = "Usuario Firmante No Encontrado";
+                detalleFallo = "El usuario firmante especificado no existe en la base de datos de usuarios. Verifique con 'usuario listar'.";
             } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_despacho_usuario")) {
-                detalleFallo = "El usuario despachador especificado no existe en la base de datos de usuarios.";
+                causaPrincipal = "Usuario Despachador No Encontrado";
+                detalleFallo = "El usuario despachador especificado no existe en la base de datos de usuarios. Verifique con 'usuario listar'.";
+            } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_cert_firma")) {
+                causaPrincipal = "Firma Digital No Encontrada";
+                detalleFallo = "El ID de firma digital especificado no existe en el registro de firmas.\n"
+                        + "• El trámite debe ser firmado digitalmente antes de generar el certificado oficial.\n"
+                        + "• Verifique las firmas disponibles con 'firma listar'.";
+            } else if (sqlMsg.contains("is still referenced from table")) {
+                causaPrincipal = "No Se Puede Eliminar: Registro en Uso Activo";
+                detalleFallo = "No es posible eliminar este registro porque ya cuenta con trámites, firmas o expedientes asociados en el sistema.\n"
+                        + "• Por normativa y trazabilidad institucional, los registros con historial no pueden borrarse físicamente.\n"
+                        + "• Puede cambiar su estado a 'INACTIVO' mediante el comando modificar.";
             } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("ci")) {
-                detalleFallo = "El C.I. ingresado ya pertenece a otro usuario registrado. Cada usuario debe tener un C.I. único.";
+                causaPrincipal = "C.I. Ya Registrado en el Sistema";
+                detalleFallo = "El C.I. ingresado ya pertenece a otro usuario registrado. Cada usuario debe poseer un C.I. único.";
             } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("registro")) {
-                detalleFallo = "El Registro o Código numérico ya pertenece a otro usuario registrado.";
+                causaPrincipal = "Registro/Código Universitario Ya Existe";
+                detalleFallo = "El Registro o Código numérico ya pertenece a otro usuario en el sistema.";
             } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("email")) {
-                detalleFallo = "El correo electrónico ingresado ya está asociado a otra cuenta.";
+                causaPrincipal = "Correo Electrónico Ya Registrado";
+                detalleFallo = "El correo electrónico ingresado ya se encuentra asociado a otra cuenta de usuario.";
             } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("codigo_tramite")) {
-                detalleFallo = "El código de trámite ya existe. Cada trámite debe tener un código numérico único.";
+                causaPrincipal = "Código de Trámite Duplicado";
+                detalleFallo = "El código de trámite ya existe en la base de datos. Cada trámite debe tener un código numérico único.";
             } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("numero_despacho")) {
-                detalleFallo = "El número de despacho ya existe.";
+                causaPrincipal = "Número de Despacho Duplicado";
+                detalleFallo = "El número de despacho oficial ya fue registrado anteriormente.";
             } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("codigo_verificacion")) {
-                detalleFallo = "El código de verificación ya existe.";
+                causaPrincipal = "Código de Verificación Duplicado";
+                detalleFallo = "El código de verificación del certificado ya existe en el sistema.";
+            } else if (sqlMsg.contains("violates unique constraint") && sqlMsg.contains("id_tramite")) {
+                causaPrincipal = "Trámite Ya Cuenta con Este Registro";
+                detalleFallo = "Este trámite ya tiene habilitado su portal de seguimiento o su monitoreo SLA.";
+            } else if (sqlMsg.contains("invalid input syntax for type integer")) {
+                causaPrincipal = "Tipo de Dato Inválido (Se Esperaba un Número Entero)";
+                detalleFallo = "Se ingresó texto, letras o caracteres en un campo donde la base de datos requiere exclusivamente un número entero (ID o código).\n"
+                        + "• Revise el orden y posición de los parámetros.";
+            } else if (sqlMsg.contains("date/time field value out of range")) {
+                causaPrincipal = "Formato de Fecha Inválido";
+                detalleFallo = "El valor de fecha ingresado no es válido. Debe usar estrictamente el formato AAAA-MM-DD (ejemplo: 2026-10-15).";
             } else {
+                causaPrincipal = "Restricción de Base de Datos";
                 detalleFallo = sqlMsg;
             }
         } else {
-            causaPrincipal = "Error durante el procesamiento";
+            causaPrincipal = "Error Inesperado Durante el Procesamiento";
             detalleFallo = ex.getMessage() != null ? ex.getMessage() : ex.toString();
         }
 

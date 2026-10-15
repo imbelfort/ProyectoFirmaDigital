@@ -27,8 +27,8 @@ public class UsuarioService {
         String apellidos = ParamValidator.requireString(params, 1, "apellidos", sintaxis, ejemplo);
         String ci = ParamValidator.requireString(params, 2, "ci", sintaxis, ejemplo).toUpperCase();
         String registro = ParamValidator.requireNumericCode(params, 3, "registro", sintaxis, ejemplo);
-        String email = ParamValidator.requireString(params, 4, "email", sintaxis, ejemplo).toLowerCase();
-        String rol = ParamValidator.optionalString(params, 5, "ALUMNO").toUpperCase();
+        String email = ParamValidator.requireEmail(params, 4, "email", sintaxis, ejemplo);
+        String rol = ParamValidator.requireRol(params, 5, "ALUMNO", sintaxis, ejemplo);
         String telefono = ParamValidator.optionalString(params, 6, "");
         
         // Regla: Para ALUMNO, parámetro 7 es su Facultad y parámetro 8 es su Carrera (los alumnos no tienen cargo).
@@ -90,8 +90,8 @@ public class UsuarioService {
         String apellidos = ParamValidator.requireString(params, 2, "apellidos", sintaxis, ejemplo);
         String ci = ParamValidator.requireString(params, 3, "ci", sintaxis, ejemplo).toUpperCase();
         String registro = ParamValidator.requireNumericCode(params, 4, "registro", sintaxis, ejemplo);
-        String email = ParamValidator.requireString(params, 5, "email", sintaxis, ejemplo).toLowerCase();
-        String rol = ParamValidator.optionalString(params, 6, "ALUMNO").toUpperCase();
+        String email = ParamValidator.requireEmail(params, 5, "email", sintaxis, ejemplo);
+        String rol = ParamValidator.requireRol(params, 6, "ALUMNO", sintaxis, ejemplo);
         String telefono = ParamValidator.optionalString(params, 7, "");
         String facultadOUnidad = ParamValidator.optionalString(params, 8, "");
         String carreraOCargo = ParamValidator.optionalString(params, 9, "");

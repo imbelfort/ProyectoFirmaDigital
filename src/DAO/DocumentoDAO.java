@@ -60,7 +60,10 @@ public class DocumentoDAO {
             ps.setString(1, estado);
             ps.setString(2, observacion);
             ps.setInt(3, id);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("No se encontró ningún documento con el ID: " + id + ". Verifique los documentos con 'documento listar [id_tramite]'.");
+            }
         }
     }
 }

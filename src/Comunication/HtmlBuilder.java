@@ -88,195 +88,119 @@ public class HtmlBuilder {
     // GENERAR TABLA GENERAL
     // ============================================================
 
-public static String generateTable(String title, String[] headers, List<String[]> data) {
-    StringBuilder tableHeadersHtml = new StringBuilder();
+    // ============================================================
+    // CONSTRUCTOR DE TABLA PRINCIPAL (ESTILO EJECUTIVO MODERNO)
+    // ============================================================
 
-    for (String header : headers) {
-        tableHeadersHtml.append("<th style=\"border: 1px solid #6A1B9A; padding: 4px; ")
-                .append("background-color: #6A1B9A; color: white; font-size: 12px;\">")
-                .append(escapeHtml(header))
-                .append("</th>");
-    }
+    private static String buildTableHtml(String title, String[] headers, List<String[]> data) {
+        StringBuilder tableHeadersHtml = new StringBuilder();
 
-    StringBuilder tableBodyHtml = new StringBuilder();
+        for (String header : headers) {
+            tableHeadersHtml.append("<th style=\"background-color: #1E3A8A; color: #FFFFFF; font-size: 11px; ")
+                    .append("font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; ")
+                    .append("padding: 10px 8px; border: 1px solid #1E3A8A; text-align: center;\">")
+                    .append(escapeHtml(header))
+                    .append("</th>");
+        }
 
-    if (data == null || data.isEmpty()) {
-        tableBodyHtml.append("<tr>")
-                .append("<td colspan=\"")
-                .append(headers.length)
-                .append("\" style=\"border: 1px solid #6A1B9A; padding: 8px; ")
-                .append("color: #4A148C; font-size: 12px; text-align: center;\">")
-                .append("No existen registros para mostrar")
-                .append("</td>")
-                .append("</tr>");
-    } else {
-        for (String[] element : data) {
-            tableBodyHtml.append("<tr style=\"border: 1px solid #6A1B9A; background-color: #F3E5F5;\">");
+        StringBuilder tableBodyHtml = new StringBuilder();
 
-            for (int i = 0; i < headers.length; i++) {
-                String value = "";
+        if (data == null || data.isEmpty()) {
+            tableBodyHtml.append("<tr>")
+                    .append("<td colspan=\"")
+                    .append(headers.length)
+                    .append("\" style=\"border: 1px solid #CBD5E1; padding: 24px 10px; ")
+                    .append("color: #64748B; font-size: 13px; text-align: center; font-style: italic; background-color: #F8FAFC;\">")
+                    .append("No existen registros para mostrar")
+                    .append("</td>")
+                    .append("</tr>");
+        } else {
+            for (int r = 0; r < data.size(); r++) {
+                String[] element = data.get(r);
+                String bgColor = (r % 2 == 0) ? "#FFFFFF" : "#F8FAFC";
 
-                if (element != null && i < element.length && element[i] != null) {
-                    value = element[i];
+                tableBodyHtml.append("<tr style=\"background-color: ").append(bgColor).append(";\">");
+
+                for (int i = 0; i < headers.length; i++) {
+                    String value = "";
+
+                    if (element != null && i < element.length && element[i] != null) {
+                        value = element[i];
+                    }
+
+                    String header = headers[i];
+
+                    tableBodyHtml.append("<td style=\"border: 1px solid #CBD5E1; padding: 8px 10px; ")
+                            .append("color: #334155; font-size: 12px; text-align: center; vertical-align: middle;\">")
+                            .append(formatValueByHeader(header, value))
+                            .append("</td>");
                 }
 
-                String header = headers[i];
-
-                tableBodyHtml.append("<td style=\"border: 1px solid #6A1B9A; padding: 4px; ")
-                        .append("color: #4A148C; font-size: 12px; text-align:center; vertical-align:middle;\">")
-                        .append(formatValueByHeader(header, value))
-                        .append("</td>");
+                tableBodyHtml.append("</tr>");
             }
-
-            tableBodyHtml.append("</tr>");
         }
-    }
 
-    String html = "<center><h3 style=\"color: #4A148C; font-size: 16px;\">"
-            + escapeHtml(title)
-            + "</h3></center>"
-            + "<table style=\"border-collapse: collapse; border: 1px solid #6A1B9A; "
-            + "width: 95%; margin: auto; font-family: Arial; font-size: 12px;\">"
-            + "<thead><tr>"
-            + tableHeadersHtml
-            + "</tr></thead>"
-            + "<tbody>"
-            + tableBodyHtml
-            + "</tbody>"
-            + "</table>";
-
-    return insertInHtml(html);
-}
-
-public static String generateTableContentSinHtml(String title, String[] headers, List<String[]> data) {
-    StringBuilder tableHeadersHtml = new StringBuilder();
-
-    for (String header : headers) {
-        tableHeadersHtml.append("<th style=\"border: 1px solid #6A1B9A; padding: 4px; ")
-                .append("background-color: #6A1B9A; color: white; font-size: 12px;\">")
-                .append(escapeHtml(header))
-                .append("</th>");
-    }
-
-    StringBuilder tableBodyHtml = new StringBuilder();
-
-    if (data == null || data.isEmpty()) {
-        tableBodyHtml.append("<tr>")
-                .append("<td colspan=\"")
-                .append(headers.length)
-                .append("\" style=\"border: 1px solid #6A1B9A; padding: 8px; ")
-                .append("color: #4A148C; font-size: 12px; text-align: center;\">")
-                .append("No existen registros para mostrar")
-                .append("</td>")
-                .append("</tr>");
-    } else {
-        for (String[] element : data) {
-            tableBodyHtml.append("<tr style=\"border: 1px solid #6A1B9A; background-color: #F3E5F5;\">");
-
-            for (int i = 0; i < headers.length; i++) {
-                String value = "";
-
-                if (element != null && i < element.length && element[i] != null) {
-                    value = element[i];
-                }
-
-                String header = headers[i];
-
-                tableBodyHtml.append("<td style=\"border: 1px solid #6A1B9A; padding: 4px; ")
-                        .append("color: #4A148C; font-size: 12px; text-align:center; vertical-align:middle;\">")
-                        .append(formatValueByHeader(header, value))
-                        .append("</td>");
-            }
-
-            tableBodyHtml.append("</tr>");
+        StringBuilder html = new StringBuilder();
+        if (title != null && !title.trim().isEmpty()) {
+            html.append("<div align=\"center\" style=\"margin-bottom: 14px;\">")
+                .append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin: auto;\">")
+                .append("<tr><td align=\"center\" style=\"padding-bottom: 4px;\">")
+                .append("<span style=\"background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; ")
+                .append("font-size: 11px; font-weight: bold; padding: 3px 12px; text-transform: uppercase; letter-spacing: 0.5px;\">")
+                .append("Sistema de Firma Digital")
+                .append("</span></td></tr>")
+                .append("<tr><td align=\"center\">")
+                .append("<h2 style=\"color: #0F172A; font-family: Arial, sans-serif; font-size: 17px; font-weight: bold; margin: 4px 0 0 0;\">")
+                .append(escapeHtml(title))
+                .append("</h2></td></tr></table></div>");
         }
+
+        html.append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse: collapse; ")
+            .append("border: 1px solid #CBD5E1; width: 96%; margin: auto; font-family: Arial, Helvetica, sans-serif; font-size: 12px;\">")
+            .append("<thead><tr>")
+            .append(tableHeadersHtml)
+            .append("</tr></thead>")
+            .append("<tbody>")
+            .append(tableBodyHtml)
+            .append("</tbody>")
+            .append("</table>");
+
+        return html.toString();
     }
 
-    return "<center><h3 style=\"color: #4A148C; font-size: 16px;\">"
-            + escapeHtml(title)
-            + "</h3></center>"
-            + "<table style=\"border-collapse: collapse; border: 1px solid #6A1B9A; "
-            + "width: 95%; margin: auto; font-family: Arial; font-size: 12px;\">"
-            + "<thead><tr>"
-            + tableHeadersHtml
-            + "</tr></thead>"
-            + "<tbody>"
-            + tableBodyHtml
-            + "</tbody>"
-            + "</table>";
-}
+    // ============================================================
+    // GENERAR TABLA GENERAL
+    // ============================================================
+
+    public static String generateTable(String title, String[] headers, List<String[]> data) {
+        return insertInHtml(buildTableHtml(title, headers, data));
+    }
+
+    public static String generateTableContentSinHtml(String title, String[] headers, List<String[]> data) {
+        return buildTableHtml(title, headers, data);
+    }
+
     // ============================================================
     // GENERAR MENSAJE + TABLA
     // ============================================================
 
     public static String generateMessageAndTable(String mensaje, String tituloTabla, String[] headers, List<String[]> data) {
-        String htmlMensaje = "<center><h3 style=\"color: #4A148C; font-size: 16px;\">"
-                + escapeHtml(mensaje)
-                + "</h3></center>";
+        String htmlMensaje = "<div align=\"center\" style=\"margin-bottom: 16px;\">"
+                + "<div style=\"background-color: #ECFDF5; border: 1px solid #A7F3D0; border-left: 5px solid #10B981; "
+                + "padding: 10px 16px; width: 92%; margin: auto; text-align: center;\">"
+                + "<span style=\"color: #065F46; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;\">"
+                + "&#10003; " + escapeHtml(mensaje)
+                + "</span>"
+                + "</div></div>";
 
-        String tabla = generateTableContent(tituloTabla, headers, data);
+        String tabla = buildTableHtml(tituloTabla, headers, data);
 
         return insertInHtml(htmlMensaje + tabla);
     }
 
-private static String generateTableContent(String title, String[] headers, List<String[]> data) {
-    StringBuilder tableHeadersHtml = new StringBuilder();
-
-    for (String header : headers) {
-        tableHeadersHtml.append("<th style=\"border: 1px solid #6A1B9A; padding: 4px; ")
-                .append("background-color: #6A1B9A; color: white; font-size: 12px;\">")
-                .append(escapeHtml(header))
-                .append("</th>");
+    private static String generateTableContent(String title, String[] headers, List<String[]> data) {
+        return buildTableHtml(title, headers, data);
     }
-
-    StringBuilder tableBodyHtml = new StringBuilder();
-
-    if (data == null || data.isEmpty()) {
-        tableBodyHtml.append("<tr>")
-                .append("<td colspan=\"")
-                .append(headers.length)
-                .append("\" style=\"border: 1px solid #6A1B9A; padding: 8px; ")
-                .append("color: #4A148C; font-size: 12px; text-align: center;\">")
-                .append("No existen registros para mostrar")
-                .append("</td>")
-                .append("</tr>");
-    } else {
-        for (String[] element : data) {
-            tableBodyHtml.append("<tr style=\"border: 1px solid #6A1B9A; background-color: #F3E5F5;\">");
-
-            for (int i = 0; i < headers.length; i++) {
-                String value = "";
-
-                if (element != null && i < element.length && element[i] != null) {
-                    value = element[i];
-                }
-
-                String header = headers[i];
-
-                tableBodyHtml.append("<td style=\"border: 1px solid #6A1B9A; padding: 4px; ")
-                        .append("color: #4A148C; font-size: 12px; text-align:center; vertical-align:middle;\">")
-                        .append(formatValueByHeader(header, value))
-                        .append("</td>");
-            }
-
-            tableBodyHtml.append("</tr>");
-        }
-    }
-
-    return "<center><h3 style=\"color: #4A148C; font-size: 16px;\">"
-            + escapeHtml(title)
-            + "</h3></center>"
-            + "<table style=\"border-collapse: collapse; border: 1px solid #6A1B9A; "
-            + "width: 95%; margin: auto; font-family: Arial; font-size: 12px;\">"
-            + "<thead><tr>"
-            + tableHeadersHtml
-            + "</tr></thead>"
-            + "<tbody>"
-            + tableBodyHtml
-            + "</tbody>"
-            + "</table>";
-}
-
 
     // ============================================================
     // GENERAR TEXTO
@@ -284,19 +208,21 @@ private static String generateTableContent(String title, String[] headers, List<
 
     public static String generateText(String[] args) {
         if (args == null || args.length == 0) {
-            return insertInHtml("<center><h3>Sin contenido</h3></center>");
+            return insertInHtml("<center><h3 style=\"color: #64748B;\">Sin contenido</h3></center>");
         }
 
         StringBuilder acumulative = new StringBuilder();
 
-        acumulative.append("<center><h2>")
+        acumulative.append("<div align=\"center\" style=\"margin-bottom: 12px;\">")
+                .append("<h2 style=\"color: #0F172A; font-family: Arial, sans-serif; font-size: 18px;\">")
                 .append(escapeHtml(args[0]))
-                .append("</h2></center>");
+                .append("</h2></div>");
 
         for (int i = 1; i < args.length; i++) {
-            acumulative.append("<center><h3>")
+            acumulative.append("<div align=\"center\" style=\"margin-bottom: 8px;\">")
+                    .append("<h3 style=\"color: #334155; font-family: Arial, sans-serif; font-size: 14px;\">")
                     .append(escapeHtml(args[i]))
-                    .append("</h3></center>");
+                    .append("</h3></div>");
         }
 
         return insertInHtml(acumulative.toString());
@@ -316,24 +242,33 @@ private static String generateTableContent(String title, String[] headers, List<
                 value = data[i];
             }
 
-            acumulative.append("<tr>")
-                .append("<td style=\"border: 1px solid #6A1B9A; padding: 6px; ")
-                .append("background-color: #6A1B9A; color: white; font-weight: bold;\">")
+            String bgColor = (i % 2 == 0) ? "#FFFFFF" : "#F8FAFC";
+
+            acumulative.append("<tr style=\"background-color: ").append(bgColor).append(";\">")
+                .append("<td style=\"border: 1px solid #CBD5E1; padding: 9px 14px; ")
+                .append("background-color: #F1F5F9; color: #1E3A8A; font-weight: bold; width: 35%; ")
+                .append("text-transform: uppercase; font-size: 11px; letter-spacing: 0.3px;\">")
                 .append(escapeHtml(headers[i]))
                 .append("</td>")
-                .append("<td style=\"border: 1px solid #6A1B9A; padding: 6px; color: #4A148C;\">")
+                .append("<td style=\"border: 1px solid #CBD5E1; padding: 9px 14px; color: #334155; font-size: 12px;\">")
                 .append(formatValueByHeader(headers[i], value))
                 .append("</td>")
                 .append("</tr>");
         }
 
-        String table = "<div align=\"center\">"
-                + "<h2 style=\"color: #4A148C;\">"
+        String table = "<div align=\"center\" style=\"margin-bottom: 14px;\">"
+                + "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin: auto;\">"
+                + "<tr><td align=\"center\" style=\"padding-bottom: 4px;\">"
+                + "<span style=\"background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; "
+                + "font-size: 11px; font-weight: bold; padding: 3px 12px; text-transform: uppercase; letter-spacing: 0.5px;\">"
+                + "Detalle de Registro"
+                + "</span></td></tr>"
+                + "<tr><td align=\"center\">"
+                + "<h2 style=\"color: #0F172A; font-family: Arial, sans-serif; font-size: 17px; margin: 4px 0 0 0;\">"
                 + escapeHtml(title)
-                + "</h2>"
-                + "</div>"
-                + "<table style=\"border-collapse: collapse; width: 70%; margin: auto; "
-                + "font-family: Arial; font-size: 13px;\">"
+                + "</h2></td></tr></table></div>"
+                + "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse: collapse; width: 80%; margin: auto; "
+                + "font-family: Arial, sans-serif; font-size: 12px; border: 1px solid #CBD5E1;\">"
                 + acumulative
                 + "</table>";
 
@@ -350,7 +285,7 @@ private static String generateTableContent(String title, String[] headers, List<
     ) {
         if (comandosTexto == null || comandosTexto.trim().isEmpty()) {
             return insertInHtml(
-                    "<center><h3>No existen comandos para mostrar</h3></center>"
+                    "<center><h3 style=\"color: #64748B;\">No existen comandos para mostrar</h3></center>"
             );
         }
 
@@ -364,6 +299,7 @@ private static String generateTableContent(String title, String[] headers, List<
             startIndex = 1;
         }
 
+        int rowCount = 0;
         for (int i = startIndex; i < lineas.length; i++) {
             String linea = lineas[i];
 
@@ -373,10 +309,6 @@ private static String generateTableContent(String title, String[] headers, List<
 
             linea = linea.trim();
 
-            /*
-            * Ignora líneas vacías y caracteres sueltos
-            * que no representan comandos.
-            */
             if (linea.isEmpty()
                     || linea.equals("!")
                     || linea.equals("-")) {
@@ -392,71 +324,55 @@ private static String generateTableContent(String title, String[] headers, List<
             }
 
             String descripcion = getDescripcionComando(linea);
+            String bgColor = (rowCount % 2 == 0) ? "#FFFFFF" : "#F8FAFC";
+            rowCount++;
 
-            rowsHtml.append("<tr>")
-                    .append("<td style='")
-                    .append("border:1px solid #4A148C;")
-                    .append("padding:8px;")
-                    .append("color:#4A148C;")
-                    .append("vertical-align:middle;")
-                    .append("'>")
+            rowsHtml.append("<tr style=\"background-color: ").append(bgColor).append(";\">")
+                    .append("<td style=\"border: 1px solid #CBD5E1; padding: 9px 12px; vertical-align: middle; width: 35%;\">")
+                    .append("<span style=\"background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; ")
+                    .append("font-family: Consolas, monospace; font-size: 12px; font-weight: bold; padding: 3px 8px;\">")
                     .append(escapeHtml(linea))
+                    .append("</span>")
                     .append("</td>")
-
-                    .append("<td style='")
-                    .append("border:1px solid #4A148C;")
-                    .append("padding:8px;")
-                    .append("color:#4A148C;")
-                    .append("vertical-align:middle;")
-                    .append("'>")
+                    .append("<td style=\"border: 1px solid #CBD5E1; padding: 9px 12px; color: #334155; font-size: 12px; vertical-align: middle;\">")
                     .append(escapeHtml(descripcion))
                     .append("</td>")
                     .append("</tr>");
         }
 
         String html =
-                "<center>"
-                + "<h3 style='color:#4A148C;'>"
+                "<div align=\"center\" style=\"margin-bottom: 14px;\">"
+                + "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin: auto;\">"
+                + "<tr><td align=\"center\" style=\"padding-bottom: 4px;\">"
+                + "<span style=\"background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; "
+                + "font-size: 11px; font-weight: bold; padding: 3px 12px; text-transform: uppercase; letter-spacing: 0.5px;\">"
+                + "Gu&iacute;a de Comandos"
+                + "</span></td></tr>"
+                + "<tr><td align=\"center\">"
+                + "<h2 style=\"color: #0F172A; font-family: Arial, sans-serif; font-size: 17px; margin: 4px 0 0 0;\">"
                 + escapeHtml(titulo)
-                + "</h3>"
-                + "</center>"
-
-                + "<table style='"
-                + "border-collapse:collapse;"
-                + "width:90%;"
-                + "margin:auto;"
-                + "font-family:Arial,sans-serif;"
-                + "font-size:14px;"
-                + "'>"
-
+                + "</h2></td></tr></table></div>"
+                + "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\""
+                + "border-collapse: collapse; "
+                + "width: 94%; "
+                + "margin: auto; "
+                + "font-family: Arial, sans-serif; "
+                + "font-size: 12px; "
+                + "border: 1px solid #CBD5E1;"
+                + "\">"
                 + "<thead>"
                 + "<tr>"
-
-                + "<th style='"
-                + "border:1px solid #4A148C;"
-                + "background-color:#6A1B9A;"
-                + "color:white;"
-                + "padding:8px;"
-                + "'>"
+                + "<th style=\"border: 1px solid #1E3A8A; background-color: #1E3A8A; color: white; padding: 10px 12px; text-align: left; font-size: 11px; font-weight: bold; text-transform: uppercase; width: 35%;\">"
                 + "Comando"
                 + "</th>"
-
-                + "<th style='"
-                + "border:1px solid #4A148C;"
-                + "background-color:#6A1B9A;"
-                + "color:white;"
-                + "padding:8px;"
-                + "'>"
-                + "Descripción"
+                + "<th style=\"border: 1px solid #1E3A8A; background-color: #1E3A8A; color: white; padding: 10px 12px; text-align: left; font-size: 11px; font-weight: bold; text-transform: uppercase;\">"
+                + "Descripci&oacute;n"
                 + "</th>"
-
                 + "</tr>"
                 + "</thead>"
-
                 + "<tbody>"
                 + rowsHtml
                 + "</tbody>"
-
                 + "</table>";
 
         return insertInHtml(html);
@@ -467,7 +383,20 @@ private static String generateTableContent(String title, String[] headers, List<
     // ============================================================
 
     private static String insertInHtml(String data) {
-        return HTML_OPEN + BODY_OPEN + data + BODY_CLOSE + HTML_CLOSE;
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"
+                + "</head>"
+                + "<body style=\"margin: 0; padding: 15px; background-color: #F8FAFC; font-family: Arial, Helvetica, sans-serif; color: #1E293B;\">"
+                + "<div style=\"max-width: 960px; margin: 0 auto; background-color: #FFFFFF; border: 1px solid #CBD5E1; padding: 20px 24px;\">"
+                + data
+                + "<div style=\"margin-top: 24px; padding-top: 12px; border-top: 1px solid #E2E8F0; text-align: center; color: #64748B; font-size: 11px; font-family: Arial, sans-serif;\">"
+                + "Sistema de Firma Digital del Vicerrectorado &bull; Universidad Aut&oacute;noma Gabriel Ren&eacute; Moreno"
+                + "</div>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
     }
 
     private static String getDescripcionComando(String linea) {
@@ -532,76 +461,132 @@ private static String generateTableContent(String title, String[] headers, List<
         return "Comando de gestion disponible";
     }
 
-private static String formatValueByHeader(String header, String value) {
-    if (value == null) {
-        value = "";
+    private static String formatValueByHeader(String header, String value) {
+        if (value == null) {
+            value = "";
+        }
+
+        value = value.trim();
+
+        if (isImageHeader(header)) {
+            return formatImageValue(value);
+        }
+
+        if (value.equalsIgnoreCase("Sin imagen")) {
+            return "";
+        }
+
+        if (isStatusHeader(header)) {
+            return formatStatusBadge(value);
+        }
+
+        return escapeHtml(value);
     }
 
-    value = value.trim();
-
-    if (isImageHeader(header)) {
-        return formatImageValue(value);
+    private static boolean isStatusHeader(String header) {
+        if (header == null) {
+            return false;
+        }
+        String h = header.trim().toUpperCase();
+        return h.equals("ESTADO")
+                || h.equals("ESTADO_SLA")
+                || h.equals("ESTADO_VALIDACION")
+                || h.equals("PRIORIDAD")
+                || h.equals("VALIDEZ");
     }
 
-    // Seguridad: si por error llega "Sin imagen" a una columna que NO es imagen,
-    // no lo mostramos.
-    if (value.equalsIgnoreCase("Sin imagen")) {
-        return "";
+    private static String formatStatusBadge(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return "";
+        }
+
+        String v = value.trim().toUpperCase();
+
+        // Estados positivos / activos
+        if (v.equals("ACTIVO") || v.equals("VALIDO") || v.equals("VALIDADO")
+                || v.equals("COMPLETADO") || v.equals("FIRMADO") || v.equals("DESPACHADO")
+                || v.equals("CUMPLIDO") || v.equals("APROBADO") || v.equals("EN TIEMPO")
+                || v.equals("EXITOSO")) {
+            return "<span style=\"background-color: #DEF7EC; color: #03543F; border: 1px solid #BCF0DA; "
+                    + "padding: 2px 7px; font-size: 11px; font-weight: bold;\">"
+                    + escapeHtml(value)
+                    + "</span>";
+        }
+
+        // Estados pendientes / advertencia / alerta
+        if (v.equals("PENDIENTE") || v.equals("EN PROCESO") || v.equals("EN REVISION")
+                || v.equals("INICIADO") || v.equals("REGISTRADO") || v.equals("ALERTA")
+                || v.equals("POR VENCER") || v.equals("MEDIA")) {
+            return "<span style=\"background-color: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; "
+                    + "padding: 2px 7px; font-size: 11px; font-weight: bold;\">"
+                    + escapeHtml(value)
+                    + "</span>";
+        }
+
+        // Estados críticos / negativos / rechazados / vencidos
+        if (v.equals("INACTIVO") || v.equals("RECHAZADO") || v.equals("VENCIDO")
+                || v.equals("ANULADO") || v.equals("OBSERVADO") || v.equals("BLOQUEADO")
+                || v.equals("ALTA") || v.equals("URGENTE") || v.equals("CRITICO")
+                || v.equals("REVOCADO") || v.equals("NO VALIDO") || v.equals("FUERA DE TIEMPO")) {
+            return "<span style=\"background-color: #FDE8E8; color: #9B1C1C; border: 1px solid #F8B4B4; "
+                    + "padding: 2px 7px; font-size: 11px; font-weight: bold;\">"
+                    + escapeHtml(value)
+                    + "</span>";
+        }
+
+        // Por defecto / neutro / baja prioridad
+        return "<span style=\"background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; "
+                + "padding: 2px 7px; font-size: 11px; font-weight: bold;\">"
+                + escapeHtml(value)
+                + "</span>";
     }
 
-    return escapeHtml(value);
-}
+    private static boolean isImageHeader(String header) {
+        if (header == null) {
+            return false;
+        }
 
-private static boolean isImageHeader(String header) {
-    if (header == null) {
-        return false;
+        String h = header.trim().toUpperCase();
+
+        return h.equals("FOTO")
+                || h.equals("IMAGEN")
+                || h.equals("FOTO_PERFIL")
+                || h.equals("QR");
     }
 
-    String h = header.trim().toUpperCase();
-
-    return h.equals("FOTO")
-            || h.equals("IMAGEN")
-            || h.equals("FOTO_PERFIL")
-            || h.equals("QR");
-}
-
-        private static String formatImageValue(String value) {
+    private static String formatImageValue(String value) {
         if (value == null || value.trim().isEmpty() || value.equalsIgnoreCase("null")) {
-                return "Sin imagen";
+            return "<span style=\"color: #94A3B8; font-size: 11px; font-style: italic;\">Sin imagen</span>";
         }
 
         value = value.trim();
 
         if (value.startsWith("http://") || value.startsWith("https://")) {
-                return "<img src=\"" + escapeHtml(value) + "\" alt=\"imagen\" "
-                        + "style=\"width:75px; height:75px; object-fit:cover; border-radius:6px; "
-                        + "border:1px solid #6A1B9A;\">";
+            return "<img src=\"" + escapeHtml(value) + "\" alt=\"imagen\" "
+                    + "style=\"width:70px; height:70px; object-fit:cover; border:1px solid #CBD5E1;\">";
         }
 
         if (value.startsWith("cid:")) {
-                return "<img src=\"" + escapeHtml(value) + "\" alt=\"imagen\" "
-                        + "style=\"width:75px; height:75px; object-fit:cover; border-radius:6px; "
-                        + "border:1px solid #6A1B9A;\">";
+            return "<img src=\"" + escapeHtml(value) + "\" alt=\"imagen\" "
+                    + "style=\"width:70px; height:70px; object-fit:cover; border:1px solid #CBD5E1;\">";
         }
 
         if (value.startsWith("data:image")) {
-                return "<img src=\"" + value + "\" alt=\"imagen\" "
-                        + "style=\"width:90px; height:90px; object-fit:cover; border-radius:8px; "
-                        + "border:1px solid #6A1B9A; display:block; margin:auto;\">";
+            return "<img src=\"" + value + "\" alt=\"imagen\" "
+                    + "style=\"width:85px; height:85px; object-fit:cover; border:1px solid #CBD5E1; display:block; margin:auto;\">";
         }
 
         // Si viene base64 puro desde la BD
         if (value.length() > 100) {
-                String mime = detectarMimeBase64(value);
+            String mime = detectarMimeBase64(value);
 
-                return "<img src=\"data:" + mime + ";base64," + value + "\" alt=\"imagen\" "
-                        + "style=\"width:75px; height:75px; object-fit:cover; border-radius:6px; "
-                        + "border:1px solid #6A1B9A;\">";
+            return "<img src=\"data:" + mime + ";base64," + value + "\" alt=\"imagen\" "
+                    + "style=\"width:70px; height:70px; object-fit:cover; border:1px solid #CBD5E1;\">";
         }
 
         // Si llega un nombre o ruta que no puede abrirse desde el correo
         return escapeHtml(value);
-        }
+    }
 
 private static String detectarMimeBase64(String base64) {
     if (base64 == null) {
@@ -638,49 +623,53 @@ private static String detectarMimeBase64(String base64) {
             String ejemploValido
     ) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<div style='font-family: Arial, sans-serif; max-width: 800px; margin: 15px auto; border: 2px solid #D32F2F; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>");
+        sb.append("<div style='font-family: Arial, sans-serif; max-width: 850px; margin: 15px auto; border: 2px solid #DC2626; border-radius: 8px; overflow: hidden; background-color: #FFFFFF;'>");
 
-        // Header
-        sb.append("<div style='background-color: #D32F2F; color: white; padding: 12px 18px;'>");
-        sb.append("<h2 style='margin: 0; font-size: 18px; font-weight: bold;'>[ERROR EN COMANDO] — ").append(escapeHtml(causaPrincipal)).append("</h2>");
-        sb.append("<span style='font-size: 12px; opacity: 0.9;'>Sistema de Firma Digital del Vicerrectorado (Grupo 20 SA)</span>");
+        // Header rojo institucional
+        sb.append("<div style='background-color: #DC2626; color: #FFFFFF; padding: 14px 18px;'>");
+        sb.append("<h2 style='margin: 0; font-size: 17px; font-weight: bold; color: #FFFFFF;'>[ERROR EN COMANDO] &mdash; ").append(escapeHtml(causaPrincipal)).append("</h2>");
+        sb.append("<span style='font-size: 11px; color: #FEE2E2;'>Sistema de Firma Digital del Vicerrectorado &bull; Grupo 20 SA</span>");
         sb.append("</div>");
 
         // Body
-        sb.append("<div style='background-color: #FFFFFF; padding: 18px;'>");
+        sb.append("<div style='padding: 18px 20px; background-color: #FFFFFF;'>");
 
-        // Comando recibido
+        // 1. Comando recibido
         if (comandoRecibido != null && !comandoRecibido.trim().isEmpty()) {
-            sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #424242; font-size: 13px;'>Comando recibido:</p>");
-            sb.append("<div style='background: #FFEBEE; color: #C62828; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 13px; margin-bottom: 14px; border-left: 4px solid #D32F2F;'>");
+            sb.append("<div style='margin-bottom: 14px;'>");
+            sb.append("<p style='margin: 0 0 5px 0; font-weight: bold; color: #374151; font-size: 12px; text-transform: uppercase;'>1. Comando que usted envi&oacute;:</p>");
+            sb.append("<div style='background-color: #FEF2F2; color: #991B1B; padding: 10px 14px; border: 1px solid #FCA5A5; border-left: 5px solid #DC2626; font-family: Consolas, monospace; font-size: 13px; font-weight: bold;'>");
             sb.append(escapeHtml(comandoRecibido));
-            sb.append("</div>");
+            sb.append("</div></div>");
         }
 
-        // Detalle del fallo
-        sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #D32F2F; font-size: 13px;'>¿Qué falló exactamente?:</p>");
-        sb.append("<div style='background: #FFF8E1; color: #E65100; padding: 10px 14px; border-radius: 6px; font-size: 13px; line-height: 1.5; margin-bottom: 14px; border-left: 4px solid #FFA000; white-space: pre-wrap;'>");
-        sb.append(escapeHtml(detalleFallo));
-        sb.append("</div>");
+        // 2. Detalle del fallo
+        sb.append("<div style='margin-bottom: 14px;'>");
+        sb.append("<p style='margin: 0 0 5px 0; font-weight: bold; color: #DC2626; font-size: 12px; text-transform: uppercase;'>2. &iquest;En qu&eacute; se equivoc&oacute; o qu&eacute; datos faltan?:</p>");
+        sb.append("<div style='background-color: #FFFBEB; color: #92400E; padding: 12px 14px; border: 1px solid #FCD34D; border-left: 5px solid #F59E0B; font-size: 13px; line-height: 1.6;'>");
+        sb.append(escapeHtml(detalleFallo).replace("\n", "<br>"));
+        sb.append("</div></div>");
 
-        // Sintaxis esperada
+        // 3. Sintaxis requerida
         if (sintaxisCorrecta != null && !sintaxisCorrecta.trim().isEmpty()) {
-            sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #2E7D32; font-size: 13px;'>Sintaxis requerida:</p>");
-            sb.append("<div style='background: #E8F5E9; color: #2E7D32; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 13px; margin-bottom: 14px; border-left: 4px solid #4CAF50;'>");
-            sb.append(escapeHtml(sintaxisCorrecta));
-            sb.append("</div>");
+            sb.append("<div style='margin-bottom: 14px;'>");
+            sb.append("<p style='margin: 0 0 5px 0; font-weight: bold; color: #166534; font-size: 12px; text-transform: uppercase;'>3. Estructura y sintaxis correcta requerida:</p>");
+            sb.append("<div style='background-color: #F0FDF4; color: #166534; padding: 10px 14px; border: 1px solid #86EFAC; border-left: 5px solid #16A34A; font-family: Consolas, monospace; font-size: 12px; line-height: 1.5;'>");
+            sb.append(escapeHtml(sintaxisCorrecta).replace("\n", "<br>"));
+            sb.append("</div></div>");
         }
 
-        // Ejemplo válido
+        // 4. Ejemplo válido
         if (ejemploValido != null && !ejemploValido.trim().isEmpty()) {
-            sb.append("<p style='margin: 0 0 4px 0; font-weight: bold; color: #1565C0; font-size: 13px;'>Ejemplo de cómo debe enviarse:</p>");
-            sb.append("<div style='background: #E3F2FD; color: #0D47A1; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: 13px; margin-bottom: 14px; border-left: 4px solid #1E88E5;'>");
-            sb.append(escapeHtml(ejemploValido));
-            sb.append("</div>");
+            sb.append("<div style='margin-bottom: 14px;'>");
+            sb.append("<p style='margin: 0 0 5px 0; font-weight: bold; color: #1E40AF; font-size: 12px; text-transform: uppercase;'>4. Ejemplo v&aacute;lido (listo para copiar y enviar):</p>");
+            sb.append("<div style='background-color: #EFF6FF; color: #1E40AF; padding: 10px 14px; border: 1px solid #93C5FD; border-left: 5px solid #2563EB; font-family: Consolas, monospace; font-size: 13px; font-weight: bold;'>");
+            sb.append(escapeHtml(ejemploValido).replace("\n", "<br>"));
+            sb.append("</div></div>");
         }
 
-        sb.append("<p style='margin: 10px 0 0 0; font-size: 12px; color: #757575; text-align: center;'>");
-        sb.append("Envie <b>help</b> para consultar la lista de todos los comandos disponibles.");
+        sb.append("<p style='margin: 15px 0 0 0; font-size: 12px; color: #64748B; text-align: center; border-top: 1px solid #E2E8F0; padding-top: 10px;'>");
+        sb.append("Puede enviar el comando <b>help</b> en el Asunto del correo para consultar la gu&iacute;a de todos los comandos.");
         sb.append("</p>");
 
         sb.append("</div>");

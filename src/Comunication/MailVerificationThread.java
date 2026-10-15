@@ -177,39 +177,39 @@ public class MailVerificationThread implements Runnable {
         String imapStatus = lastImapStatus != null && lastImapStatus ? "ACTIVO" : "INACTIVO";
         String pop3Status = lastPopStatus != null && lastPopStatus ? "ACTIVO" : "INACTIVO";
 
-        String html = "<html><body style='font-family: Arial; padding: 15px; background-color: #f5f5f5;'>" +
-                "<h2 style='text-align: center; color: #1a1a1a; margin: 0 0 20px 0;'>ESTADO DE SERVIDORES DE CORREO</h2>" +
-                "<table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>" +
-                "<tr style='background-color: #6A1B9A;'>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #4A148C; text-align: left;'>Protocolo</th>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #4A148C; text-align: left;'>Host</th>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #4A148C; text-align: left;'>Puerto</th>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #4A148C; text-align: center;'>Estado</th>" +
+        String html = "<html><body style='font-family: Arial, sans-serif; padding: 15px; background-color: #F8FAFC;'>" +
+                "<h2 style='text-align: center; color: #0F172A; margin: 0 0 15px 0; font-size: 16px;'>ESTADO DE SERVIDORES DE CORREO</h2>" +
+                "<table style='width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #CBD5E1; font-size: 12px;'>" +
+                "<tr style='background-color: #1E3A8A;'>" +
+                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: left; font-size: 11px; text-transform: uppercase;'>Protocolo</th>" +
+                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: left; font-size: 11px; text-transform: uppercase;'>Host</th>" +
+                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: left; font-size: 11px; text-transform: uppercase;'>Puerto</th>" +
+                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: center; font-size: 11px; text-transform: uppercase;'>Estado</th>" +
                 "</tr>" +
 
                 "<tr>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>SMTP</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>" + HOST + "</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>" + PORT_SMTP + "</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd; text-align: center; background-color: " + smtpColor + "; color: white; font-weight: bold;'>" + smtpStatus + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; font-weight: bold; color: #1E3A8A;'>SMTP</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + HOST + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + PORT_SMTP + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; text-align: center; background-color: " + smtpColor + "; color: white; font-weight: bold;'>" + smtpStatus + "</td>" +
+                "</tr>" +
+
+                "<tr style='background-color: #F8FAFC;'>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; font-weight: bold; color: #1E3A8A;'>IMAP</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + HOST + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + PORT_IMAP + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; text-align: center; background-color: " + imapColor + "; color: white; font-weight: bold;'>" + imapStatus + "</td>" +
                 "</tr>" +
 
                 "<tr>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>IMAP</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>" + HOST + "</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>" + PORT_IMAP + "</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd; text-align: center; background-color: " + imapColor + "; color: white; font-weight: bold;'>" + imapStatus + "</td>" +
-                "</tr>" +
-
-                "<tr>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>POP3</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>" + HOST + "</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd;'>" + PORT_POP + "</td>" +
-                "<td style='padding: 10px; border: 1px solid #ddd; text-align: center; background-color: " + pop3Color + "; color: white; font-weight: bold;'>" + pop3Status + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; font-weight: bold; color: #1E3A8A;'>POP3</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + HOST + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + PORT_POP + "</td>" +
+                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; text-align: center; background-color: " + pop3Color + "; color: white; font-weight: bold;'>" + pop3Status + "</td>" +
                 "</tr>" +
 
                 "</table>" +
-                "<p style='font-size: 12px; color: #666; margin: 0;'>Monitoreando estado cada 5 segundos...</p>" +
+                "<p style='font-size: 11px; color: #64748B; margin: 0;'>Monitoreando estado cada 5 segundos...</p>" +
                 "</body></html>";
 
         Home.mostraRespuesta(html);

@@ -60,7 +60,10 @@ public class IndicadorDAO {
             ps.setDouble(2, actual);
             ps.setString(3, estado);
             ps.setInt(4, id);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("No se encontró ningún indicador con el ID: " + id + ". Verifique los IDs con 'indicador listar'.");
+            }
         }
     }
 }

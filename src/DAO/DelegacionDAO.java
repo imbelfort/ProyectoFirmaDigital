@@ -68,7 +68,10 @@ public class DelegacionDAO {
             ps.setString(5, delegacion.getAlcanceFirma());
             ps.setString(6, delegacion.getEstado());
             ps.setInt(7, delegacion.getId());
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("No se encontró ninguna delegación con el ID: " + delegacion.getId() + ". Verifique los IDs con 'delegacion listar'.");
+            }
         }
     }
 
@@ -77,7 +80,10 @@ public class DelegacionDAO {
         try (Connection con = Conexion.getInstancia().EstablecerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("No se encontró ninguna delegación con el ID: " + id + ". Verifique los IDs con 'delegacion listar'.");
+            }
         }
     }
 }

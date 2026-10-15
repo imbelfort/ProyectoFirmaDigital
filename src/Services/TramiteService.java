@@ -23,7 +23,7 @@ public class TramiteService {
         int solicitante = ParamValidator.requireInt(params, 1, "id_solicitante", sintaxis, ejemplo);
         int tipo = ParamValidator.requireInt(params, 2, "id_tipo", sintaxis, ejemplo);
         String asunto = ParamValidator.requireString(params, 3, "asunto", sintaxis, ejemplo);
-        String prioridad = ParamValidator.optionalString(params, 4, "NORMAL").toUpperCase();
+        String prioridad = ParamValidator.requirePrioridad(params, 4, "NORMAL", sintaxis, ejemplo);
 
         Tramite t = new Tramite();
         t.setCodigoTramite(codigo);
@@ -45,14 +45,20 @@ public class TramiteService {
         String ejemplo = "tramite modificar [1;Solicitud rectificada;ALTA;EN_PROCESO]";
 
         int id = ParamValidator.requireInt(params, 0, "id_tramite", sintaxis, ejemplo);
+        if (!tramiteDAO.existsById(id)) {
+            throw new SQLException("No existe ningún trámite registrado con el ID: " + id + ". Verifique los IDs válidos con 'tramite listar'.");
+        }
         String asunto = ParamValidator.requireString(params, 1, "asunto", sintaxis, ejemplo);
-        String prioridad = ParamValidator.optionalString(params, 2, "NORMAL").toUpperCase();
+        String prioridad = ParamValidator.requirePrioridad(params, 2, "NORMAL", sintaxis, ejemplo);
         String estado = ParamValidator.optionalString(params, 3, "INICIADO").toUpperCase();
 
         tramiteDAO.update(id, asunto, prioridad, estado);
     }
 
     public void eliminarTramite(int id) throws SQLException {
+        if (!tramiteDAO.existsById(id)) {
+            throw new SQLException("No existe ningún trámite registrado con el ID: " + id + ". Verifique los IDs válidos con 'tramite listar'.");
+        }
         tramiteDAO.delete(id);
     }
 
