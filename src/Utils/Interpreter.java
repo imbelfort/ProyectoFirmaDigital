@@ -73,6 +73,15 @@ public class Interpreter implements Runnable {
             case Token.FLUJO:
                 listener.flujo(tokenEvent);
                 break;
+            case Token.GUIA:
+                listener.guia(tokenEvent);
+                break;
+            case Token.OBSERVACION:
+                listener.observacion(tokenEvent);
+                break;
+            case Token.BITACORA:
+                listener.bitacora(tokenEvent);
+                break;
             case Token.FIRMA:
                 listener.firma(tokenEvent);
                 break;
@@ -87,6 +96,9 @@ public class Interpreter implements Runnable {
                 break;
             case Token.SLA:
                 listener.sla(tokenEvent);
+                break;
+            case Token.ALERTA:
+                listener.alerta(tokenEvent);
                 break;
             case Token.REPORTE:
                 listener.reporte(tokenEvent);

@@ -16,8 +16,11 @@ public interface ITokenCasoUsoEventListener {
     void documento(TokenEvent event);
     void tipoTramite(TokenEvent event);
 
-    // CU4. Enrutamiento de Flujo y Guia Procesal
+    // CU4. Enrutamiento de Flujo, Guia Procesal, Observaciones y Bitacora
     void flujo(TokenEvent event);
+    void guia(TokenEvent event);
+    void observacion(TokenEvent event);
+    void bitacora(TokenEvent event);
 
     // CU5. Firma Digital y Despacho
     void firma(TokenEvent event);
@@ -29,6 +32,7 @@ public interface ITokenCasoUsoEventListener {
 
     // CU7. Monitoreo SLA y Alertas
     void sla(TokenEvent event);
+    void alerta(TokenEvent event);
 
     // CU8. Reportes y Estadisticas
     void reporte(TokenEvent event);

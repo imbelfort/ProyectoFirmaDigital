@@ -28,6 +28,7 @@ public class Token {
     public static final int SLA = 113;
     public static final int ALERTA = 114;
     public static final int REPORTE = 115;
+    public static final int GUIA = 116;
 
     // Acciones de Comandos (200 - 299)
     public static final int LISTAR = 200;
@@ -45,6 +46,9 @@ public class Token {
     public static final int TRAMITES = 212;
     public static final int FIRMAS = 213;
     public static final int HABILITAR = 214;
+    public static final int MOSTRAR = 215;
+    public static final int SUBSANAR = 216;
+    public static final int ATENDER = 217;
 
     public static final int ERROR_COMMAND = 300;
     public static final int ERROR_CHARACTER = 301;
@@ -71,6 +75,7 @@ public class Token {
     public static final String LEXEME_SLA = "sla";
     public static final String LEXEME_ALERTA = "alerta";
     public static final String LEXEME_REPORTE = "reporte";
+    public static final String LEXEME_GUIA = "guia";
 
     public static final String LEXEME_LISTAR = "listar";
     public static final String LEXEME_AGREGAR = "agregar";
@@ -87,6 +92,9 @@ public class Token {
     public static final String LEXEME_TRAMITES = "tramites";
     public static final String LEXEME_FIRMAS = "firmas";
     public static final String LEXEME_HABILITAR = "habilitar";
+    public static final String LEXEME_MOSTRAR = "mostrar";
+    public static final String LEXEME_SUBSANAR = "subsanar";
+    public static final String LEXEME_ATENDER = "atender";
 
     public static final String LEXEME_ERROR_COMMAND = "UNKNOWN COMMAND";
     public static final String LEXEME_ERROR_CHARACTER = "UNKNOWN CHARACTER";
@@ -177,6 +185,7 @@ public class Token {
             case SLA: return LEXEME_SLA;
             case ALERTA: return LEXEME_ALERTA;
             case REPORTE: return LEXEME_REPORTE;
+            case GUIA: return LEXEME_GUIA;
 
             case LISTAR: return LEXEME_LISTAR;
             case AGREGAR: return LEXEME_AGREGAR;
@@ -193,6 +202,9 @@ public class Token {
             case TRAMITES: return LEXEME_TRAMITES;
             case FIRMAS: return LEXEME_FIRMAS;
             case HABILITAR: return LEXEME_HABILITAR;
+            case MOSTRAR: return LEXEME_MOSTRAR;
+            case SUBSANAR: return LEXEME_SUBSANAR;
+            case ATENDER: return LEXEME_ATENDER;
 
             case ERROR_COMMAND: return LEXEME_ERROR_COMMAND;
             case ERROR_CHARACTER: return LEXEME_ERROR_CHARACTER;
@@ -230,6 +242,7 @@ public class Token {
             case LEXEME_SLA: return SLA;
             case LEXEME_ALERTA: return ALERTA;
             case LEXEME_REPORTE: return REPORTE;
+            case LEXEME_GUIA: return GUIA;
 
             case LEXEME_LISTAR: return LISTAR;
             case LEXEME_AGREGAR: return AGREGAR;
@@ -246,6 +259,9 @@ public class Token {
             case LEXEME_TRAMITES: return TRAMITES;
             case LEXEME_FIRMAS: return FIRMAS;
             case LEXEME_HABILITAR: return HABILITAR;
+            case LEXEME_MOSTRAR: return MOSTRAR;
+            case LEXEME_SUBSANAR: return SUBSANAR;
+            case LEXEME_ATENDER: return ATENDER;
 
             default: return -1;
         }

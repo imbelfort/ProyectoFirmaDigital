@@ -51,6 +51,22 @@ public class HtmlBuilder {
         "ID", "COD_TRAMITE", "ETAPA_ACTUAL", "RESPONSABLE", "FECHA_INICIO", "FECHA_FIN", "ESTADO"
     };
 
+    public static final String[] HEADERS_GUIA = {
+        "ID", "TIPO_TRAMITE", "PASO", "ETAPA", "INSTRUCCIONES", "ROL_RESPONSABLE", "TIEMPO_ESTIMADO"
+    };
+
+    public static final String[] HEADERS_OBSERVACION = {
+        "ID", "COD_TRAMITE", "OBSERVADOR", "TIPO", "DESCRIPCION", "ESTADO", "FECHA", "FECHA_SUBSANACION"
+    };
+
+    public static final String[] HEADERS_BITACORA = {
+        "ID", "COD_TRAMITE", "USUARIO", "ACCION", "DETALLE", "IP", "FECHA_EVENTO"
+    };
+
+    public static final String[] HEADERS_ALERTA = {
+        "ID", "COD_TRAMITE", "TIPO_ALERTA", "MENSAJE", "NOTIFICADO_A", "FECHA", "ESTADO_ALERTA"
+    };
+
     public static final String[] HEADERS_FIRMA = {
         "ID", "COD_TRAMITE", "FIRMANTE", "TIPO_FIRMA", "ALGORITMO", "CERTIFICADO", "FECHA_FIRMA", "VALIDEZ"
     };

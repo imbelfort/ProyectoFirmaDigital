@@ -41,11 +41,15 @@ public class Home {
         DocumentoService documentoService = new DocumentoService();
         TipoTramiteService tipoTramiteService = new TipoTramiteService();
         FlujoService flujoService = new FlujoService();
+        GuiaService guiaService = new GuiaService();
+        ObservacionService observacionService = new ObservacionService();
+        BitacoraService bitacoraService = new BitacoraService();
         FirmaService firmaService = new FirmaService();
         DespachoService despachoService = new DespachoService();
         CertificadoService certificadoService = new CertificadoService();
         PortalService portalService = new PortalService();
         SlaService slaService = new SlaService();
+        AlertaService alertaService = new AlertaService();
         ReporteService reporteService = new ReporteService();
 
         String subjectText = email.getSubject() != null ? email.getSubject().trim() : "";
@@ -297,6 +301,94 @@ public class Home {
                 }
             }
 
+            @Override
+            public void guia(TokenEvent event) {
+                try {
+                    switch (event.getAction()) {
+                        case Token.LISTAR:
+                            enviarRespuesta(email, respuesta, "Catalogo de Guia Procesal", HtmlBuilder.HEADERS_GUIA, guiaService.listarGuias());
+                            break;
+                        case Token.MOSTRAR:
+                            enviarRespuesta(email, respuesta, "Instrucciones de la Guia Procesal", HtmlBuilder.HEADERS_GUIA, guiaService.mostrarGuiaPorTipo(event.getParams()));
+                            break;
+                        case Token.AGREGAR:
+                            guiaService.crearGuia(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Paso de guia procesal registrado exitosamente", "Guia Procesal", HtmlBuilder.HEADERS_GUIA, guiaService.listarGuias());
+                            break;
+                        case Token.HELP:
+                            mostrarYEnviarHELP(email, respuesta, "Comandos Guia Procesal (CU4)", guiaService.getComandosGuia());
+                            break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'guia'.\n" +
+                                "• Acciones válidas: listar, mostrar, agregar, help.\n" +
+                                "• Envie 'guia help' para ver la sintaxis y ejemplos."
+                            );
+                    }
+                } catch (Exception ex) {
+                    manejarExcepcion(email, respuesta, ex, subjectText, "guia");
+                }
+            }
+
+            @Override
+            public void observacion(TokenEvent event) {
+                try {
+                    switch (event.getAction()) {
+                        case Token.LISTAR:
+                            enviarRespuesta(email, respuesta, "Historial de Observaciones de Tramites", HtmlBuilder.HEADERS_OBSERVACION, observacionService.listarObservaciones());
+                            break;
+                        case Token.AGREGAR:
+                            observacionService.crearObservacion(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Observacion registrada exitosamente", "Observaciones de Tramite", HtmlBuilder.HEADERS_OBSERVACION, observacionService.listarObservaciones());
+                            break;
+                        case Token.SUBSANAR:
+                            observacionService.subsanarObservacion(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Observacion subsanada exitosamente", "Observaciones de Tramite", HtmlBuilder.HEADERS_OBSERVACION, observacionService.listarObservaciones());
+                            break;
+                        case Token.HELP:
+                            mostrarYEnviarHELP(email, respuesta, "Comandos Observaciones (CU4)", observacionService.getComandosObservacion());
+                            break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'observacion'.\n" +
+                                "• Acciones válidas: listar, agregar, subsanar, help.\n" +
+                                "• Envie 'observacion help' para ver la sintaxis y ejemplos."
+                            );
+                    }
+                } catch (Exception ex) {
+                    manejarExcepcion(email, respuesta, ex, subjectText, "observacion");
+                }
+            }
+
+            @Override
+            public void bitacora(TokenEvent event) {
+                try {
+                    switch (event.getAction()) {
+                        case Token.LISTAR:
+                            enviarRespuesta(email, respuesta, "Bitacora General de Auditoria de Tramites", HtmlBuilder.HEADERS_BITACORA, bitacoraService.listarBitacora());
+                            break;
+                        case Token.CONSULTAR:
+                            enviarRespuesta(email, respuesta, "Bitacora de Auditoria del Tramite", HtmlBuilder.HEADERS_BITACORA, bitacoraService.consultarPorTramite(event.getParams()));
+                            break;
+                        case Token.AGREGAR:
+                            bitacoraService.registrarEventoManual(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Evento registrado en bitacora exitosamente", "Bitacora de Auditoria", HtmlBuilder.HEADERS_BITACORA, bitacoraService.listarBitacora());
+                            break;
+                        case Token.HELP:
+                            mostrarYEnviarHELP(email, respuesta, "Comandos Bitacora (CU4)", bitacoraService.getComandosBitacora());
+                            break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'bitacora'.\n" +
+                                "• Acciones válidas: listar, consultar, agregar, help.\n" +
+                                "• Envie 'bitacora help' para ver la sintaxis y ejemplos."
+                            );
+                    }
+                } catch (Exception ex) {
+                    manejarExcepcion(email, respuesta, ex, subjectText, "bitacora");
+                }
+            }
+
             // CU5. FIRMA Y DESPACHO
             @Override
             public void firma(TokenEvent event) {
@@ -450,6 +542,36 @@ public class Home {
                     }
                 } catch (Exception ex) {
                     manejarExcepcion(email, respuesta, ex, subjectText, "sla");
+                }
+            }
+
+            @Override
+            public void alerta(TokenEvent event) {
+                try {
+                    switch (event.getAction()) {
+                        case Token.LISTAR:
+                            enviarRespuesta(email, respuesta, "Historial de Alertas de Vencimiento SLA", HtmlBuilder.HEADERS_ALERTA, alertaService.listarAlertas());
+                            break;
+                        case Token.AGREGAR:
+                            alertaService.crearAlerta(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Alerta generada y registrada exitosamente", "Alertas SLA", HtmlBuilder.HEADERS_ALERTA, alertaService.listarAlertas());
+                            break;
+                        case Token.ATENDER:
+                            alertaService.atenderAlerta(event.getParams());
+                            enviarMensajeYTabla(email, respuesta, "Alerta marcada como atendida exitosamente", "Alertas SLA", HtmlBuilder.HEADERS_ALERTA, alertaService.listarAlertas());
+                            break;
+                        case Token.HELP:
+                            mostrarYEnviarHELP(email, respuesta, "Comandos Alertas SLA (CU7)", alertaService.getComandosAlerta());
+                            break;
+                        default:
+                            throw new IllegalArgumentException(
+                                "Acción no reconocida para 'alerta'.\n" +
+                                "• Acciones válidas: listar, agregar, atender, help.\n" +
+                                "• Envie 'alerta help' para ver la sintaxis y ejemplos."
+                            );
+                    }
+                } catch (Exception ex) {
+                    manejarExcepcion(email, respuesta, ex, subjectText, "alerta");
                 }
             }
 
@@ -694,6 +816,18 @@ public class Home {
             case "flujo":
                 return "flujo avanzar [id_tramite;etapa_actual;id_usuario_responsable]\n"
                      + "flujo listar";
+            case "guia":
+                return "guia mostrar [id_tipo_tramite]\n"
+                     + "guia agregar [id_tipo_tramite;paso_numero;nombre_etapa;descripcion;rol;horas]\n"
+                     + "guia listar";
+            case "observacion":
+                return "observacion agregar [id_tramite;id_usuario;tipo_observacion;descripcion]\n"
+                     + "observacion subsanar [id_observacion;descripcion_subsanacion]\n"
+                     + "observacion listar";
+            case "bitacora":
+                return "bitacora consultar [id_tramite]\n"
+                     + "bitacora agregar [id_tramite;id_usuario;accion;detalle]\n"
+                     + "bitacora listar";
             case "firma":
                 return "firma consolidada [id_tramite;id_firmante;numero_certificado]\n"
                      + "firma remota [id_tramite;id_firmante;numero_certificado]\n"
@@ -712,6 +846,10 @@ public class Home {
             case "sla":
                 return "sla verificar [id_tramite]\n"
                      + "sla listar";
+            case "alerta":
+                return "alerta agregar [id_tramite;tipo_alerta;mensaje;notificado_a]\n"
+                     + "alerta atender [id_alerta]\n"
+                     + "alerta listar";
             case "reporte":
                 return "reporte tramites | reporte sla | reporte firmas";
             default:
@@ -736,6 +874,12 @@ public class Home {
                 return "tipo_tramite agregar [TT-01;Certificado de Calificaciones;Emision oficial firmada;72;50.00]";
             case "flujo":
                 return "flujo avanzar [1;REVISION_LEGAL;2]";
+            case "guia":
+                return "guia mostrar [1]";
+            case "observacion":
+                return "observacion agregar [1;2;FALTA_REQUISITO;Falta fotocopia legalizada de CI]";
+            case "bitacora":
+                return "bitacora consultar [1]";
             case "firma":
                 return "firma consolidada [1;1;CERT-ADSIB-2026-991]";
             case "despacho":
@@ -746,6 +890,8 @@ public class Home {
                 return "portal consultar [PIN-8841]";
             case "sla":
                 return "sla verificar [1]";
+            case "alerta":
+                return "alerta agregar [1;ADVERTENCIA_24H;Vence en menos de 24 horas;encargado@uagrm.edu.bo]";
             case "reporte":
                 return "reporte tramites";
             default:
@@ -780,16 +926,16 @@ public class Home {
                 "  tramite help | tramite listar\n" +
                 "  documento help | documento listar\n" +
                 "  tipo_tramite help | tipo_tramite listar\n\n" +
-                "CU4. Enrutamiento de Flujo:\n" +
-                "  flujo help | flujo listar\n\n" +
+                "CU4. Enrutamiento de Flujo, Guia, Observaciones y Bitacora:\n" +
+                "  flujo help | flujo listar | guia help | observacion help | bitacora help\n\n" +
                 "CU5. Firma Digital y Despacho:\n" +
                 "  firma help | firma listar\n" +
                 "  despacho help | despacho listar\n\n" +
                 "CU6. Certificado Oficial con QR y Seguimiento:\n" +
                 "  certificado help | certificado listar\n" +
                 "  portal help | portal listar\n\n" +
-                "CU7. Monitoreo SLA (72 Horas Habiles):\n" +
-                "  sla help | sla listar\n\n" +
+                "CU7. Monitoreo SLA (72 Horas Habiles) y Alertas:\n" +
+                "  sla help | sla listar | alerta help | alerta listar\n\n" +
                 "CU8. Reportes y Estadisticas:\n" +
                 "  reporte help | reporte tramites | reporte sla | reporte firmas";
 
