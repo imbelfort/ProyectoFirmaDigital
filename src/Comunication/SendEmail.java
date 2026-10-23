@@ -61,26 +61,22 @@ public class SendEmail {
             writer = new DataOutputStream(socket.getOutputStream());
 
             if (socket != null && reader != null && writer != null) {
-                System.out.println("SMTP: " + reader.readLine());
+                logSmtp("S", reader.readLine());
 
                 // Saludar al servidor
                 command = "HELO " + SERVER + "\r\n";
-                writer.writeBytes(command);
-                writer.flush();
-                System.out.println("SMTP: " + reader.readLine());
+                sendSmtpCommand(writer, command);
+                logSmtp("S", reader.readLine());
 
-                command = "MAIL FROM:" + user_emisor + "\r\n";
                 command = "MAIL FROM:<" + user_emisor.trim() + ">\r\n";
-                writer.writeBytes(command);
-                writer.flush();
-                System.out.println("SMTP: " + reader.readLine());
+                sendSmtpCommand(writer, command);
+                logSmtp("S", reader.readLine());
 
                 String origen = email.getFrom();
                 if (esEmailValido(origen)) {
                     command = "RCPT TO:<" + origen.trim() + ">\r\n";
-                    writer.writeBytes(command);
-                    writer.flush();
-                    System.out.println("SMTP: " + reader.readLine());
+                    sendSmtpCommand(writer, command);
+                    logSmtp("S", reader.readLine());
                 } else {
                     System.out.println("Correo de respuesta no enviado: no hay destinatario válido");
                     writer.close();
@@ -92,9 +88,8 @@ public class SendEmail {
                 // Escribir Mensaje
                 // Comenzar DATA
                 command = "DATA\r\n";
-                writer.writeBytes(command);
-                writer.flush();
-                System.out.println("SMTP: " + reader.readLine());
+                sendSmtpCommand(writer, command);
+                logSmtp("S", reader.readLine());
 
                 // Construir cabeceras mÃ­nimas vÃ¡lidas (From, To, Subject, MIME)
                 StringBuilder data = new StringBuilder();
@@ -165,17 +160,16 @@ public class SendEmail {
                 writer.flush();
                 String dataResponse = reader.readLine();
                 if (dataResponse != null) {
-                    System.out.println("SMTP: " + dataResponse);
+                    logSmtp("S", dataResponse);
                 } else {
-                    System.out.println("Correo de respuesta no enviado: el servidor no respondiÃ³ despuÃ©s del cuerpo");
+                    System.out.println("Correo de respuesta no enviado: el servidor no respondió después del cuerpo");
                 }
 
                 command = "QUIT\r\n";
-                writer.writeBytes(command);
-                writer.flush();
+                sendSmtpCommand(writer, command);
                 String quitResponse = reader.readLine();
                 if (quitResponse != null) {
-                    System.out.println("SMTP: " + quitResponse);
+                    logSmtp("S", quitResponse);
                 }
 
                 System.out.println("Correo de respuesta enviado exitosamente a: " + email.getFrom());
@@ -214,7 +208,20 @@ public class SendEmail {
         }
         return lines;
     }
-private boolean esEmailValido(String email) {
+
+    private static void sendSmtpCommand(DataOutputStream writer, String command) throws IOException {
+        System.out.println("[SMTP][C] " + command.replace("\r", "").replace("\n", ""));
+        writer.writeBytes(command);
+        writer.flush();
+    }
+
+    private static void logSmtp(String direction, String message) {
+        if (message != null) {
+            System.out.println("[SMTP][" + direction + "] " + message);
+        }
+    }
+
+    private boolean esEmailValido(String email) {
     return email != null && email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
 }
 
@@ -318,7 +325,7 @@ private boolean esEmailValido(String email) {
         private InlineEmailContent prepararContenidoInline(String html) {
             InlineEmailContent content = new InlineEmailContent();
 
-            if (html == null || html.isBlank()) {
+            if (html == null || html.trim().isEmpty()) {
                 content.htmlSanitizado = "";
                 return content;
             }
