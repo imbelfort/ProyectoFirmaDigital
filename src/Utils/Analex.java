@@ -96,12 +96,11 @@ public class Analex {
     }
     
     private boolean isDate(char c){        
-        //return c == '-' || c == '/' || c == ':';
-        return c == '-'  || c == ':';
+        return c == '-' || c == '/' || c == ':';
     }
     
     private boolean isEmail(char c){        
-        return c == 64 || c == '.' || c == '_' || c == '-';
+        return c == 64 || c == '.' || c == '_' || c == '-' || c == '/';
     }
 
     /**
