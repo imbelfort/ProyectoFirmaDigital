@@ -19,9 +19,6 @@ import Utils.Extractor;
 public class MailVerificationThread implements Runnable {
 
     private final static int PORT_POP = 110;
-    private final static int PORT_IMAP = 143;
-    private final static int PORT_SMTP = 25;
-
     private final static String HOST = "mail.tecnoweb.org.bo";
     private final static String USER = "grupo20sa";
     private final static String PASSWORD = "grup020grup020*";
@@ -40,10 +37,6 @@ public class MailVerificationThread implements Runnable {
     private BufferedReader input;
     private DataOutputStream output;
 
-    private Boolean lastImapStatus;
-    private Boolean lastPopStatus;
-    private Boolean lastSmtpStatus;
-
     private IEmailEventListener emailEventListener;
 
     public IEmailEventListener getEmailEventListener() {
@@ -58,21 +51,12 @@ public class MailVerificationThread implements Runnable {
         socket = null;
         input = null;
         output = null;
-        lastImapStatus = null;
-        lastPopStatus = null;
-        lastSmtpStatus = null;
     }
 
     @Override
     public void run() {
         while (true) {
             try {
-                boolean imapAvailable = isPortAvailable(HOST, PORT_IMAP, CONNECT_TIMEOUT_MS);
-                notifyStatusIfChanged("IMAP", PORT_IMAP, imapAvailable, 1);
-
-                boolean smtpAvailable = isPortAvailable(HOST, PORT_SMTP, CONNECT_TIMEOUT_MS);
-                notifyStatusIfChanged("SMTP", PORT_SMTP, smtpAvailable, 2);
-
                 List<Email> emails = null;
 
                 socket = openSocket(HOST, PORT_POP, CONNECT_TIMEOUT_MS);
@@ -80,8 +64,6 @@ public class MailVerificationThread implements Runnable {
                 output = new DataOutputStream(socket.getOutputStream());
 
                 debug("Conexion POP3 establecida");
-
-                notifyStatusIfChanged("POP3", PORT_POP, true, 0);
 
                 authUser(USER, PASSWORD);
 
@@ -107,7 +89,6 @@ public class MailVerificationThread implements Runnable {
                 Thread.sleep(LOOP_DELAY_MS);
 
             } catch (IOException ex) {
-                notifyStatusIfChanged("POP3", PORT_POP, false, 0);
                 Logger.getLogger(MailVerificationThread.class.getName()).log(Level.SEVERE, null, ex);
                 cerrarConexionPop3();
                 safeSleep(LOOP_DELAY_MS);
@@ -124,95 +105,6 @@ public class MailVerificationThread implements Runnable {
         Socket s = new Socket();
         s.connect(new InetSocketAddress(host, port), timeoutMs);
         return s;
-    }
-
-    private boolean isPortAvailable(String host, int port, int timeoutMs) {
-        Socket s = new Socket();
-
-        try {
-            s.connect(new InetSocketAddress(host, port), timeoutMs);
-            return true;
-        } catch (IOException e) {
-            return false;
-        } finally {
-            try {
-                s.close();
-            } catch (IOException ignored) {
-            }
-        }
-    }
-
-    private void notifyStatusIfChanged(String protocol, int port, boolean available, int serverType) {
-        Boolean last = null;
-
-        if (serverType == 0) {
-            last = lastPopStatus;
-        } else if (serverType == 1) {
-            last = lastImapStatus;
-        } else if (serverType == 2) {
-            last = lastSmtpStatus;
-        }
-
-        if (last != null && last.booleanValue() == available) {
-            return;
-        }
-
-        if (serverType == 0) {
-            lastPopStatus = available;
-        } else if (serverType == 1) {
-            lastImapStatus = available;
-        } else if (serverType == 2) {
-            lastSmtpStatus = available;
-        }
-
-        mostrarDashboardServidores();
-    }
-
-    private void mostrarDashboardServidores() {
-        String smtpColor = lastSmtpStatus != null && lastSmtpStatus ? "#2e7d32" : "#c62828";
-        String imapColor = lastImapStatus != null && lastImapStatus ? "#2e7d32" : "#c62828";
-        String pop3Color = lastPopStatus != null && lastPopStatus ? "#2e7d32" : "#c62828";
-
-        String smtpStatus = lastSmtpStatus != null && lastSmtpStatus ? "ACTIVO" : "INACTIVO";
-        String imapStatus = lastImapStatus != null && lastImapStatus ? "ACTIVO" : "INACTIVO";
-        String pop3Status = lastPopStatus != null && lastPopStatus ? "ACTIVO" : "INACTIVO";
-
-        String html = "<html><body style='font-family: Arial, sans-serif; padding: 15px; background-color: #F8FAFC;'>" +
-                "<h2 style='text-align: center; color: #0F172A; margin: 0 0 15px 0; font-size: 16px;'>ESTADO DE SERVIDORES DE CORREO</h2>" +
-                "<table style='width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #CBD5E1; font-size: 12px;'>" +
-                "<tr style='background-color: #1E3A8A;'>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: left; font-size: 11px; text-transform: uppercase;'>Protocolo</th>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: left; font-size: 11px; text-transform: uppercase;'>Host</th>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: left; font-size: 11px; text-transform: uppercase;'>Puerto</th>" +
-                "<th style='color: white; padding: 10px; border: 1px solid #1E3A8A; text-align: center; font-size: 11px; text-transform: uppercase;'>Estado</th>" +
-                "</tr>" +
-
-                "<tr>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; font-weight: bold; color: #1E3A8A;'>SMTP</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + HOST + "</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + PORT_SMTP + "</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; text-align: center; background-color: " + smtpColor + "; color: white; font-weight: bold;'>" + smtpStatus + "</td>" +
-                "</tr>" +
-
-                "<tr style='background-color: #F8FAFC;'>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; font-weight: bold; color: #1E3A8A;'>IMAP</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + HOST + "</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + PORT_IMAP + "</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; text-align: center; background-color: " + imapColor + "; color: white; font-weight: bold;'>" + imapStatus + "</td>" +
-                "</tr>" +
-
-                "<tr>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; font-weight: bold; color: #1E3A8A;'>POP3</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + HOST + "</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; color: #334155;'>" + PORT_POP + "</td>" +
-                "<td style='padding: 8px 10px; border: 1px solid #E2E8F0; text-align: center; background-color: " + pop3Color + "; color: white; font-weight: bold;'>" + pop3Status + "</td>" +
-                "</tr>" +
-
-                "</table>" +
-                "<p style='font-size: 11px; color: #64748B; margin: 0;'>Monitoreando estado cada 5 segundos...</p>" +
-                "</body></html>";
-
-        Home.mostraRespuesta(html);
     }
 
     private void authUser(String email, String password) throws IOException {

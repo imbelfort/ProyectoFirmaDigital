@@ -6,10 +6,7 @@
 package Comunication;
 
 //import com.juanvladimir13.template.MaryTemplate;
-import Database.ConfigEmailServer;
 import Utils.Email;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,43 +14,27 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.NoSuchProviderException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
-import proyectomailgrupo20sa.Principal;
-
 public class SendEmail {
 
     private final static int PORT_SMTP = 25;
     private final static String SERVER = "mail.tecnoweb.org.bo";
     private final static String user_emisor = "grupo20sa@tecnoweb.org.bo";
     private static String user_receptor;
-    private static Socket socket;
-    private static BufferedReader entrada;
-    private static DataOutputStream salida;
 
     public SendEmail() {
-        this.user_receptor = "";
+        user_receptor = "";
 
     }
 
@@ -62,7 +43,7 @@ public class SendEmail {
     }
 
     public void setUser_receptor(String user_receptor) {
-        this.user_receptor = user_receptor;
+        SendEmail.user_receptor = user_receptor;
     }
 
     public void responseUser(Email email, String mensaje) {
@@ -94,48 +75,18 @@ public class SendEmail {
                 writer.flush();
                 System.out.println("SMTP: " + reader.readLine());
 
-                if (Principal.cbx_emailsReceptores.isSelected()) {
-                    // Obtener destinatarios desde JTextArea
-                    String[] receptores = getEmailsReceptores();
-
-                    // Usar Set para evitar duplicados y mantener orden
-                    Set<String> destinatarios = new LinkedHashSet<>();
-                    // Incluir el remitente original (quien enviÃ³ el comando) como destinatario
-                    if (esEmailValido(email.getFrom())) {
-                        destinatarios.add(email.getFrom().trim());
-                    }
-
-                    for (String r : receptores) {
-                        boolean valido = esEmailValido(r);
-                        System.out.println("DEBUG: candidato receptor='" + r + "' valido=" + valido);
-                        if (valido) {
-                            destinatarios.add(r.trim());
-                        }
-                    }
-
-                    // Enviar RCPT TO para cada destinatario (usar <> segÃºn RFC)
-                    for (String destinatario : destinatarios) {
-                        command = "RCPT TO:<" + destinatario + ">\r\n";
-                        writer.writeBytes(command);
-                        writer.flush();
-                        System.out.println("SMTP: " + reader.readLine());
-                    }
+                String origen = email.getFrom();
+                if (esEmailValido(origen)) {
+                    command = "RCPT TO:<" + origen.trim() + ">\r\n";
+                    writer.writeBytes(command);
+                    writer.flush();
+                    System.out.println("SMTP: " + reader.readLine());
                 } else {
-                    // Solo al remitente original
-                    String origen = email.getFrom();
-                    if (esEmailValido(origen)) {
-                        command = "RCPT TO:<" + origen.trim() + ">\r\n";
-                        writer.writeBytes(command);
-                        writer.flush();
-                        System.out.println("SMTP: " + reader.readLine());
-                    } else {
-                        // Si no hay destinatario vÃ¡lido, cancelar
-                        System.out.println("Correo de respuesta no enviado: no hay destinatarios vÃ¡lidos");
-                        writer.close();
-                        reader.close();
-                        socket.close();
-                        return;
-                    }
+                    System.out.println("Correo de respuesta no enviado: no hay destinatario válido");
+                    writer.close();
+                    reader.close();
+                    socket.close();
+                    return;
                 }
 
                 // Escribir Mensaje
@@ -151,14 +102,7 @@ public class SendEmail {
 
                 // Reconstruir lista To a partir de los RCPT enviados (usar getEmailsReceptores + remitente)
                 List<String> toList = new ArrayList<>();
-                if (Principal.cbx_emailsReceptores.isSelected()) {
-                    if (esEmailValido(email.getFrom())) toList.add(email.getFrom().trim());
-                    for (String r : getEmailsReceptores()) {
-                        if (esEmailValido(r)) toList.add(r.trim());
-                    }
-                } else {
-                    if (esEmailValido(email.getFrom())) toList.add(email.getFrom().trim());
-                }
+                if (esEmailValido(email.getFrom())) toList.add(email.getFrom().trim());
 
                 if (!toList.isEmpty()) {
                     data.append("To: ");
@@ -320,35 +264,11 @@ private boolean esEmailValido(String email) {
         mensaje.setSubject(subject);
         mensaje.setText("enviado");
 
-        // Agregar destinatarios segÃºn estado del checkbox
-        if (Principal.cbx_emailsReceptores.isSelected()) {
-            Set<String> destinatarios = new HashSet<>();
-
-            // Agregar receptor por parÃ¡metro
-            if (esEmailValido(receptor)) {
-                destinatarios.add(receptor.trim());
-            }
-
-            // Agregar correos del JTextArea
-            String[] receptores = getEmailsReceptores();
-            for (String email : receptores) {
-                if (esEmailValido(email)) {
-                    destinatarios.add(email.trim());
-                }
-            }
-
-            // AÃ±adir todos como TO
-            for (String email : destinatarios) {
-                mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            }
+        if (esEmailValido(receptor)) {
+            mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(receptor.trim()));
         } else {
-            // Solo enviar al receptor pasado si es vÃ¡lido
-            if (esEmailValido(receptor)) {
-                mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(receptor.trim()));
-            } else {
-                System.out.println("Email invÃ¡lido: " + receptor);
-                return;
-            }
+            System.out.println("Email inválido: " + receptor);
+            return;
         }
 
         // EnvÃ­o del mensaje
@@ -379,24 +299,7 @@ private boolean esEmailValido(String email) {
     }
 
     public String[] getEmailsReceptores() {
-        String emailsReceptores = Principal.ta_emailsReceptores.getText();
-
-        if (emailsReceptores == null || emailsReceptores.trim().isEmpty()) {
-            return new String[0]; // Retorna arreglo vacÃ­o si no hay nada
-        }
-
-        // Separar por saltos de lÃ­nea y limpiar cada email
-        String[] lineas = emailsReceptores.split("\\r?\\n");
-
-        List<String> resultado = new ArrayList<>();
-        for (String linea : lineas) {
-            String email = linea.trim();
-            if (!email.isEmpty()) {
-                resultado.add(email);
-            }
-        }
-
-        return resultado.toArray(new String[0]);
+        return new String[0];
     }
 
         // Normaliza saltos de lÃ­nea a CRLF y aplica dot-stuffing para DATA SMTP

@@ -7,9 +7,6 @@ import Utils.Email;
 import Utils.Interpreter;
 import Utils.ParamValidator;
 import Utils.Token;
-import proyectomailgrupo20sa.Principal;
-
-import javax.swing.SwingUtilities;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -900,13 +897,8 @@ public class Home {
     }
 
     public static void mostraRespuesta(String textoHtml) {
-        SwingUtilities.invokeLater(() -> {
-            if (Principal.ta_respuesta != null) {
-                Principal.ta_respuesta.setContentType("text/html");
-                Principal.ta_respuesta.setText(textoHtml);
-                Principal.ta_respuesta.setCaretPosition(0);
-            }
-        });
+        System.out.println("Respuesta generada:");
+        System.out.println(textoHtml);
     }
 
     public static void mostrarYEnviarHELP(Email email, SendEmail respuesta, String titulo, String comandos) {
