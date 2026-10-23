@@ -901,9 +901,11 @@ public class Home {
 
     public static void mostraRespuesta(String textoHtml) {
         SwingUtilities.invokeLater(() -> {
-            Principal.ta_respuesta.setContentType("text/html");
-            Principal.ta_respuesta.setText(textoHtml);
-            Principal.ta_respuesta.setCaretPosition(0);
+            if (Principal.ta_respuesta != null) {
+                Principal.ta_respuesta.setContentType("text/html");
+                Principal.ta_respuesta.setText(textoHtml);
+                Principal.ta_respuesta.setCaretPosition(0);
+            }
         });
     }
 

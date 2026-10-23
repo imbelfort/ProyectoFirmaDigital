@@ -71,6 +71,7 @@ C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Uti
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Interpreter.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\ParamValidator.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\SimpleJson.java
+C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\TestRunner.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Token.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\TokenCommand.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\TSParams.java
