@@ -84,6 +84,21 @@ public class InicializarDB {
                 return;
             }
 
+            java.sql.ResultSet rs = con.getMetaData().getColumns(null, null, "usuario", "id_usuario");
+            boolean tieneIdUsuario = rs.next();
+            rs.close();
+
+            java.sql.ResultSet rsTable = con.getMetaData().getTables(null, null, "usuario", null);
+            boolean existeUsuario = rsTable.next();
+            rsTable.close();
+
+            if (existeUsuario && !tieneIdUsuario) {
+                System.out.println("[INFO] Se detecto esquema antiguo incompatible en PostgreSQL. Recreando tablas segun BD.md...");
+                eliminarTodasLasTablas();
+                con = Conexion.getInstancia().EstablecerConexion();
+                if (con == null) return;
+            }
+
             stmt = con.createStatement();
 
             String createUsuario =
@@ -341,13 +356,15 @@ public class InicializarDB {
             String createAlertaSla =
                     "CREATE TABLE IF NOT EXISTS alerta_sla (" +
                     "id SERIAL PRIMARY KEY," +
-                    "id_monitoreo INTEGER NOT NULL," +
+                    "id_monitoreo INTEGER," +
                     "id_tramite INTEGER NOT NULL," +
                     "tipo_alerta VARCHAR(50) NOT NULL," +
                     "mensaje TEXT NOT NULL," +
+                    "fecha_generacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
                     "fecha_alerta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
                     "notificado_a VARCHAR(150)," +
-                    "CONSTRAINT fk_alerta_monitoreo FOREIGN KEY (id_monitoreo) REFERENCES monitoreo_sla(id) ON DELETE CASCADE," +
+                    "atendida BOOLEAN NOT NULL DEFAULT FALSE," +
+                    "CONSTRAINT fk_alerta_monitoreo FOREIGN KEY (id_monitoreo) REFERENCES monitoreo_sla(id) ON DELETE SET NULL," +
                     "CONSTRAINT fk_alerta_tramite FOREIGN KEY (id_tramite) REFERENCES tramite(id) ON DELETE CASCADE" +
                     ");";
 
@@ -383,7 +400,10 @@ public class InicializarDB {
                     createPortalSeguimiento,
                     createMonitoreoSla,
                     createAlertaSla,
-                    createReporteEstadistica
+                    createReporteEstadistica,
+                    "ALTER TABLE alerta_sla ADD COLUMN IF NOT EXISTS fecha_generacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP",
+                    "ALTER TABLE alerta_sla ADD COLUMN IF NOT EXISTS atendida BOOLEAN NOT NULL DEFAULT FALSE",
+                    "ALTER TABLE alerta_sla ALTER COLUMN id_monitoreo DROP NOT NULL"
             );
 
             System.out.println("[OK] Todas las tablas de Firma Digital del Vicerrectorado fueron verificadas/creadas correctamente.");
@@ -445,7 +465,24 @@ public class InicializarDB {
 
                     "INSERT INTO indicador_gestion (codigo, nombre, descripcion, meta_esperada, valor_actual, unidad_medida, periodo) " +
                     "SELECT 'IND-SLA-72H', 'Tasa Cumplimiento SLA 72 Horas', 'Porcentaje de tramites despachados en 72 horas habiles', 95.00, 92.50, 'PORCENTAJE', 'MENSUAL' " +
-                    "WHERE NOT EXISTS (SELECT 1 FROM indicador_gestion WHERE codigo = 'IND-SLA-72H')"
+                    "WHERE NOT EXISTS (SELECT 1 FROM indicador_gestion WHERE codigo = 'IND-SLA-72H')",
+
+                    "INSERT INTO tramite (codigo_tramite, id_usuario_solicitante, id_tipo_tramite, asunto, estado, prioridad) " +
+                    "SELECT '2026001', (SELECT id_usuario FROM usuario WHERE registro = '219064748' LIMIT 1), (SELECT id FROM tipo_tramite WHERE codigo = 'DIPLOMA_ACAD' LIMIT 1), 'Solicitud Diploma Academico Licenciatura', 'INICIADO', 'NORMAL' " +
+                    "WHERE NOT EXISTS (SELECT 1 FROM tramite WHERE codigo_tramite = '2026001')",
+
+                    "INSERT INTO monitoreo_sla (id_tramite, horas_sla_limite, fecha_inicio_sla, fecha_limite_sla, horas_transcurridas, estado_sla) " +
+                    "SELECT t.id, 72, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '72 hours', 0, 'EN_TIEMPO' " +
+                    "FROM tramite t WHERE t.codigo_tramite = '2026001' " +
+                    "AND NOT EXISTS (SELECT 1 FROM monitoreo_sla m WHERE m.id_tramite = t.id)",
+
+                    "INSERT INTO guia_procesal (id_tipo_tramite, paso_numero, nombre_etapa, descripcion_instrucciones, rol_responsable, tiempo_estimado_horas) " +
+                    "SELECT (SELECT id FROM tipo_tramite WHERE codigo = 'DIPLOMA_ACAD' LIMIT 1), 1, 'Recepcion Documental', 'Revision de requisitos en mesa de entrada', 'ENCARGADO', 12 " +
+                    "WHERE NOT EXISTS (SELECT 1 FROM guia_procesal WHERE paso_numero = 1)",
+
+                    "INSERT INTO requisito (id_tipo_tramite, nombre, descripcion, es_obligatorio, formato_permitido) " +
+                    "SELECT (SELECT id FROM tipo_tramite WHERE codigo = 'DIPLOMA_ACAD' LIMIT 1), 'Cedula de Identidad', 'Fotocopia Legalizada de CI', true, 'PDF' " +
+                    "WHERE NOT EXISTS (SELECT 1 FROM requisito WHERE nombre = 'Cedula de Identidad')"
             );
 
             System.out.println("[OK] Datos iniciales del Vicerrectorado verificados/insertados correctamente.");

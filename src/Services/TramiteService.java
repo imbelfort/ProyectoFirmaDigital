@@ -19,7 +19,7 @@ public class TramiteService {
         String sintaxis = "tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]";
         String ejemplo = "tramite agregar [2026001;4;1;Solicitud de Certificado de Notas;NORMAL]";
 
-        String codigo = ParamValidator.requireNumericCode(params, 0, "codigo_tramite", sintaxis, ejemplo);
+        String codigo = ParamValidator.requireCodigoTramite(params, 0, "codigo_tramite", sintaxis, ejemplo);
         int solicitante = ParamValidator.requireInt(params, 1, "id_solicitante", sintaxis, ejemplo);
         int tipo = ParamValidator.requireInt(params, 2, "id_tipo", sintaxis, ejemplo);
         String asunto = ParamValidator.requireString(params, 3, "asunto", sintaxis, ejemplo);

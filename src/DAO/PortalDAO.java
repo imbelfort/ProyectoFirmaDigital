@@ -11,7 +11,8 @@ public class PortalDAO {
 
     public void create(PortalSeguimiento portal) throws SQLException {
         String sql = "INSERT INTO portal_seguimiento (id_tramite, pin_seguimiento, portal_activo, total_visitas) " +
-                     "VALUES (?, ?, ?, ?)";
+                     "VALUES (?, ?, ?, ?) " +
+                     "ON CONFLICT (id_tramite) DO UPDATE SET pin_seguimiento = EXCLUDED.pin_seguimiento, portal_activo = EXCLUDED.portal_activo";
         try (Connection con = Conexion.getInstancia().EstablecerConexion();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, portal.getIdTramite());

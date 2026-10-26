@@ -284,4 +284,19 @@ public class ParamValidator {
         }
         return val;
     }
+
+    public static String requireCodigoTramite(List<String> params, int index, String paramName, String commandSyntax, String example) {
+        String val = requireString(params, index, paramName, commandSyntax, example);
+        if (!val.matches("^[a-zA-Z0-9_-]+$")) {
+            throw new CommandException(
+                    ErrorCode.ERR_FMT_003,
+                    "El código ingresado para [" + paramName + "] ('" + val + "') contiene caracteres inválidos.\n" +
+                    "• Regla institucional: Solo debe contener caracteres alfanuméricos, guiones (-) o guiones bajos (_).\n" +
+                    "• Ejemplos válidos: 2026001, TR-2026-001, TR-19347.\n" +
+                    "• Sintaxis requerida: " + commandSyntax,
+                    example
+            );
+        }
+        return val;
+    }
 }
