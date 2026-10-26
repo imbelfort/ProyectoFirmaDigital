@@ -3,7 +3,9 @@ package Comunication;
 import Interfaces.IEmailEventListener;
 import Interfaces.ITokenCasoUsoEventListener;
 import Services.*;
+import Utils.CommandException;
 import Utils.Email;
+import Utils.ErrorCode;
 import Utils.Interpreter;
 import Utils.ParamValidator;
 import Utils.Token;
@@ -603,18 +605,28 @@ public class Home {
 
             @Override
             public void error(TokenEvent event) {
-                String cmd = event.getParams().size() > 0 ? event.getParams().get(0) : subjectText;
-                String lexeme = event.getParams().size() > 1 ? event.getParams().get(1) : "término desconocido";
+                String cmd = subjectText;
+                String errorCode = event.getErrorCode() != null ? event.getErrorCode() : ErrorCode.ERR_CMD_004;
+                String causa = "[" + errorCode + "] " + ErrorCode.getDescripcionCorta(errorCode);
+                String detalle;
+
+                if (event.getParams().size() > 0 && !event.getParams().get(0).equals(cmd)) {
+                    detalle = event.getParams().get(0);
+                } else if (event.getParams().size() > 1) {
+                    detalle = "Error en el término o carácter: '" + event.getParams().get(1) + "'.";
+                } else {
+                    detalle = "Error en la estructura del comando ingresado.";
+                }
+
+                String sugerencia = event.getSuggestion() != null ? event.getSuggestion() : "usuario listar  ó  help";
+                String sintaxis = "<entidad> <accion> [parametro1;parametro2;...]";
 
                 String htmlError = HtmlBuilder.generateDetailedError(
                         cmd,
-                        "Error de Sintaxis o Carácter Inválido en Comando",
-                        "El término, carácter o palabra '" + lexeme + "' no es reconocido por el analizador del sistema.\n"
-                        + "• Verifique que la entidad y la acción estén escritas en minúsculas y sin acentos (ej. 'tramite listar').\n"
-                        + "• Recuerde que los parámetros deben ir entre corchetes [ ] y separados con punto y coma (;).\n"
-                        + "• No use caracteres especiales ni signos extraños fuera de los corchetes.",
-                        "<entidad> <accion> [parametro1;parametro2;...]",
-                        "usuario listar  ó  tramite listar  ó  help"
+                        causa,
+                        detalle,
+                        sintaxis,
+                        sugerencia
                 );
                 mostraRespuesta(htmlError);
                 respuesta.responseUser(email, htmlError);
@@ -627,27 +639,30 @@ public class Home {
                     return;
                 }
 
+                String cmd = subjectText;
+                String errorCode = event.getErrorCode() != null ? event.getErrorCode() : ErrorCode.ERR_CMD_002;
+                String causa = "[" + errorCode + "] " + ErrorCode.getDescripcionCorta(errorCode);
+                String detalle;
+                String sugerencia;
+
+                if (event.getParams().size() > 0) {
+                    detalle = event.getParams().get(0);
+                } else {
+                    detalle = "No se reconoce la entidad o comando principal: '" + subjectText + "'.";
+                }
+
+                if (event.getSuggestion() != null) {
+                    sugerencia = event.getSuggestion();
+                } else {
+                    sugerencia = "usuario listar  ó  help";
+                }
+
                 String htmlError = HtmlBuilder.generateDetailedError(
-                        subjectText,
-                        "Entidad o Comando Principal No Reconocido",
-                        "No se reconoce la entidad o comando principal: '" + subjectText + "'.\n"
-                        + "• Entidades válidas del sistema:\n"
-                        + "  - usuario (gestión de usuarios, alumnos, docentes, autoridades)\n"
-                        + "  - tramite (iniciar, modificar, listar, eliminar)\n"
-                        + "  - documento (anexar y validar documentos del expediente)\n"
-                        + "  - delegacion (delegaciones de firma de autoridades)\n"
-                        + "  - indicador (indicadores de gestión vicerrectoral)\n"
-                        + "  - tipo_tramite (catálogo oficial de trámites)\n"
-                        + "  - flujo (enrutamiento y avance de etapas)\n"
-                        + "  - firma (emisión de firma consolidada o remota)\n"
-                        + "  - despacho (registro de despachos oficiales)\n"
-                        + "  - certificado (emisión y consulta de certificados con QR)\n"
-                        + "  - portal (seguimiento público de trámites con PIN)\n"
-                        + "  - sla (monitoreo de 72 horas hábiles y alertas)\n"
-                        + "  - reporte (estadísticas de trámites, firmas y SLA)\n"
-                        + "• Envie únicamente la palabra 'help' en el Asunto para recibir el manual general.",
-                        "<entidad> <accion> [parametros]",
-                        "usuario listar  ó  tramite agregar [...]  ó  help"
+                        cmd,
+                        causa,
+                        detalle,
+                        "<entidad> <accion> [parametro1;parametro2;...]",
+                        sugerencia
                 );
                 mostraRespuesta(htmlError);
                 respuesta.responseUser(email, htmlError);
@@ -677,17 +692,25 @@ public class Home {
         String sintaxisCorrecta = obtenerSintaxisCasoUso(casoUso);
         String ejemploValido = obtenerEjemploCasoUso(casoUso);
 
-        if (ex instanceof IllegalArgumentException) {
-            causaPrincipal = "Parámetros Incorrectos o Faltantes en el Comando";
+        if (ex instanceof CommandException) {
+            CommandException ce = (CommandException) ex;
+            String ec = ce.getErrorCode();
+            causaPrincipal = "[" + ec + "] " + ErrorCode.getDescripcionCorta(ec);
+            detalleFallo = ce.getMessage();
+            if (ce.getSuggestion() != null && !ce.getSuggestion().isEmpty()) {
+                ejemploValido = ce.getSuggestion();
+            }
+        } else if (ex instanceof IllegalArgumentException) {
+            causaPrincipal = "[" + ErrorCode.ERR_INC_002 + "] Parámetros Incorrectos o Faltantes en el Comando";
             detalleFallo = ex.getMessage();
         } else if (ex instanceof SQLException) {
             String sqlMsg = ex.getMessage() != null ? ex.getMessage() : "";
 
             if (sqlMsg.startsWith("No se encontró") || sqlMsg.startsWith("No existe")) {
-                causaPrincipal = "Registro No Encontrado en Base de Datos";
+                causaPrincipal = "[" + ErrorCode.ERR_NEG_001 + "] Registro No Encontrado en Base de Datos";
                 detalleFallo = sqlMsg;
             } else if (sqlMsg.startsWith("Ya existe")) {
-                causaPrincipal = "Registro Duplicado en Base de Datos";
+                causaPrincipal = "[" + ErrorCode.ERR_BD_003 + "] Registro Duplicado en Base de Datos";
                 detalleFallo = sqlMsg;
             } else if (sqlMsg.contains("violates foreign key constraint") && sqlMsg.contains("fk_tramite_solicitante")) {
                 causaPrincipal = "Usuario Solicitante No Encontrado";

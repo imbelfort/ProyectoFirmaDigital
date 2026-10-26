@@ -266,4 +266,93 @@ public class Token {
             default: return -1;
         }
     }
+
+    public static final String[] ENTIDADES = {
+        LEXEME_USUARIO, LEXEME_DELEGACION, LEXEME_INDICADOR, LEXEME_TRAMITE,
+        LEXEME_DOCUMENTO, LEXEME_TIPO_TRAMITE, LEXEME_FLUJO, LEXEME_OBSERVACION,
+        LEXEME_BITACORA, LEXEME_FIRMA, LEXEME_DESPACHO, LEXEME_CERTIFICADO,
+        LEXEME_PORTAL, LEXEME_SLA, LEXEME_ALERTA, LEXEME_REPORTE, LEXEME_GUIA
+    };
+
+    public static final String[] ACCIONES = {
+        LEXEME_LISTAR, LEXEME_AGREGAR, LEXEME_MODIFICAR, LEXEME_ELIMINAR,
+        LEXEME_HELP, LEXEME_VALIDAR, LEXEME_AVANZAR, LEXEME_CONSOLIDADA,
+        LEXEME_REMOTA, LEXEME_GENERAR, LEXEME_CONSULTAR, LEXEME_VERIFICAR,
+        LEXEME_TRAMITES, LEXEME_FIRMAS, LEXEME_HABILITAR, LEXEME_MOSTRAR,
+        LEXEME_SUBSANAR, LEXEME_ATENDER
+    };
+
+    public static boolean isCU(String word) {
+        if (word == null) return false;
+        String w = word.trim().toLowerCase();
+        for (String cu : ENTIDADES) {
+            if (cu.equals(w)) return true;
+        }
+        return false;
+    }
+
+    public static boolean isAction(String word) {
+        if (word == null) return false;
+        String w = word.trim().toLowerCase();
+        for (String act : ACCIONES) {
+            if (act.equals(w)) return true;
+        }
+        return false;
+    }
+
+    public static String sugerirCUCercano(String word) {
+        if (word == null) return null;
+        String w = word.trim().toLowerCase();
+        String mejor = null;
+        int menorDistancia = Integer.MAX_VALUE;
+        for (String cu : ENTIDADES) {
+            int d = levenshteinDistance(w, cu);
+            if (d < menorDistancia) {
+                menorDistancia = d;
+                mejor = cu;
+            }
+        }
+        if (menorDistancia <= 3 || (w.length() >= 4 && menorDistancia <= w.length() / 2 + 1)) {
+            return mejor;
+        }
+        return null;
+    }
+
+    public static String sugerirAccionCercana(String word) {
+        if (word == null) return null;
+        String w = word.trim().toLowerCase();
+        String mejor = null;
+        int menorDistancia = Integer.MAX_VALUE;
+        for (String act : ACCIONES) {
+            int d = levenshteinDistance(w, act);
+            if (d < menorDistancia) {
+                menorDistancia = d;
+                mejor = act;
+            }
+        }
+        if (menorDistancia <= 3 || (w.length() >= 4 && menorDistancia <= w.length() / 2 + 1)) {
+            return mejor;
+        }
+        return null;
+    }
+
+    public static int levenshteinDistance(String s1, String s2) {
+        int len1 = s1.length();
+        int len2 = s2.length();
+        int[][] dp = new int[len1 + 1][len2 + 1];
+
+        for (int i = 0; i <= len1; i++) dp[i][0] = i;
+        for (int j = 0; j <= len2; j++) dp[0][j] = j;
+
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                int cost = (s1.charAt(i - 1) == s2.charAt(j - 1)) ? 0 : 1;
+                dp[i][j] = Math.min(
+                    Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1),
+                    dp[i - 1][j - 1] + cost
+                );
+            }
+        }
+        return dp[len1][len2];
+    }
 }
