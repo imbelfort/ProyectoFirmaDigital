@@ -1,13 +1,30 @@
 package Database;
 
-/**
- *
- * @author Usuario
- */
 public class ConfigDB {
     public static final String DRIVER = "org.postgresql.Driver";
-    public static final String DB = "db_grupo20sa";
-    public static final String USER = "grupo20sa";
-    public static final String PASSWORD = "grup020grup020*";
-    public static final String URL = "jdbc:postgresql://mail.tecnoweb.org.bo/";
+    public static final String DB = "db_grupo26sa";
+    public static final String USER = "grupo26sa";
+    public static final String PASSWORD = "grup026grup026*";
+
+    public static String getHost() {
+        String host = System.getenv("DB_HOST");
+        if (host != null && !host.trim().isEmpty()) {
+            return host.trim();
+        }
+        return "mail.tecnoweb.org.bo";
+    }
+
+    public static String getPort() {
+        String port = System.getenv("DB_PORT");
+        if (port != null && !port.trim().isEmpty()) {
+            return port.trim();
+        }
+        return "5432";
+    }
+
+    public static String getUrl() {
+        return "jdbc:postgresql://" + getHost() + ":" + getPort() + "/";
+    }
+
+    public static final String URL = "jdbc:postgresql://" + getHost() + ":" + getPort() + "/";
 }

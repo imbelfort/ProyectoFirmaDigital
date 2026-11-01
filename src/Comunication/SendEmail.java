@@ -26,11 +26,13 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import Database.ConfigEmailServer;
+
 public class SendEmail {
 
-    private final static int PORT_SMTP = 25;
-    private final static String SERVER = "mail.tecnoweb.org.bo";
-    private final static String user_emisor = "grupo20sa@tecnoweb.org.bo";
+    private final static int PORT_SMTP = Integer.parseInt(ConfigEmailServer.getPortSmtp());
+    private final static String SERVER = ConfigEmailServer.getHost();
+    private final static String user_emisor = ConfigEmailServer.MAIL;
     private static String user_receptor;
 
     public SendEmail() {

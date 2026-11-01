@@ -20,7 +20,7 @@ public class PruebaValidacionesSeguridadYErrores {
     public static void main(String[] args) {
         System.out.println("=========================================================================");
         System.out.println("  TEST SUITE: VALIDACIONES DE SEGURIDAD, CARACTERES Y ERRORES CLAROS     ");
-        System.out.println("  Sistema de Firma Digital del Vicerrectorado (UAGRM - Grupo 20 SA)      ");
+        System.out.println("  Sistema de Firma Digital del Vicerrectorado (UAGRM - Grupo 26 SA)      ");
         System.out.println("=========================================================================\n");
 
         testCaracteresPeligrosos();

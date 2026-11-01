@@ -1,5 +1,5 @@
 # GUIA DE COMANDOS POR CORREO - VICERRECTORADO FIRMA DIGITAL
-### SERVIDOR: `grupo20sa@tecnoweb.org.bo` | GRUPO 20 SA
+### SERVIDOR: `grupo26sa@tecnoweb.org.bo` | GRUPO 26 SA
 
 > **REGLA DE ACCESO Y CREDENCIALES (SOLO NUMEROS, SIN LETRAS):**
 > - **Alumnos:** Su login es su **Registro Universitario numérico** (ej. `219064748`, `218055412`) y su contraseña inicial es su **C.I.**

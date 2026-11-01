@@ -16,12 +16,14 @@ import Utils.Command;
 import Utils.Email;
 import Utils.Extractor;
 
+import Database.ConfigEmailServer;
+
 public class MailVerificationThread implements Runnable {
 
-    private final static int PORT_POP = 110;
-    private final static String HOST = "mail.tecnoweb.org.bo";
-    private final static String USER = "grupo20sa";
-    private final static String PASSWORD = "grup020grup020*";
+    private final static int PORT_POP = Integer.parseInt(ConfigEmailServer.getPortPop());
+    private final static String HOST = ConfigEmailServer.getHost();
+    private final static String USER = ConfigEmailServer.USER;
+    private final static String PASSWORD = ConfigEmailServer.PASSWORD;
 
     private final static int CONNECT_TIMEOUT_MS = 5000;
     private final static int LOOP_DELAY_MS = 5000;

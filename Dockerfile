@@ -16,7 +16,7 @@ RUN mkdir -p build/classes && \
     src/Services/*.java \
     src/Interfaces/*.java \
     src/Comunication/*.java \
-    src/proyectomailgrupo20sa/*.java
+    src/proyectomailgrupo26sa/*.java
 
 # Imagen de Ejecución (Runtime Liviano)
 FROM eclipse-temurin:8-jre-focal
@@ -34,4 +34,4 @@ ENV MAIL_SMTP_PORT=25
 ENV MAIL_POP_PORT=110
 
 # Ejecutar el Demonio de Correo y Monitor
-CMD ["java", "-cp", "build/classes:lib/*", "proyectomailgrupo20sa.Principal"]
+CMD ["java", "-cp", "build/classes:lib/*", "proyectomailgrupo26sa.Principal"]

@@ -1,5 +1,5 @@
 # SISTEMA DE FIRMA DIGITAL DEL VICERRECTORADO (UAGRM)
-## Proyecto Correo Electrónico - Grupo 20 SA | Tecnología Web
+## Proyecto Correo Electrónico - Grupo 26 SA | Tecnología Web
 
 Sistema automatizado de gestión y firma digital de trámites académicos y administrativos mediante comandos enviados por correo electrónico (POP3 / SMTP) y base de datos relacional PostgreSQL.
 
@@ -10,13 +10,13 @@ Sistema automatizado de gestión y firma digital de trámites académicos y admi
 - **Servidor de Correo:** `mail.tecnoweb.org.bo`
 - **Puerto SMTP:** `25`
 - **Puerto POP3:** `110`
-- **Usuario Correo:** `grupo20sa`
-- **Email:** `grupo20sa@tecnoweb.org.bo`
-- **Password:** `grup020grup020*`
+- **Usuario Correo:** `grupo26sa`
+- **Email:** `grupo26sa@tecnoweb.org.bo`
+- **Password:** `grup026grup026*`
 - **Motor BD:** PostgreSQL (`jdbc:postgresql://mail.tecnoweb.org.bo/`)
-- **Base de Datos:** `db_grupo20sa`
-- **Usuario BD:** `grupo20sa`
-- **Password BD:** `grup020grup020*`
+- **Base de Datos:** `db_grupo26sa`
+- **Usuario BD:** `grupo26sa`
+- **Password BD:** `grup026grup026*`
 
 ---
 
@@ -60,6 +60,6 @@ Sistema automatizado de gestión y firma digital de trámites académicos y admi
 
 ### Guía de Inicio Rápido
 Para interactuar con el sistema por correo electrónico:
-1. Envíe un correo a `grupo20sa@tecnoweb.org.bo`
+1. Envíe un correo a `grupo26sa@tecnoweb.org.bo`
 2. En el **Subject** (Asunto), escriba el comando deseado (ej: `help`, `usuario listar`, `tramite listar`, `sla listar`).
 3. El sistema procesará la solicitud de forma inmediata y le responderá con el resultado formateado en HTML.

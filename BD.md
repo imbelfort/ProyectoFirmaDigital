@@ -1,8 +1,8 @@
 -- ============================================================
--- BASE DE DATOS: db_grupo20sa
+-- BASE DE DATOS: db_grupo26sa
 -- SISTEMA DE FIRMA DIGITAL DEL VICERRECTORADO
 -- UNIVERSIDAD AUTONOMA GABRIEL RENE MORENO (UAGRM)
--- GRUPO 20 SA - TECNOLOGIA WEB
+-- GRUPO 26 SA - TECNOLOGIA WEB
 -- ============================================================
 -- REGLA DE CREDENCIALES Y CODIGOS (ESTRICTAMENTE NUMERICOS, SIN LETRAS):
 -- * Alumnos: Registro Universitario numérico (ej. 219064748). Su C.I. es su contraseña.

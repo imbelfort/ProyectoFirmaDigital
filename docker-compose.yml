@@ -7,15 +7,15 @@ services:
     container_name: firmadigital-postgres
     restart: always
     environment:
-      POSTGRES_DB: db_grupo20sa
-      POSTGRES_USER: grupo20sa
-      POSTGRES_PASSWORD: grup020grup020*
+      POSTGRES_DB: db_grupo26sa
+      POSTGRES_USER: grupo26sa
+      POSTGRES_PASSWORD: grup026grup026*
     ports:
       - "5432:5432"
     volumes:
       - pgdata_firma:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U grupo20sa -d db_grupo20sa"]
+      test: ["CMD-SHELL", "pg_isready -U grupo26sa -d db_grupo26sa"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -29,7 +29,7 @@ services:
       GREENMAIL_OPTS: >-
         -Dgreenmail.setup.all
         -Dgreenmail.hostname=0.0.0.0
-        -Dgreenmail.users=grupo20sa@tecnoweb.org.bo:grup020grup020*,alumno@tecnoweb.org.bo:123456,docente@tecnoweb.org.bo:123456,vicerrector@tecnoweb.org.bo:123456
+        -Dgreenmail.users=grupo26sa@tecnoweb.org.bo:grup026grup026*,alumno@tecnoweb.org.bo:123456,docente@tecnoweb.org.bo:123456,vicerrector@tecnoweb.org.bo:123456
     ports:
       - "25:3025"     # SMTP
       - "110:3110"   # POP3

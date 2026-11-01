@@ -21,7 +21,7 @@ public class Conexion {
         try {
             Class.forName(ConfigDB.DRIVER);
             this.con = DriverManager.getConnection(
-                ConfigDB.URL + ConfigDB.DB, 
+                ConfigDB.getUrl() + ConfigDB.DB, 
                 ConfigDB.USER, 
                 ConfigDB.PASSWORD
             );

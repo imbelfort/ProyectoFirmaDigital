@@ -45,7 +45,7 @@ C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Mod
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Models\Usuario.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\org\netbeans\lib\awtextra\AbsoluteConstraints.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\org\netbeans\lib\awtextra\AbsoluteLayout.java
-C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\proyectomailgrupo20sa\Principal.java
+C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\proyectomailgrupo26sa\Principal.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Services\AlertaService.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Services\BitacoraService.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Services\CertificadoService.java

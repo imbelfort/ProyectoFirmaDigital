@@ -644,7 +644,7 @@ private static String detectarMimeBase64(String base64) {
         // Header rojo institucional
         sb.append("<div style='background-color: #DC2626; color: #FFFFFF; padding: 14px 18px;'>");
         sb.append("<h2 style='margin: 0; font-size: 17px; font-weight: bold; color: #FFFFFF;'>[ERROR EN COMANDO] &mdash; ").append(escapeHtml(causaPrincipal)).append("</h2>");
-        sb.append("<span style='font-size: 11px; color: #FEE2E2;'>Sistema de Firma Digital del Vicerrectorado &bull; Grupo 20 SA</span>");
+        sb.append("<span style='font-size: 11px; color: #FEE2E2;'>Sistema de Firma Digital del Vicerrectorado &bull; Grupo 26 SA</span>");
         sb.append("</div>");
 
         // Body

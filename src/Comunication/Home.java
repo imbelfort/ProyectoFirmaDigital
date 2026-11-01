@@ -931,7 +931,7 @@ public class Home {
     }
 
     public static void mostrarYEnviarHELPGeneral(Email email, SendEmail respuesta) {
-        String titulo = "Sistema de Firma Digital del Vicerrectorado - Grupo 20 SA";
+        String titulo = "Sistema de Firma Digital del Vicerrectorado - Grupo 26 SA";
         String comandos =
                 "REGLA: Para Alumnos, Docentes y Administrativos, su login es su Registro numerico y su CI es su contraseña inicial.\n\n" +
                 "CU1. Gestion de Usuarios:\n" +

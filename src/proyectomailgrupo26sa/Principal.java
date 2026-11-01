@@ -1,4 +1,4 @@
-package proyectomailgrupo20sa;
+package proyectomailgrupo26sa;
 
 import Comunication.Home;
 import Database.InicializarDB;
@@ -7,7 +7,7 @@ public class Principal {
 
     public static void main(String[] args) {
         System.out.println("=======================================================");
-        System.out.println("  SERVIDOR DE CORREO - VICERRECTORADO FIRMA DIGITAL - GRUPO 20 SA");
+        System.out.println("  SERVIDOR DE CORREO - VICERRECTORADO FIRMA DIGITAL - GRUPO 26 SA");
         System.out.println("=======================================================");
         System.out.println("Inicializando base de datos...");
 
@@ -23,7 +23,7 @@ public class Principal {
         Home.iniciar();
 
         System.out.println("[OK] Servicio de monitoreo ACTIVO");
-        System.out.println("[OK] Monitoreando: grupo20sa@tecnoweb.org.bo");
+        System.out.println("[OK] Monitoreando: grupo26sa@tecnoweb.org.bo");
         System.out.println("[OK] Revisando correos cada 5 segundos");
         System.out.println("=======================================================");
         System.out.println("El sistema esta listo para responder correos.");

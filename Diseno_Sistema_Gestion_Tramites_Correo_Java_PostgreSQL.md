@@ -1,7 +1,7 @@
 # DISEÑO FUNCIONAL Y BASE DE DATOS
 ## Sistema de Gestión de Trámites y Firma Digital mediante Comandos por Correo Electrónico
 ### Vicerrectorado - Universidad Autónoma Gabriel René Moreno (UAGRM)
-*Implementación nativa en Java + sockets POP3/SMTP + PostgreSQL (db_grupo20sa)*
+*Implementación nativa en Java + sockets POP3/SMTP + PostgreSQL (db_grupo26sa)*
 
 ---
 
@@ -9,7 +9,7 @@
 
 El sistema permite gestionar trámites académicos y administrativos del Vicerrectorado (Diplomas Académicos, Títulos en Provisión Nacional, Certificados de Calificaciones y Legalizaciones) utilizando el **correo electrónico como interfaz principal de entrada y salida**.
 
-Los usuarios (Alumnos, Docentes, Encargados de Despacho y Vicerrector) no requieren ingresar a un sistema web pesado para sus transacciones: envían un correo electrónico a la casilla oficial del sistema (`grupo20sa@tecnoweb.org.bo` o buzón local de pruebas), donde el asunto contiene el comando a procesar.
+Los usuarios (Alumnos, Docentes, Encargados de Despacho y Vicerrector) no requieren ingresar a un sistema web pesado para sus transacciones: envían un correo electrónico a la casilla oficial del sistema (`grupo26sa@tecnoweb.org.bo` o buzón local de pruebas), donde el asunto contiene el comando a procesar.
 
 El demonio en Java nativo (`MailVerificationThread`) consulta periódicamente el buzón mediante sockets POP3 (puerto 110), extrae el correo, procesa el comando mediante un autómata léxico formal (`Analex` / `Interpreter`), ejecuta la lógica de negocio y transacciones relacionales en **PostgreSQL**, y genera una respuesta ejecutiva en HTML enriquecido con CSS que se envía al remitente vía sockets SMTP (puerto 25) mediante `SendEmail`.
 
@@ -23,7 +23,7 @@ Simultáneamente, la interfaz gráfica Swing (`Principal.java`) permite a los op
 graph LR
     Actor[Actor / Remitente] -->|Envía Correo| POP3[Servidor POP3 :110]
     POP3 -->|Lectura Sockets| JavaApp[Aplicación Java Nativa]
-    JavaApp -->|Transacción JDBC| Postgres[(PostgreSQL db_grupo20sa)]
+    JavaApp -->|Transacción JDBC| Postgres[(PostgreSQL db_grupo26sa)]
     Postgres -->|Resultados| JavaApp
     JavaApp -->|Genera HTML Ejecutivo| SMTP[Servidor SMTP :25]
     SMTP -->|Envía Respuesta| Actor
@@ -46,7 +46,7 @@ Componentes estructurales:
 * **Capa de Persistencia (DAO y Database):**
   - Conexión JDBC nativa a PostgreSQL (`Conexion.java`).
   - 17 clases DAO orientadas a sentencias preparadas (`PreparedStatement`) con control de transacciones ACID (`commit` / `rollback`).
-* **Base de Datos Relacional PostgreSQL:** Base de datos `db_grupo20sa` con 20 tablas normalizadas con integridad referencial, disparadores y claves foráneas.
+* **Base de Datos Relacional PostgreSQL:** Base de datos `db_grupo26sa` con 20 tablas normalizadas con integridad referencial, disparadores y claves foráneas.
 
 ---
 
@@ -59,7 +59,7 @@ sequenceDiagram
     participant POP3 as Servidor POP3 (110)
     participant Core as MailVerificationThread / Home
     participant Lexer as Analex / Interpreter
-    participant DB as PostgreSQL (db_grupo20sa)
+    participant DB as PostgreSQL (db_grupo26sa)
     participant SMTP as Servidor SMTP (25)
 
     Usuario->>POP3: Envía correo con comando en el Asunto (Subject)
@@ -302,13 +302,13 @@ Por normativa de seguridad universitaria:
 
 ---
 
-# 7. Diseño Físico Oficial de la Base de Datos PostgreSQL (`db_grupo20sa`)
+# 7. Diseño Físico Oficial de la Base de Datos PostgreSQL (`db_grupo26sa`)
 
 A continuación se presenta el script DDL oficial de PostgreSQL que implementa las 20 tablas operativas del sistema:
 
 ```sql
 -- ============================================================
--- BASE DE DATOS: db_grupo20sa
+-- BASE DE DATOS: db_grupo26sa
 -- SISTEMA DE FIRMA DIGITAL DEL VICERRECTORADO (UAGRM)
 -- ============================================================
 
@@ -647,6 +647,6 @@ CREATE TABLE reporte_estadistica (
 
 # 9. Conclusión y Estado de Implementación
 
-1. **Viabilidad Total:** La arquitectura nativa de Java combinada con sockets directos POP3/SMTP y PostgreSQL `db_grupo20sa` cumple a cabalidad con todos los requerimientos de la materia sin frameworks externos.
+1. **Viabilidad Total:** La arquitectura nativa de Java combinada con sockets directos POP3/SMTP y PostgreSQL `db_grupo26sa` cumple a cabalidad con todos los requerimientos de la materia sin frameworks externos.
 2. **Robustez y Auditoría:** Todos los eventos procesados disponen de trazabilidad inmutable mediante `bitacora_tramite`, garantizando auditoría legal vicerrectoral y cumplimiento del SLA de 72 horas.
 3. **Mantenibilidad:** El código se encuentra desacoplado en paquetes modulares (`Comunication`, `DAO`, `Services`, `Database`, `Models`, `Utils`) y compila limpiamente sin advertencias, garantizando una ejecución estable en el servidor `mail.tecnoweb.org.bo` y entornos locales con Docker.

@@ -1,6 +1,6 @@
 # GUÍA DE EJECUCIÓN Y PRUEBAS DEL SISTEMA
 ## Sistema de Gestión de Trámites y Firma Digital por Correo Electrónico
-### Vicerrectorado UAGRM — Grupo 20 SA | Tecnología Web
+### Vicerrectorado UAGRM — Grupo 26 SA | Tecnología Web
 
 ---
 
@@ -11,9 +11,9 @@ El sistema opera bajo un esquema de integración completa:
   - **SMTP:** `localhost:25` (recepción y envío de correos).
   - **POP3:** `localhost:110` (lectura periódica del buzón por el demonio Java).
   - **Cuentas configuradas:**
-    * Sistema: `grupo20sa@test.local` (clave: `grup020grup020*`).
+    * Sistema: `grupo26sa@test.local` (clave: `grup026grup026*`).
     * Solicitante/Alumno: `alumno@test.local` (clave: `123456`).
-* **Base de Datos Relacional:** PostgreSQL `db_grupo20sa` con 20 tablas operativas.
+* **Base de Datos Relacional:** PostgreSQL `db_grupo26sa` con 20 tablas operativas.
 * **Motor Java Nativo:** Compilado en `build/classes/` con analizador léxico (`Analex`), autómata formal, servicios y DAOs.
 
 ---
@@ -40,7 +40,7 @@ compilar.bat
 ```cmd
 iniciar_sistema.bat
 ```
-*(O manualmente: `java -cp lib/*;build/classes proyectomailgrupo20sa.Principal`)*
+*(O manualmente: `java -cp lib/*;build/classes proyectomailgrupo26sa.Principal`)*
 El demonio `MailVerificationThread` comenzará a consultar el buzón cada 5 segundos.
 
 ---
@@ -56,7 +56,7 @@ El script le solicitará el comando deseado (ej: `help`, `usuario listar`, `tram
 
 Alternativamente, puede usar PowerShell directamente:
 ```powershell
-Send-MailMessage -From 'alumno@test.local' -To 'grupo20sa@test.local' -Subject 'usuario listar' -Body 'Prueba' -SmtpServer '127.0.0.1' -Port 25
+Send-MailMessage -From 'alumno@test.local' -To 'grupo26sa@test.local' -Subject 'usuario listar' -Body 'Prueba' -SmtpServer '127.0.0.1' -Port 25
 ```
 
 ### Opción B: Ejecutar la Suite de Pruebas Automatizada (CU1 - CU8)
@@ -215,7 +215,7 @@ Se ejecutó la suite completa de pruebas [TestRunner.java](file:///c:/Users/MEGA
 ========================================================
 
 [PASO 1] Probando conexion a PostgreSQL...
->>> [EXITO] Conexion establecida con la base de datos: db_grupo20sa
+>>> [EXITO] Conexion establecida con la base de datos: db_grupo26sa
 
 [PASO 2] Verificando tablas en base de datos...
 >>> [EXITO] Tablas verificadas.

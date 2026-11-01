@@ -1,5 +1,5 @@
 # LÓGICA DE NEGOCIO: SISTEMA DE FIRMA DIGITAL DEL VICERRECTORADO
-### Universidad Autónoma Gabriel René Moreno (UAGRM) — Grupo 20 SA
+### Universidad Autónoma Gabriel René Moreno (UAGRM) — Grupo 26 SA
 
 ---
 
@@ -10,7 +10,7 @@ El **Sistema de Firma Digital del Vicerrectorado** tiene como objetivo automatiz
 ### Canales de Operación y Comunicación
 1. **Canal Asíncrono por Correo Electrónico (POP3 / SMTP):**
    - El solicitante o funcionario no requiere una aplicación web pesada ni instalar software cliente. 
-   - Envía un correo electrónico a `grupo20sa@tecnoweb.org.bo` con el comando en el **Asunto (Subject)**.
+   - Envía un correo electrónico a `grupo26sa@tecnoweb.org.bo` con el comando en el **Asunto (Subject)**.
    - El demonio `MailVerificationThread.java` extrae periódicamente los mensajes usando sockets POP3 (puerto 110).
    - Tras procesar la transacción en la base de datos relacional PostgreSQL, el sistema genera y envía una respuesta HTML ejecutiva al correo del remitente usando sockets SMTP (puerto 25).
 2. **Canal de Supervisión Local (GUI Swing):**
