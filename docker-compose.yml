@@ -29,11 +29,28 @@ services:
       GREENMAIL_OPTS: >-
         -Dgreenmail.setup.all
         -Dgreenmail.hostname=0.0.0.0
-        -Dgreenmail.users=grupo26sa@tecnoweb.org.bo:grup026grup026*,alumno@tecnoweb.org.bo:123456,docente@tecnoweb.org.bo:123456,vicerrector@tecnoweb.org.bo:123456
+        -Dgreenmail.users=grupo26sa:grup026grup026*@tecnoweb.org.bo,alumno:123456@tecnoweb.org.bo,docente:123456@tecnoweb.org.bo,vicerrector:123456@tecnoweb.org.bo,alumno@tecnoweb.org.bo:123456@tecnoweb.org.bo,docente@tecnoweb.org.bo:123456@tecnoweb.org.bo,grupo26sa@tecnoweb.org.bo:grup026grup026*@tecnoweb.org.bo
     ports:
-      - "25:3025"     # SMTP
-      - "110:3110"   # POP3
+      - "25:25"     # SMTP
+      - "110:110"   # POP3
+      - "143:143"   # IMAP
       - "8080:8080"   # API / Dashboard GreenMail
+
+  # Cliente de Correo Webmail (Interfaz Gráfica tipo Thunderbird / Gmail)
+  webmail:
+    image: roundcube/roundcubemail:latest
+    container_name: firmadigital-webmail
+    restart: always
+    ports:
+      - "8085:80"
+    environment:
+      ROUNDCUBEMAIL_DEFAULT_HOST: mailserver
+      ROUNDCUBEMAIL_SMTP_SERVER: mailserver
+      ROUNDCUBEMAIL_SMTP_PORT: 25
+      ROUNDCUBEMAIL_DEFAULT_PORT: 143
+      ROUNDCUBEMAIL_USERNAME_DOMAIN: tecnoweb.org.bo
+    depends_on:
+      - mailserver
 
   # Demonio de Aplicación Java - Sistema de Firma Digital
   app:
@@ -49,8 +66,8 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       MAIL_HOST: mailserver
-      MAIL_SMTP_PORT: 3025
-      MAIL_POP_PORT: 3110
+      MAIL_SMTP_PORT: 25
+      MAIL_POP_PORT: 110
 
 volumes:
   pgdata_firma:

@@ -6,64 +6,93 @@
 
 ## 1. Arquitectura y Componentes del Entorno de Pruebas
 
-El sistema opera bajo un esquema de integración completa:
-* **Servidor de Correo (GreenMail en Docker):**
+El sistema opera bajo contenedores Docker listos para demostración y grabación:
+* **Base de Datos Relacional (`firmadigital-postgres`):**
+  - PostgreSQL 15 en el puerto `5432` con base de datos `db_grupo26sa` y 21 tablas creadas e inicializadas.
+* **Servidor de Correo Local (`firmadigital-mailserver` - GreenMail):**
   - **SMTP:** `localhost:25` (recepción y envío de correos).
-  - **POP3:** `localhost:110` (lectura periódica del buzón por el demonio Java).
-  - **Cuentas configuradas:**
-    * Sistema: `grupo26sa@test.local` (clave: `grup026grup026*`).
-    * Solicitante/Alumno: `alumno@test.local` (clave: `123456`).
-* **Base de Datos Relacional:** PostgreSQL `db_grupo26sa` con 20 tablas operativas.
-* **Motor Java Nativo:** Compilado en `build/classes/` con analizador léxico (`Analex`), autómata formal, servicios y DAOs.
+  - **POP3:** `localhost:110` (lectura periódica del buzón por el demonio Java cada 5 segundos).
+  - **IMAP:** `localhost:143` (para clientes de correo Webmail / Thunderbird).
+  - **Cuentas disponibles:**
+    * Sistema / Vicerrectorado: `grupo26sa@tecnoweb.org.bo` (clave: `grup026grup026*`).
+    * Solicitante / Alumno: `alumno@tecnoweb.org.bo` (clave: `123456`).
+    * Docente: `docente@tecnoweb.org.bo` (clave: `123456`).
+    * Vicerrector: `vicerrector@tecnoweb.org.bo` (clave: `123456`).
+* **Cliente de Correo Webmail (`firmadigital-webmail` - Roundcube):**
+  - Interfaz web visual idéntica a un Webmail / Thunderbird accesible en `http://localhost:8085`.
+* **Demonio Java (`firmadigital-app`):**
+  - Contenedor que ejecuta el motor de correo en segundo plano, revisa POP3, procesa mediante el autómata/intérprete formal y despacha respuestas corporativas en HTML.
 
 ---
 
-## 2. Puesta en Marcha del Entorno (Paso a Paso)
+## 2. Puesta en Marcha del Entorno (Un solo comando)
 
-### Paso 1: Levantar el Servidor de Correo (Docker)
-En la raíz del proyecto, ejecute:
+En la raíz del proyecto, ejecute en su terminal:
 ```cmd
-docker compose -f docker-compose-mail.yml up -d
-```
-Verifique que los puertos 25 y 110 estén escuchando:
-```cmd
-netstat -ano | findstr ":25 :110"
+docker compose up -d --build
 ```
 
-### Paso 2: Compilar el Proyecto Java
+Para verificar que los 4 contenedores estén en estado `Up`:
 ```cmd
-compilar.bat
+docker compose ps
 ```
-*(O manualmente: `javac -encoding UTF-8 -cp lib/*;build/classes -d build/classes @sources.txt`)*
 
-### Paso 3: Iniciar el Sistema Principal (Demonio + Monitor Swing)
+Para monitorear los logs del demonio Java en tiempo real:
 ```cmd
-iniciar_sistema.bat
+docker logs -f firmadigital-app
 ```
-*(O manualmente: `java -cp lib/*;build/classes proyectomailgrupo26sa.Principal`)*
-El demonio `MailVerificationThread` comenzará a consultar el buzón cada 5 segundos.
 
 ---
 
-## 3. Formas de Probar los Comandos
+## 3. Formas de Uso y Grabación del Video
 
-### Opción A: Enviar Comandos de Forma Interactiva
-Abra una consola y ejecute:
-```cmd
-enviar_correo_prueba.bat
-```
-El script le solicitará el comando deseado (ej: `help`, `usuario listar`, `tramite listar`) y lo inyectará directamente al servidor SMTP en `localhost:25`.
+### Opción A: Interfaz Gráfica Webmail (Roundcube) — ¡Recomendado para el Video!
+Esta es la forma más clara y profesional para demostrar el uso del software frente al evaluador:
 
-Alternativamente, puede usar PowerShell directamente:
+1. **Abrir el Webmail:**
+   Ingrese desde su navegador a:
+   👉 **`http://localhost:8085`**
+
+2. **Iniciar Sesión:**
+   - **Usuario:** `alumno`
+   - **Contraseña:** `123456`
+
+3. **Enviar Comandos por Correo:**
+   - Clic en **"Redactar"** (Compose).
+   - **Para:** `grupo26sa@tecnoweb.org.bo`
+   - **Asunto:** El comando que desea ejecutar (ej: `help`, `usuario listar`, `tramite listar`).
+   - **Cuerpo:** Parámetros adicionales o texto libre.
+   - Clic en **"Enviar"**.
+
+4. **Ver Respuesta:**
+   - En 5 segundos, haga clic en el botón de **"Actualizar"** de la bandeja de entrada.
+   - Abra el correo recibido: verá la respuesta institucional con formato HTML, tablas estilizadas y estado del trámite.
+
+---
+
+### Opción B: Envío Rápido por Consola (PowerShell)
+Si desea alternar y mostrar interacción por consola:
+
 ```powershell
-Send-MailMessage -From 'alumno@test.local' -To 'grupo26sa@test.local' -Subject 'usuario listar' -Body 'Prueba' -SmtpServer '127.0.0.1' -Port 25
+# Solicitar ayuda general
+Send-MailMessage -From 'alumno@tecnoweb.org.bo' -To 'grupo26sa@tecnoweb.org.bo' -Subject 'help' -Body 'help' -SmtpServer '127.0.0.1' -Port 25
+
+# Consultar trámites
+Send-MailMessage -From 'alumno@tecnoweb.org.bo' -To 'grupo26sa@tecnoweb.org.bo' -Subject 'tramite listar' -Body 'tramite listar' -SmtpServer '127.0.0.1' -Port 25
+
+# Consultar usuarios
+Send-MailMessage -From 'alumno@tecnoweb.org.bo' -To 'grupo26sa@tecnoweb.org.bo' -Subject 'usuario listar' -Body 'usuario listar' -SmtpServer '127.0.0.1' -Port 25
 ```
 
-### Opción B: Ejecutar la Suite de Pruebas Automatizada (CU1 - CU8)
-Para validar de una sola vez los **38 comandos del sistema** contra la base de datos PostgreSQL:
+---
+
+### Opción C: Ejecución Masiva Automatizada de Pruebas (CU1 a CU8)
+Para demostrar en el video que los **60 comandos** del sistema están probados y funcionando al 100%:
+
 ```cmd
-java -cp lib/*;build/classes Utils.TestRunner
+docker exec firmadigital-app java -cp "lib/*:build/classes" Utils.TestRunner
 ```
+*(Valida todos los casos de uso: Usuarios, Delegación, Trámites, Flujo, Firmas Digitales, Certificados con QR, SLAs y Reportes).*
 
 ---
 

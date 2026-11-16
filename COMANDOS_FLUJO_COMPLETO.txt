@@ -1,0 +1,95 @@
+================================================================================
+   SECUENCIA ORDENADA DE COMANDOS PARA COMPLETAR EL FLUJO (CU1 A CU8)
+   Sistema de Gestion de Tramites y Firma Digital del Vicerrectorado UAGRM
+================================================================================
+SERVIDOR DE CORREO: grupo26sa@tecnoweb.org.bo
+REMITENTE SUGERIDO: alumno@tecnoweb.org.bo (o vicerrector / docente)
+
+INSTRUCCION:
+En Roundcube (http://localhost:8085) o tu cliente de correo, redacta un correo para:
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): Coloca exactamente el comando de cada paso.
+   Cuerpo: Puedes poner el mismo texto o dejarlo simple.
+================================================================================
+
+--------------------------------------------------------------------------------
+PASO 1: CONSULTA DE COMANDOS DE AYUDA (WELCOME / HELP GENERAL)
+--------------------------------------------------------------------------------
+help
+
+--------------------------------------------------------------------------------
+PASO 2: CU1 - GESTION DE USUARIOS
+--------------------------------------------------------------------------------
+usuario help
+usuario listar
+usuario agregar [Maria;Lopez Roca;6543210;219088776;mlopez@alu.uagrm.edu.bo;ALUMNO;72111222;FICCT;Ingenieria Informatica]
+usuario listar
+
+--------------------------------------------------------------------------------
+PASO 3: CU2 - DELEGACION DE AUTORIDAD E INDICADORES
+--------------------------------------------------------------------------------
+delegacion help
+delegacion listar
+delegacion agregar [1;2;RES-VIC-01/2026;Viaje oficial a congreso internacional;2026-11-16;2026-11-30;TOTAL]
+indicador listar
+
+--------------------------------------------------------------------------------
+PASO 4: CU3 - GESTION DE TRAMITES Y REQUISITOS (INICIO DE EXPEDIENTE)
+--------------------------------------------------------------------------------
+tipo_tramite listar
+tramite help
+tramite listar
+tramite agregar [TR-8001;4;1;Solicitud de Diploma Academico Licenciatura;ALTA]
+documento listar
+documento agregar [2;1;Certificado de Notas Original;PDF;http://expedientes.uagrm.edu.bo/docs/notas_8001.pdf]
+documento validar [1;APROBADO;Documento legal y cotejado en actas]
+
+--------------------------------------------------------------------------------
+PASO 5: CU4 - ENROSTRAR FLUJO, GUIA PROCESAL, OBSERVACIONES Y BITACORA
+--------------------------------------------------------------------------------
+guia listar
+guia mostrar [1]
+flujo listar
+flujo avanzar [2;REVISION_LEGAL;2]
+observacion help
+observacion agregar [2;2;SUBSANABLE;Falta sello de cancelacion de valores en caja central]
+observacion listar
+observacion subsanar [1;Se adjunto la boleta de pago sellada por el banco]
+bitacora consultar [2]
+
+--------------------------------------------------------------------------------
+PASO 6: CU5 - DESPACHO Y EJECUCION DE FIRMA DIGITAL CONSOLIDADA
+--------------------------------------------------------------------------------
+firma help
+firma listar
+firma consolidada [2;1;CERT-VIC-2026-009]
+despacho help
+despacho agregar [2;2;DESP-2026-0045;DIGITAL_CORREO]
+despacho listar
+
+--------------------------------------------------------------------------------
+PASO 7: CU6 - EMISION DE CERTIFICADO OFICIAL CON QR Y SEGUIMIENTO
+--------------------------------------------------------------------------------
+certificado help
+certificado generar [2;1;Diploma Academico de Licenciatura]
+certificado listar
+portal help
+portal listar
+
+--------------------------------------------------------------------------------
+PASO 8: CU7 - MONITOREO DE PLAZOS SLA (72 HORAS HABILES) Y ALERTAS
+--------------------------------------------------------------------------------
+sla help
+sla listar
+sla verificar [2]
+alerta help
+alerta listar
+
+--------------------------------------------------------------------------------
+PASO 9: CU8 - REPORTES GERENCIALES Y ESTADISTICAS CONSOLIDADAS
+--------------------------------------------------------------------------------
+reporte help
+reporte tramites
+reporte sla
+reporte firmas
+reporte observaciones
