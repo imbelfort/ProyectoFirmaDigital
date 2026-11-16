@@ -29,7 +29,7 @@ services:
       GREENMAIL_OPTS: >-
         -Dgreenmail.setup.all
         -Dgreenmail.hostname=0.0.0.0
-        -Dgreenmail.users=grupo26sa:grup026grup026*@tecnoweb.org.bo,alumno:123456@tecnoweb.org.bo,docente:123456@tecnoweb.org.bo,vicerrector:123456@tecnoweb.org.bo,alumno@tecnoweb.org.bo:123456@tecnoweb.org.bo,docente@tecnoweb.org.bo:123456@tecnoweb.org.bo,grupo26sa@tecnoweb.org.bo:grup026grup026*@tecnoweb.org.bo
+        -Dgreenmail.users=grupo26sa:grup026grup026*@tecnoweb.org.bo,alumno:123456@tecnoweb.org.bo,docente:123456@tecnoweb.org.bo,vicerrector:123456@tecnoweb.org.bo
     ports:
       - "25:25"     # SMTP
       - "110:110"   # POP3
@@ -48,7 +48,6 @@ services:
       ROUNDCUBEMAIL_SMTP_SERVER: mailserver
       ROUNDCUBEMAIL_SMTP_PORT: 25
       ROUNDCUBEMAIL_DEFAULT_PORT: 143
-      ROUNDCUBEMAIL_USERNAME_DOMAIN: tecnoweb.org.bo
     depends_on:
       - mailserver
 
