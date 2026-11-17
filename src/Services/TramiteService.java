@@ -16,14 +16,46 @@ public class TramiteService {
     }
 
     public void crearTramite(List<String> params) throws SQLException {
-        String sintaxis = "tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]";
-        String ejemplo = "tramite agregar [2026001;4;1;Solicitud de Certificado de Notas;NORMAL]";
+        crearTramite(params, null);
+    }
 
-        String codigo = ParamValidator.requireCodigoTramite(params, 0, "codigo_tramite", sintaxis, ejemplo);
-        int solicitante = ParamValidator.requireInt(params, 1, "id_solicitante", sintaxis, ejemplo);
-        int tipo = ParamValidator.requireInt(params, 2, "id_tipo", sintaxis, ejemplo);
-        String asunto = ParamValidator.requireString(params, 3, "asunto", sintaxis, ejemplo);
-        String prioridad = ParamValidator.requirePrioridad(params, 4, "NORMAL", sintaxis, ejemplo);
+    public void crearTramite(List<String> params, String remitenteEmail) throws SQLException {
+        String sintaxis = "tramite agregar [id_tipo;asunto]  o  tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]";
+        String ejemplo = "tramite agregar [1;Solicitud de Diploma Academico]  o  tramite agregar [2026001;4;1;Solicitud de Certificado;NORMAL]";
+
+        String codigo;
+        int solicitante;
+        int tipo;
+        String asunto;
+        String prioridad;
+
+        // MODO SIMPLIFICADO INTELIGENTE: El alumno solo envía [id_tipo; asunto] o [id_tipo; asunto; prioridad]
+        if (params != null && params.size() <= 3 && params.size() >= 2) {
+            tipo = ParamValidator.requireInt(params, 0, "id_tipo_tramite", sintaxis, ejemplo);
+            asunto = ParamValidator.requireString(params, 1, "asunto", sintaxis, ejemplo);
+            prioridad = params.size() == 3 ? ParamValidator.requirePrioridad(params, 2, "NORMAL", sintaxis, ejemplo) : "NORMAL";
+
+            // 1. Identificar al solicitante automáticamente por su correo
+            solicitante = -1;
+            if (remitenteEmail != null) {
+                solicitante = new DAO.UsuarioDAO().findIdByEmail(remitenteEmail);
+            }
+            if (solicitante <= 0) {
+                // Fallback seguro a usuario alumno por defecto si no se encuentra
+                solicitante = 4;
+            }
+
+            // 2. Generar código de trámite correlativo automático con año (Ej. 2026105)
+            codigo = String.valueOf(2026000 + (int) (System.currentTimeMillis() % 9000 + 1000));
+
+        } else {
+            // MODO COMPLETO (Compatibilidad retrospectiva)
+            codigo = ParamValidator.requireCodigoTramite(params, 0, "codigo_tramite", sintaxis, ejemplo);
+            solicitante = ParamValidator.requireInt(params, 1, "id_solicitante", sintaxis, ejemplo);
+            tipo = ParamValidator.requireInt(params, 2, "id_tipo", sintaxis, ejemplo);
+            asunto = ParamValidator.requireString(params, 3, "asunto", sintaxis, ejemplo);
+            prioridad = ParamValidator.requirePrioridad(params, 4, "NORMAL", sintaxis, ejemplo);
+        }
 
         Tramite t = new Tramite();
         t.setCodigoTramite(codigo);

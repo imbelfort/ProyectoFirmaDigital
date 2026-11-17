@@ -190,7 +190,7 @@ public class Home {
                             enviarRespuesta(email, respuesta, "Lista de Tramites Academicos", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
                             break;
                         case Token.AGREGAR:
-                            tramiteService.crearTramite(event.getParams());
+                            tramiteService.crearTramite(event.getParams(), email.getFrom());
                             enviarMensajeYTabla(email, respuesta, "Tramite iniciado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
                             break;
                         case Token.MODIFICAR:

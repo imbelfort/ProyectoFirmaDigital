@@ -131,6 +131,21 @@ public class UsuarioDAO {
         }
     }
 
+    public int findIdByEmail(String email) throws SQLException {
+        if (email == null || email.trim().isEmpty()) return -1;
+        String sql = "SELECT id_usuario FROM usuario WHERE LOWER(TRIM(email)) = LOWER(TRIM(?))";
+        try (Connection con = Conexion.getInstancia().EstablecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_usuario");
+                }
+            }
+        }
+        return -1;
+    }
+
     public boolean existsById(int id) throws SQLException {
         String sql = "SELECT 1 FROM usuario WHERE id_usuario = ?";
 
