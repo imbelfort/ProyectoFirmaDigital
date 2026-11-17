@@ -50,7 +50,9 @@
 ### Trámites
 - **tramite help**
 - **tramite listar**
-- **tramite agregar** `[codigo_tramite;id_usuario_solicitante;id_tipo_tramite;asunto;prioridad]`
+- **tramite agregar** `[id_tipo_tramite;asunto]` *(Recomendado: autogenera código y asocia al alumno)*
+  - *Ejemplo:* `tramite agregar [1;Solicitud de Diploma de Licenciatura]`
+- **tramite agregar** `[codigo_tramite;id_usuario_solicitante;id_tipo_tramite;asunto;prioridad]` *(Modo manual)*
 - **tramite modificar** `[id_tramite;asunto;prioridad;estado]`
 - **tramite eliminar** `[id_tramite]`
 

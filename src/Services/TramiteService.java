@@ -103,9 +103,11 @@ public class TramiteService {
     public String getComandosTramite() {
         return "Comandos Gestion de Tramites (CU3):\n" +
                 "- tramite listar\n" +
+                "- tramite agregar [id_tipo;asunto]\n" +
+                "  (Ejemplo: tramite agregar [1;Solicitud de Diploma de Licenciatura])\n" +
                 "- tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]\n" +
                 "- tramite modificar [id;asunto;prioridad;estado]\n" +
                 "- tramite eliminar [id]\n\n" +
-                "Nota: El código de trámite es numérico (ej. 2026001).";
+                "Nota: En el modo simplificado el sistema asigna automaticamente el alumno solicitante y el codigo de tramite.";
     }
 }

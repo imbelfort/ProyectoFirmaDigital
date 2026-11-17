@@ -46,12 +46,6 @@ URL DEL CLIENTE WEB:  http://localhost:8085
    Flujo Logico y Real de Tramite y Firma Digital - Vicerrectorado UAGRM
 ================================================================================
 
-EXPLICACION GENERAL PARA EL VIDEO:
-"En este video demostraremos el ciclo completo de atencion de un tramite de Diploma 
-Academico por correo electronico. Un estudiante solicita su tramite, el personal de 
-ventanilla valida los requisitos, el Vicerrector firma digitalmente con estandares 
-criptograficos y el sistema emite el certificado oficial con codigo QR y control SLA."
-
 ================================================================================
 FASE 1: EL ESTUDIANTE CONSULTA Y SOLICITA SU TRAMITE
 (Sesion iniciada con: alumno / 123456)

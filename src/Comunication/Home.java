@@ -822,7 +822,8 @@ public class Home {
                      + "indicador modificar [id;meta;valor_actual;estado]\n"
                      + "indicador listar";
             case "tramite":
-                return "tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]\n"
+                return "tramite agregar [id_tipo;asunto]\n"
+                     + "tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]\n"
                      + "tramite modificar [id;asunto;prioridad;estado]\n"
                      + "tramite eliminar [id]\n"
                      + "tramite listar";
@@ -887,7 +888,7 @@ public class Home {
             case "indicador":
                 return "indicador agregar [IND-01;Tasa Tramites 72h;Porcentaje cumplido;95.00;PORCENTAJE;MENSUAL]";
             case "tramite":
-                return "tramite agregar [2026001;4;1;Solicitud de Certificado de Notas;NORMAL]";
+                return "tramite agregar [1;Solicitud de Diploma de Licenciatura]";
             case "documento":
                 return "documento agregar [1;1;Cedula_Identidad.pdf;PDF;http://docs.uagrm.edu.bo/1/ci.pdf]";
             case "tipo_tramite":
