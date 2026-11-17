@@ -102,6 +102,8 @@ public class TramiteService {
 
     public String getComandosTramite() {
         return "Comandos Gestion de Tramites (CU3):\n" +
+                "- tipo_tramite listar\n" +
+                "  (Consulte primero los tipos de tramite disponibles y su id_tipo: 1=Diploma, 2=Titulo, etc.)\n" +
                 "- tramite listar\n" +
                 "- tramite agregar [id_tipo;asunto]\n" +
                 "  (Ejemplo: tramite agregar [1;Solicitud de Diploma de Licenciatura])\n" +
