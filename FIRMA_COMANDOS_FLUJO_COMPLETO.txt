@@ -1,95 +1,161 @@
 ================================================================================
-   SECUENCIA ORDENADA DE COMANDOS PARA COMPLETAR EL FLUJO (CU1 A CU8)
-   Sistema de Gestion de Tramites y Firma Digital del Vicerrectorado UAGRM
+          CUENTAS Y USUARIOS DISPONIBLES PARA INICIAR SESION
+                  Roundcube Webmail (http://localhost:8085)
 ================================================================================
-SERVIDOR DE CORREO: grupo26sa@tecnoweb.org.bo
-REMITENTE SUGERIDO: alumno@tecnoweb.org.bo (o vicerrector / docente)
 
-INSTRUCCION:
-En Roundcube (http://localhost:8085) o tu cliente de correo, redacta un correo para:
+SERVIDOR DE CORREO:   grupo26sa@tecnoweb.org.bo (Buzon del Sistema Java)
+URL DEL CLIENTE WEB:  http://localhost:8085
+
+--------------------------------------------------------------------------------
+1. CUENTA ALUMNO / SOLICITANTE (Para solicitar tramites y ver respuestas)
+--------------------------------------------------------------------------------
+   Usuario (Login):     alumno
+   Contraseña:          123456
+   Correo que envia:    alumno@tecnoweb.org.bo
+   Rol en BD:           ALUMNO (ID BD: 6 / Registro: 12345)
+   Nombre en BD:        Alumno Prueba
+
+--------------------------------------------------------------------------------
+2. CUENTA DOCENTE / VENTANILLA (Para consultar guias y avanzar flujo)
+--------------------------------------------------------------------------------
+   Usuario (Login):     docente
+   Contraseña:          123456
+   Correo que envia:    docente@tecnoweb.org.bo
+   Rol en BD:           DOCENTE (ID BD: 3 / Registro: 1045)
+   Nombre en BD:        Alberto Guzman
+
+--------------------------------------------------------------------------------
+3. CUENTA VICERRECTOR / MAXIMA AUTORIDAD (Para firmar digitalmente)
+--------------------------------------------------------------------------------
+   Usuario (Login):     vicerrector
+   Contraseña:          123456
+   Correo que envia:    vicerrector@tecnoweb.org.bo
+   Rol en BD:           VICERRECTOR (ID BD: 1 / Registro: 1001)
+   Nombre en BD:        Reinerio Vargas
+
+--------------------------------------------------------------------------------
+4. CUENTA DEL SERVIDOR / SISTEMA
+--------------------------------------------------------------------------------
+   Usuario (Login):     grupo26sa
+   Contraseña:          grup026grup026*
+   Correo del Sistema:  grupo26sa@tecnoweb.org.bo
+   (Esta cuenta es la que escucha las peticiones de correo cada 5 segundos)
+
+================================================================================
+          GUION OFICIAL SIMPLIFICADO PARA LA GRABACION DEL VIDEO
+   Flujo Logico y Real de Tramite y Firma Digital - Vicerrectorado UAGRM
+================================================================================
+
+EXPLICACION GENERAL PARA EL VIDEO:
+"En este video demostraremos el ciclo completo de atencion de un tramite de Diploma 
+Academico por correo electronico. Un estudiante solicita su tramite, el personal de 
+ventanilla valida los requisitos, el Vicerrector firma digitalmente con estandares 
+criptograficos y el sistema emite el certificado oficial con codigo QR y control SLA."
+
+================================================================================
+FASE 1: EL ESTUDIANTE CONSULTA Y SOLICITA SU TRAMITE
+(Sesion iniciada con: alumno / 123456)
+================================================================================
+
+1. CONSULTAR CATALOGO DE TRAMITES:
    Para: grupo26sa@tecnoweb.org.bo
-   Asunto (Subject): Coloca exactamente el comando de cada paso.
-   Cuerpo: Puedes poner el mismo texto o dejarlo simple.
+   Asunto (Subject): tipo_tramite listar
+   Cuerpo: consultar
+   Explicacion en video: "El alumno consulta que tramites ofrece el Vicerrectorado. 
+   Identifica que el Tipo 1 corresponde a Diploma Academico."
+
+2. INICIAR EL TRAMITE (100% AUTOMATICO):
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): tramite agregar [1; Solicitud de Diploma de Licenciatura]
+   Cuerpo: solicitud
+   Explicacion en video: "El estudiante no necesita inventar codigos raros ni IDs de 
+   base de datos. Solo indica el tramite que desea (1) y el motivo. El sistema 
+   reconoce su cuenta de correo, genera el codigo anual correlativo (Ej. 2032236) y 
+   registra el tramite con prioridad NORMAL en estado INICIADO."
+
+3. VERIFICAR SU BANDEJA DE TRAMITES:
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): tramite listar
+   Cuerpo: listar
+   Explicacion en video: "El alumno confirma que su solicitud ya esta registrada en 
+   la base de datos de la universidad con fecha y hora exacta."
+
+================================================================================
+FASE 2: VENTANILLA / ENCARGADO REVISA Y AVANZA EL FLUJO
+(Sesion iniciada con: docente / 123456  o  continuar con alumno)
 ================================================================================
 
---------------------------------------------------------------------------------
-PASO 1: CONSULTA DE COMANDOS DE AYUDA (WELCOME / HELP GENERAL)
---------------------------------------------------------------------------------
-help
+4. REVISAR LA GUIA PROCESAL DEL TRAMITE:
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): guia mostrar [1]
+   Cuerpo: guia
+   Explicacion en video: "El personal administrativo consulta los pasos normativos y 
+   requisitos que exige el Vicerrectorado para el Diploma Academico."
 
---------------------------------------------------------------------------------
-PASO 2: CU1 - GESTION DE USUARIOS
---------------------------------------------------------------------------------
-usuario help
-usuario listar
-usuario agregar [Maria;Lopez Roca;6543210;219088776;mlopez@alu.uagrm.edu.bo;ALUMNO;72111222;FICCT;Ingenieria Informatica]
-usuario listar
+5. AVANZAR EL EXPEDIENTE A REVISION LEGAL:
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): flujo avanzar [3; REVISION_LEGAL; 2]
+   Cuerpo: avanzar
+   Explicacion en video: "Una vez cotejados los requisitos, el encargado avanza la 
+   etapa del tramite hacia la fase de Revision Legal."
 
---------------------------------------------------------------------------------
-PASO 3: CU2 - DELEGACION DE AUTORIDAD E INDICADORES
---------------------------------------------------------------------------------
-delegacion help
-delegacion listar
-delegacion agregar [1;2;RES-VIC-01/2026;Viaje oficial a congreso internacional;2026-11-16;2026-11-30;TOTAL]
-indicador listar
+================================================================================
+FASE 3: EL VICERRECTOR FIRMA DIGITALMENTE Y EMITE CERTIFICADO
+(Sesion iniciada con: vicerrector / 123456  o  continuar con alumno)
+================================================================================
 
---------------------------------------------------------------------------------
-PASO 4: CU3 - GESTION DE TRAMITES Y REQUISITOS (INICIO DE EXPEDIENTE)
---------------------------------------------------------------------------------
-tipo_tramite listar
-tramite help
-tramite listar
-tramite agregar [TR-8001;4;1;Solicitud de Diploma Academico Licenciatura;ALTA]
-documento listar
-documento agregar [2;1;Certificado de Notas Original;PDF;http://expedientes.uagrm.edu.bo/docs/notas_8001.pdf]
-documento validar [1;APROBADO;Documento legal y cotejado en actas]
+6. EJECUTAR FIRMA DIGITAL CONSOLIDADA (SHA-256):
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): firma consolidada [3; 1; CERT-VIC-2026-009]
+   Cuerpo: firma
+   Explicacion en video: "La maxima autoridad (Vicerrector, ID 1) emite la firma 
+   digital consolidada con su certificado oficial, generando el hash criptografico 
+   de no repudio."
 
---------------------------------------------------------------------------------
-PASO 5: CU4 - ENROSTRAR FLUJO, GUIA PROCESAL, OBSERVACIONES Y BITACORA
---------------------------------------------------------------------------------
-guia listar
-guia mostrar [1]
-flujo listar
-flujo avanzar [2;REVISION_LEGAL;2]
-observacion help
-observacion agregar [2;2;SUBSANABLE;Falta sello de cancelacion de valores en caja central]
-observacion listar
-observacion subsanar [1;Se adjunto la boleta de pago sellada por el banco]
-bitacora consultar [2]
+7. EMITIR EL CERTIFICADO OFICIAL CON QR:
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): certificado generar [3; 1; Diploma Academico de Licenciatura]
+   Cuerpo: cert
+   Explicacion en video: "El sistema genera el Certificado Oficial con codigo UUID y 
+   enlace de verificacion con codigo QR para autenticar su validez."
 
---------------------------------------------------------------------------------
-PASO 6: CU5 - DESPACHO Y EJECUCION DE FIRMA DIGITAL CONSOLIDADA
---------------------------------------------------------------------------------
-firma help
-firma listar
-firma consolidada [2;1;CERT-VIC-2026-009]
-despacho help
-despacho agregar [2;2;DESP-2026-0045;DIGITAL_CORREO]
-despacho listar
+8. DESPACHO AL ESTUDIANTE:
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): despacho agregar [3; 2; DESP-2026-0045; DIGITAL_CORREO]
+   Cuerpo: despacho
+   Explicacion en video: "El legajo firmado digitalmente se despacha formalmente por 
+   correo electronico al solicitante."
 
---------------------------------------------------------------------------------
-PASO 7: CU6 - EMISION DE CERTIFICADO OFICIAL CON QR Y SEGUIMIENTO
---------------------------------------------------------------------------------
-certificado help
-certificado generar [2;1;Diploma Academico de Licenciatura]
-certificado listar
-portal help
-portal listar
+================================================================================
+FASE 4: AUDITORIA Y CONTROL DE PLAZOS (SLA 72 HORAS)
+================================================================================
 
---------------------------------------------------------------------------------
-PASO 8: CU7 - MONITOREO DE PLAZOS SLA (72 HORAS HABILES) Y ALERTAS
---------------------------------------------------------------------------------
-sla help
-sla listar
-sla verificar [2]
-alerta help
-alerta listar
+9. AUDITAR TIEMPOS DE ATENCION (SLA 72 HORAS HABILES):
+   Para: grupo26sa@tecnoweb.org.bo
+   Asunto (Subject): sla verificar [3]
+   Cuerpo: sla
+   Explicacion en video: "El Vicerrectorado exige resolver los tramites en menos de 
+   72 horas habiles. El sistema verifica el cronometro del tramite para asegurar 
+   que no haya mora administrativa."
 
---------------------------------------------------------------------------------
-PASO 9: CU8 - REPORTES GERENCIALES Y ESTADISTICAS CONSOLIDADAS
---------------------------------------------------------------------------------
-reporte help
-reporte tramites
-reporte sla
-reporte firmas
-reporte observaciones
+10. REPORTE GERENCIAL CONSOLIDADO:
+    Para: grupo26sa@tecnoweb.org.bo
+    Asunto (Subject): reporte tramites
+    Cuerpo: reporte
+    Explicacion en video: "Para cerrar, la direccion emite el reporte consolidado 
+    con las metricas y estados de todos los tramites atendidos."
+
+================================================================================
+RESUMEN RAPIDO DE COMANDOS PARA COPIAR Y PEGAR:
+================================================================================
+1. tipo_tramite listar
+2. tramite agregar [1; Solicitud de Diploma de Licenciatura]
+3. tramite listar
+4. guia mostrar [1]
+5. flujo avanzar [3; REVISION_LEGAL; 2]
+6. firma consolidada [3; 1; CERT-VIC-2026-009]
+7. certificado generar [3; 1; Diploma Academico de Licenciatura]
+8. despacho agregar [3; 2; DESP-2026-0045; DIGITAL_CORREO]
+9. sla verificar [3]
+10. reporte tramites
+================================================================================
