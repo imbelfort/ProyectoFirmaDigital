@@ -43,6 +43,10 @@ public class HtmlBuilder {
         "ID", "CODIGO", "REGISTRO", "SOLICITANTE", "TIPO_TRAMITE", "ASUNTO", "ESTADO", "PRIORIDAD", "FECHA"
     };
 
+    public static final String[] HEADERS_TRAMITE_DETALLE = {
+        "ID TRÁMITE", "CÓDIGO OFICIAL", "REGISTRO / C.I.", "SOLICITANTE", "CORREO ELECTRÓNICO", "TIPO DE TRÁMITE", "ASUNTO", "ESTADO ACTUAL", "PRIORIDAD", "FECHA INICIO"
+    };
+
     public static final String[] HEADERS_DOCUMENTO = {
         "ID", "COD_TRAMITE", "DOCUMENTO", "TIPO", "ARCHIVO_URL", "ESTADO_VALIDACION", "FECHA_VALIDACION"
     };
@@ -247,6 +251,57 @@ public class HtmlBuilder {
     // ============================================================
     // GENERAR TABLA DE UN SOLO REGISTRO
     // ============================================================
+
+    public static String generateMessageAndSimpleData(String mensaje, String title, String[] headers, String[] data) {
+        String htmlMensaje = "<div align=\"center\" style=\"margin-bottom: 16px;\">"
+                + "<div style=\"background-color: #ECFDF5; border: 1px solid #A7F3D0; border-left: 5px solid #10B981; "
+                + "padding: 12px 18px; width: 85%; margin: auto; text-align: left;\">"
+                + "<span style=\"color: #065F46; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;\">"
+                + "&#10004; " + escapeHtml(mensaje)
+                + "</span>"
+                + "</div></div>";
+
+        StringBuilder acumulative = new StringBuilder();
+
+        for (int i = 0; i < headers.length; i++) {
+            String value = "";
+
+            if (data != null && i < data.length && data[i] != null) {
+                value = data[i];
+            }
+
+            String bgColor = (i % 2 == 0) ? "#FFFFFF" : "#F8FAFC";
+
+            acumulative.append("<tr style=\"background-color: ").append(bgColor).append(";\">")
+                .append("<td style=\"border: 1px solid #CBD5E1; padding: 10px 14px; ")
+                .append("background-color: #F1F5F9; color: #1E3A8A; font-weight: bold; width: 35%; ")
+                .append("text-transform: uppercase; font-size: 11px; letter-spacing: 0.3px;\">")
+                .append(escapeHtml(headers[i]))
+                .append("</td>")
+                .append("<td style=\"border: 1px solid #CBD5E1; padding: 10px 14px; color: #334155; font-size: 12px;\">")
+                .append(formatValueByHeader(headers[i], value))
+                .append("</td>")
+                .append("</tr>");
+        }
+
+        String table = "<div align=\"center\" style=\"margin-bottom: 14px;\">"
+                + "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin: auto;\">"
+                + "<tr><td align=\"center\" style=\"padding-bottom: 4px;\">"
+                + "<span style=\"background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; "
+                + "font-size: 11px; font-weight: bold; padding: 3px 12px; text-transform: uppercase; letter-spacing: 0.5px;\">"
+                + "Comprobante de Trámite Universitario"
+                + "</span></td></tr>"
+                + "<tr><td align=\"center\">"
+                + "<h2 style=\"color: #0F172A; font-family: Arial, sans-serif; font-size: 17px; margin: 4px 0 0 0;\">"
+                + escapeHtml(title)
+                + "</h2></td></tr></table></div>"
+                + "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse: collapse; width: 85%; margin: auto; "
+                + "font-family: Arial, sans-serif; font-size: 12px; border: 1px solid #CBD5E1;\">"
+                + acumulative
+                + "</table>";
+
+        return insertInHtml(htmlMensaje + table);
+    }
 
     public static String generateTableForSimpleData(String title, String[] headers, String[] data) {
         StringBuilder acumulative = new StringBuilder();

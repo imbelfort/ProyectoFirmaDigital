@@ -200,8 +200,20 @@ public class Home {
                             enviarRespuesta(email, respuesta, "Lista de Tramites Academicos", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
                             break;
                         case Token.AGREGAR:
-                            tramiteService.crearTramite(event.getParams(), email.getFrom());
-                            enviarMensajeYTabla(email, respuesta, "Tramite iniciado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
+                            Models.Tramite nuevoTramite = tramiteService.crearTramite(event.getParams(), email.getFrom());
+                            String[] detalleTramite = tramiteService.consultarDetalle(nuevoTramite.getId());
+                            if (detalleTramite != null) {
+                                String htmlConfirmacion = HtmlBuilder.generateMessageAndSimpleData(
+                                        "Trámite registrado y aperturado exitosamente en el sistema de Firma Digital del Vicerrectorado.",
+                                        "Comprobante Oficial: Trámite #" + nuevoTramite.getCodigoTramite(),
+                                        HtmlBuilder.HEADERS_TRAMITE_DETALLE,
+                                        detalleTramite
+                                );
+                                mostraRespuesta(htmlConfirmacion);
+                                respuesta.responseUser(email, htmlConfirmacion);
+                            } else {
+                                enviarMensajeYTabla(email, respuesta, "Tramite iniciado exitosamente", "Lista de Tramites", HtmlBuilder.HEADERS_TRAMITE, tramiteService.listarTramites());
+                            }
                             break;
                         case Token.MODIFICAR:
                             tramiteService.modificarTramite(event.getParams());
@@ -235,8 +247,13 @@ public class Home {
                             enviarRespuesta(email, respuesta, "Documentos del Expediente", HtmlBuilder.HEADERS_DOCUMENTO, documentoService.listarDocumentos());
                             break;
                         case Token.AGREGAR:
-                            documentoService.crearDocumento(event.getParams());
-                            enviarMensajeYTabla(email, respuesta, "Documento anexado al expediente", "Documentos del Expediente", HtmlBuilder.HEADERS_DOCUMENTO, documentoService.listarDocumentos());
+                            String adjNombre = email.getAttachmentFileName();
+                            String adjBase64 = email.getAttachmentContentBase64();
+                            documentoService.crearDocumento(event.getParams(), adjNombre, adjBase64);
+                            String msjDoc = (adjNombre != null && !adjNombre.trim().isEmpty())
+                                    ? "Documento con archivo adjunto ('" + adjNombre + "') anexado exitosamente con verificación criptográfica SHA-256"
+                                    : "Documento anexado al expediente exitosamente";
+                            enviarMensajeYTabla(email, respuesta, msjDoc, "Documentos del Expediente", HtmlBuilder.HEADERS_DOCUMENTO, documentoService.listarDocumentos());
                             break;
                         case Token.VALIDAR:
                             documentoService.validarDocumento(event.getParams());

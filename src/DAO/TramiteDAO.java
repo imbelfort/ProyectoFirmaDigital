@@ -27,6 +27,36 @@ public class TramiteDAO {
         }
     }
 
+    public String[] readDetalleById(int id) throws SQLException {
+        String sql = "SELECT t.id, t.codigo_tramite, u.registro, u.nombre || ' ' || u.apellidos AS solicitante, " +
+                     "u.email, tt.nombre AS tipo_tramite, t.asunto, t.estado, t.prioridad, t.fecha_solicitud " +
+                     "FROM tramite t " +
+                     "JOIN usuario u ON t.id_usuario_solicitante = u.id_usuario " +
+                     "JOIN tipo_tramite tt ON t.id_tipo_tramite = tt.id " +
+                     "WHERE t.id = ?";
+        try (Connection con = Conexion.getInstancia().EstablecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new String[]{
+                            String.valueOf(rs.getInt("id")),
+                            rs.getString("codigo_tramite"),
+                            rs.getString("registro"),
+                            rs.getString("solicitante"),
+                            rs.getString("email"),
+                            rs.getString("tipo_tramite"),
+                            rs.getString("asunto"),
+                            rs.getString("estado"),
+                            rs.getString("prioridad"),
+                            rs.getTimestamp("fecha_solicitud") != null ? rs.getTimestamp("fecha_solicitud").toString() : ""
+                    };
+                }
+            }
+        }
+        return null;
+    }
+
     public List<String[]> listAll() throws SQLException {
         String sql = "SELECT t.id, t.codigo_tramite, u.registro, u.nombre || ' ' || u.apellidos AS solicitante, " +
                      "tt.nombre AS tipo_tramite, t.asunto, t.estado, t.prioridad, t.fecha_solicitud " +

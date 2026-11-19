@@ -66,7 +66,9 @@ C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Ser
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Analex.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Cinta.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Command.java
+C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\CommandException.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Email.java
+C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\ErrorCode.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Extractor.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\Interpreter.java
 C:\Users\MEGAVISION\Downloads\ProyectoMailGrupo02SC\ProyectoFirmaDigital\src\Utils\ParamValidator.java

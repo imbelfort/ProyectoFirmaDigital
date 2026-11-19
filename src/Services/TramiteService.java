@@ -15,11 +15,11 @@ public class TramiteService {
         this.tramiteDAO = new TramiteDAO();
     }
 
-    public void crearTramite(List<String> params) throws SQLException {
-        crearTramite(params, null);
+    public Tramite crearTramite(List<String> params) throws SQLException {
+        return crearTramite(params, null);
     }
 
-    public void crearTramite(List<String> params, String remitenteEmail) throws SQLException {
+    public Tramite crearTramite(List<String> params, String remitenteEmail) throws SQLException {
         String sintaxis = "tramite agregar [id_tipo;asunto]  o  tramite agregar [codigo_tramite;id_solicitante;id_tipo;asunto;prioridad]";
         String ejemplo = "tramite agregar [1;Solicitud de Diploma Academico]  o  tramite agregar [2026001;4;1;Solicitud de Certificado;NORMAL]";
 
@@ -35,15 +35,8 @@ public class TramiteService {
             asunto = ParamValidator.requireString(params, 1, "asunto", sintaxis, ejemplo);
             prioridad = params.size() == 3 ? ParamValidator.requirePrioridad(params, 2, "NORMAL", sintaxis, ejemplo) : "NORMAL";
 
-            // 1. Identificar al solicitante automáticamente por su correo
-            solicitante = -1;
-            if (remitenteEmail != null) {
-                solicitante = new DAO.UsuarioDAO().findIdByEmail(remitenteEmail);
-            }
-            if (solicitante <= 0) {
-                // Fallback seguro a usuario alumno por defecto si no se encuentra
-                solicitante = 4;
-            }
+            // 1. Identificar o AUTOREGISTRAR al solicitante automáticamente por su correo
+            solicitante = new DAO.UsuarioDAO().findOrCreateByEmail(remitenteEmail);
 
             // 2. Generar código de trámite correlativo automático con año (Ej. 2026105)
             codigo = String.valueOf(2026000 + (int) (System.currentTimeMillis() % 9000 + 1000));
@@ -72,6 +65,12 @@ public class TramiteService {
         } catch (Exception ignored) {
             // SLA ya inicializado o tolerante a fallas
         }
+
+        return t;
+    }
+
+    public String[] consultarDetalle(int id) throws SQLException {
+        return tramiteDAO.readDetalleById(id);
     }
 
     public List<String[]> listarTramites() throws SQLException {

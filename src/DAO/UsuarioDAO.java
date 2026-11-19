@@ -146,6 +146,52 @@ public class UsuarioDAO {
         return -1;
     }
 
+    public int findOrCreateByEmail(String email) throws SQLException {
+        if (email == null || email.trim().isEmpty()) return 4;
+        String emailLimpio = email.trim();
+        int existente = findIdByEmail(emailLimpio);
+        if (existente > 0) {
+            return existente;
+        }
+
+        // Si no existe, lo registramos automáticamente como ALUMNO
+        String usuarioParte = emailLimpio.contains("@") ? emailLimpio.substring(0, emailLimpio.indexOf("@")) : emailLimpio;
+        usuarioParte = usuarioParte.replace(".", " ").replace("_", " ").replace("-", " ").trim();
+        if (usuarioParte.isEmpty()) usuarioParte = "Usuario";
+
+        String nombre = Character.toUpperCase(usuarioParte.charAt(0)) + (usuarioParte.length() > 1 ? usuarioParte.substring(1) : "");
+        String apellidos = "Solicitante";
+
+        // Generar un número de registro y CI aleatorio único numérico
+        long timestamp = System.currentTimeMillis();
+        String registroNum = String.valueOf(220000000L + (timestamp % 9000000L));
+        String ciNum = String.valueOf(10000000L + (timestamp % 8000000L));
+
+        Usuario nuevo = new Usuario();
+        nuevo.setRegistro(registroNum);
+        nuevo.setCi(ciNum);
+        nuevo.setContrasena(ciNum);
+        nuevo.setNombre(nombre);
+        nuevo.setApellidos(apellidos);
+        nuevo.setEmail(emailLimpio);
+        nuevo.setTelefono("70000000");
+        nuevo.setRol("ALUMNO");
+        nuevo.setUnidadAcademica("Facultad de Tecnologia");
+        nuevo.setCargo("Ingenieria del Software");
+        nuevo.setEstado("ACTIVO");
+
+        try {
+            create(nuevo);
+            System.out.println("[AUTOREGISTRO] Nuevo usuario registrado automaticamente: " + emailLimpio + " (ID: " + nuevo.getIdUsuario() + ", Registro: " + registroNum + ")");
+            return nuevo.getIdUsuario();
+        } catch (Exception ex) {
+            System.err.println("[WARN AUTOREGISTRO] Error al autoregistrar: " + ex.getMessage());
+            int recheck = findIdByEmail(emailLimpio);
+            if (recheck > 0) return recheck;
+            return 4; // Fallback
+        }
+    }
+
     public boolean existsById(int id) throws SQLException {
         String sql = "SELECT 1 FROM usuario WHERE id_usuario = ?";
 
