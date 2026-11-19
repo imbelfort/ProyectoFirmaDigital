@@ -1,0 +1,115 @@
+================================================================================
+  PROCESO DE DEMOSTRACION COMPLETO DE UN TRAMITE DE PRINCIPIO A FIN
+  Sistema de Gestion de Tramites y Firma Digital - Vicerrectorado UAGRM
+================================================================================
+DESTINATARIO:  grupo26sa@tecnoweb.org.bo
+WEBMAIL:       http://localhost:8085
+CUENTA:        alumno / 123456
+
+HISTORIA:
+"Mostraremos el ciclo de vida de un tramite real de Diploma Academico: 
+crearlo, consultarlo, adjuntar documentos, emitir una observacion administrativa, 
+subsanar la observacion, auditar en bitacora, firmar digitalmente, despachar 
+y generar el certificado oficial con codigo QR."
+================================================================================
+
+PASO 1: CREAR EL TRAMITE (El alumno solicita su Diploma)
+--------------------------------------------------------------------------------
+Asunto (Subject): tramite agregar [1; Solicitud de Diploma de Licenciatura]
+Cuerpo: inicio
+Explicacion: El alumno elige el tipo 1 (Diploma) y escribe su solicitud. 
+El sistema le asigna automaticamente su codigo y crea el tramite (ID 6).
+
+
+PASO 2: CONSULTAR EL ESTADO (El alumno verifica su expediente)
+--------------------------------------------------------------------------------
+Asunto (Subject): tramite listar
+Cuerpo: listar
+Explicacion: Confirma que el tramite ID 6 esta en estado INICIADO con prioridad NORMAL.
+
+
+PASO 3: ADJUNTAR DOCUMENTO AL EXPEDIENTE (Requisitos iniciales)
+--------------------------------------------------------------------------------
+Asunto (Subject): documento agregar [6; 1; Certificado_Calificaciones_Oficial.pdf; PDF; http://expedientes.uagrm.edu.bo/docs/notas_lic.pdf]
+Cuerpo: adjuntar
+Explicacion: Se registra el documento digital del expediente universitario vinculado al tramite 6.
+
+
+PASO 4: AGREGAR OBSERVACION ADMINISTRATIVA (Control de Ventanilla)
+--------------------------------------------------------------------------------
+Asunto (Subject): observacion agregar [6; 2; OBSERVADO; Falta adjuntar la boleta sellada de cancelacion de valores universitarios]
+Cuerpo: observacion
+Explicacion: La ventanilla revisa y encuentra un requisito pendiente, emitiendo la observacion formal.
+
+
+PASO 5: LISTAR OBSERVACIONES DEL TRAMITE
+--------------------------------------------------------------------------------
+Asunto (Subject): observacion listar
+Cuerpo: listar
+Explicacion: Muestra la observacion con estado PENDIENTE_SUBSANACION.
+
+
+PASO 6: SUBSANAR LA OBSERVACION (El alumno presenta el documento faltante)
+--------------------------------------------------------------------------------
+Asunto (Subject): observacion subsanar [1; Se presento la boleta de pago sellada por caja central]
+Cuerpo: subsanar
+Explicacion: El estudiante subsana la falta y el estado de la observacion cambia a SUBSANADA.
+
+
+PASO 7: AVANZAR DE ETAPA EN EL FLUJO (Aprobacion de Requisitos)
+--------------------------------------------------------------------------------
+Asunto (Subject): flujo avanzar [6; REVISION_LEGAL; 2]
+Cuerpo: avanzar
+Explicacion: Superadas las observaciones, el expediente pasa a la fase de Revision Legal y Firma.
+
+
+PASO 8: CONSULTAR BITACORA DE AUDITORIA (Seguimiento y Trazabilidad)
+--------------------------------------------------------------------------------
+Asunto (Subject): bitacora consultar [6]
+Cuerpo: auditoria
+Explicacion: Se audita la bitacora donde queda registrado cada cambio de etapa, fecha, hora y usuario responsable.
+
+
+PASO 9: FIRMA DIGITAL CONSOLIDADA (Vicerrector firma con token y SHA-256)
+--------------------------------------------------------------------------------
+Asunto (Subject): firma consolidada [6; 1; CERT-VIC-2026-009]
+Cuerpo: firma
+Explicacion: La maxima autoridad firma digitalmente el legajo academico aplicando el algoritmo criptografico.
+
+
+PASO 10: GENERAR CERTIFICADO OFICIAL CON QR
+--------------------------------------------------------------------------------
+Asunto (Subject): certificado generar [6; 1; Diploma Academico de Licenciatura]
+Cuerpo: cert
+Explicacion: El sistema genera el certificado oficial con identificador unico y validacion por QR.
+
+
+PASO 11: DESPACHO FORMAL AL ESTUDIANTE
+--------------------------------------------------------------------------------
+Asunto (Subject): despacho agregar [6; 2; DESP-2026-0099; DIGITAL_CORREO]
+Cuerpo: despacho
+Explicacion: Se despacha el documento final firmado digitalmente directo a la casilla de correo del alumno.
+
+
+PASO 12: CONTROL DE TIEMPOS DE ATENCION (SLA 72 HORAS HABILES)
+--------------------------------------------------------------------------------
+Asunto (Subject): sla verificar [6]
+Cuerpo: sla
+Explicacion: Auditoria automatica para certificar que el tramite se resolvio en cumplimiento de la norma de 72 horas.
+
+================================================================================
+LISTA RAPIDA DE COMANDOS PARA COPIAR Y PEGAR EN ORDEN:
+================================================================================
+1.  tramite agregar [1; Solicitud de Diploma de Licenciatura]
+2.  tramite listar
+3.  documento agregar [6; 1; Certificado_Calificaciones_Oficial.pdf; PDF; http://expedientes.uagrm.edu.bo/docs/notas_lic.pdf]
+4.  observacion agregar [6; 2; OBSERVADO; Falta adjuntar la boleta sellada de cancelacion de valores universitarios]
+5.  observacion listar
+6.  observacion subsanar [1; Se presento la boleta de pago sellada por caja central]
+7.  flujo avanzar [6; REVISION_LEGAL; 2]
+8.  bitacora consultar [6]
+9.  firma consolidada [6; 1; CERT-VIC-2026-009]
+10. certificado generar [6; 1; Diploma Academico de Licenciatura]
+11. despacho agregar [6; 2; DESP-2026-0099; DIGITAL_CORREO]
+12. sla verificar [6]
+================================================================================

@@ -38,7 +38,6 @@ tipo_tramite agregar [TT-01;Certificado de Calificaciones;Emision oficial firmad
 tramite help
 tramite listar
 tramite agregar [1;Solicitud de Diploma de Licenciatura]
-tramite agregar [2026005;4;1;Solicitud de Diploma Academico Licenciatura;NORMAL]
 tramite modificar [3;Solicitud Rectificada;ALTA;EN_PROCESO]
 tramite eliminar [2]
 documento help

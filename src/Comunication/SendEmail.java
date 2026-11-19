@@ -53,7 +53,12 @@ public class SendEmail {
         BufferedReader reader;
         DataOutputStream writer;
         String command;
-        System.out.println("Enviando correo de respuesta a: " + email.getFrom());
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("[ENVIO DE RESPUESTA SMTP]");
+        System.out.println("  * Para      : " + email.getFrom());
+        System.out.println("  * De        : " + user_emisor);
+        System.out.println("  * Servidor  : " + SERVER + ":" + PORT_SMTP);
+        System.out.println("--------------------------------------------------------------------------------");
 
         try {
             // Estableciendo Conexion Socket
@@ -78,7 +83,12 @@ public class SendEmail {
                 if (esEmailValido(origen)) {
                     command = "RCPT TO:<" + origen.trim() + ">\r\n";
                     sendSmtpCommand(writer, command);
-                    logSmtp("S", reader.readLine());
+                    String rcptResp = reader.readLine();
+                    logSmtp("S", rcptResp);
+                    if (rcptResp != null && (rcptResp.startsWith("55") || rcptResp.startsWith("50") || rcptResp.startsWith("45") || rcptResp.toLowerCase().contains("denied") || rcptResp.toLowerCase().contains("relay"))) {
+                        System.err.println("[BLOQUEO/RECHAZO SMTP] El servidor rechazo el envio al destinatario '" + origen + "'. Respuesta: " + rcptResp);
+                        System.err.println("[CAUSA POSIBLE] Bloqueo de Relay, IP no autorizada o destinatario bloqueado por politicas del servidor.");
+                    }
                 } else {
                     System.out.println("Correo de respuesta no enviado: no hay destinatario válido");
                     writer.close();
@@ -174,7 +184,8 @@ public class SendEmail {
                     logSmtp("S", quitResponse);
                 }
 
-                System.out.println("Correo de respuesta enviado exitosamente a: " + email.getFrom());
+                System.out.println("[EXITO] Correo de respuesta enviado exitosamente a: " + email.getFrom());
+                System.out.println("================================================================================\n");
 
             }
 
@@ -183,12 +194,17 @@ public class SendEmail {
             reader.close();
             socket.close();
         } catch (UnknownHostException e) {
+            System.err.println("[FALLO CONEXION] No se pudo resolver el host del servidor: " + SERVER);
             e.printStackTrace();
-            System.out.println("Correo de respuesta no enviado: no se pudo conectar con el servidor indicado");
+        } catch (java.net.SocketTimeoutException ex) {
+            System.err.println("[TIMEOUT] Tiempo de espera agotado al comunicarse con: " + SERVER + ":" + PORT_SMTP);
+        } catch (java.net.ConnectException ex) {
+            System.err.println("[CONEXION DENEGADA / IP BLOQUEADA] No se pudo conectar a " + SERVER + ":" + PORT_SMTP + " (Conexion rechazada o IP denegada)");
+            System.err.println("Detalle: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Correo de respuesta no enviado: " + ex.getMessage());
+            System.err.println("[ERROR I/O SMTP] " + ex.getMessage());
         } catch (Exception ex) {
-            System.out.println("Correo de respuesta no enviado: " + ex.getMessage());
+            System.err.println("[ERROR GENERAL SMTP] " + ex.getMessage());
         }
     }
 

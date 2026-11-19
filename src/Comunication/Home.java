@@ -30,6 +30,16 @@ public class Home {
     }
 
     public static void interprete(Email email) {
+        String remitente = email.getFrom() != null ? email.getFrom().trim() : "(desconocido)";
+        String asunto = email.getSubject() != null ? email.getSubject().trim() : "(vacio)";
+
+        System.out.println("================================================================================");
+        System.out.println("[COMUNICACION RECIBIDA]");
+        System.out.println("  * Remitente : " + remitente);
+        System.out.println("  * Asunto    : " + asunto);
+        System.out.println("  * Servidor  : grupo26sa@tecnoweb.org.bo (Vicerrectorado Firma Digital)");
+        System.out.println("================================================================================");
+
         SendEmail respuesta = new SendEmail();
 
         // Inicialización de Servicios del Vicerrectorado

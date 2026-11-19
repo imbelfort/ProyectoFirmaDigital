@@ -1,0 +1,114 @@
+================================================================================
+   EJEMPLO 2: FLUJO COMPLETO CON "CERTIFICADO DE NOTAS LEGALIZADO" (TIPO 3)
+   Probado y Validado 100% en Vivo - Vicerrectorado UAGRM
+================================================================================
+DESTINATARIO:  grupo26sa@tecnoweb.org.bo
+WEBMAIL:       http://localhost:8085
+CUENTA:        alumno / 123456
+
+HISTORIA:
+"Un estudiante solicita su Certificado de Notas Legalizado (Tipo 3). 
+Ventanilla revisa el expediente, emite una observacion por matricula, 
+el alumno la subsana, el Vicerrector firma digitalmente con SHA-256, 
+se genera el certificado oficial con QR y se despacha por correo."
+================================================================================
+
+PASO 1: SOLICITAR EL CERTIFICADO DE NOTAS (El Alumno inicia el tramite)
+--------------------------------------------------------------------------------
+Asunto (Subject): tramite agregar [3; Solicitud de Certificado de Notas Legalizado]
+Cuerpo: inicio
+Resultado: Se crea el tramite con codigo correlativo anual y estado INICIADO.
+
+
+PASO 2: CONSULTAR SU LISTA DE TRAMITES
+--------------------------------------------------------------------------------
+Asunto (Subject): tramite listar
+Cuerpo: listar
+Resultado: El alumno confirma su tramite en la tabla oficial con fecha y hora.
+
+
+PASO 3: ADJUNTAR HISTORIAL ACADEMICO DIGITAL
+--------------------------------------------------------------------------------
+Asunto (Subject): documento agregar [7; 1; Historial_Academico_2026.pdf; PDF; http://expedientes.uagrm.edu.bo/docs/historial_7.pdf]
+Cuerpo: adjunto
+Resultado: Se asocia el documento PDF al expediente 7.
+
+
+PASO 4: EMITIR OBSERVACION DE VENTANILLA (Control Academico)
+--------------------------------------------------------------------------------
+Asunto (Subject): observacion agregar [7; 2; OBSERVADO; Falta adjuntar la matricula universitaria vigente]
+Cuerpo: observacion
+Resultado: La observacion se registra con estado ABIERTA vinculada al tramite 7.
+
+
+PASO 5: LISTAR OBSERVACIONES
+--------------------------------------------------------------------------------
+Asunto (Subject): observacion listar
+Cuerpo: listar
+Resultado: La tabla muestra la observacion pendiente de atencion.
+
+
+PASO 6: SUBSANAR OBSERVACION (El Alumno presenta el documento)
+--------------------------------------------------------------------------------
+Asunto (Subject): observacion subsanar [2; Se adjunto la matricula universitaria vigente escaneada]
+Cuerpo: subsanar
+Resultado: El estado de la observacion cambia exitosamente a SUBSANADA.
+
+
+PASO 7: AVANZAR DE ETAPA EN EL FLUJO
+--------------------------------------------------------------------------------
+Asunto (Subject): flujo avanzar [7; REVISION_LEGAL; 2]
+Cuerpo: avanzar
+Resultado: El flujo avanza a la etapa REVISION_LEGAL con estado EN_PROCESO.
+
+
+PASO 8: CONSULTAR BITACORA DE AUDITORIA
+--------------------------------------------------------------------------------
+Asunto (Subject): bitacora consultar [7]
+Cuerpo: bitacora
+Resultado: Muestra el historial completo de eventos, fechas, horas y usuarios.
+
+
+PASO 9: FIRMA DIGITAL CONSOLIDADA (Vicerrector firma con SHA-256)
+--------------------------------------------------------------------------------
+Asunto (Subject): firma consolidada [7; 1; CERT-VIC-2026-NOTAS]
+Cuerpo: firma
+Resultado: Se estampa la firma criptografica SHA-256 con certificado oficial.
+
+
+PASO 10: GENERAR CERTIFICADO OFICIAL CON CODIGO QR
+--------------------------------------------------------------------------------
+Asunto (Subject): certificado generar [7; 1; Certificado Oficial de Calificaciones]
+Cuerpo: certificado
+Resultado: Genera el certificado oficial con identificador UUID y QR de validacion.
+
+
+PASO 11: DESPACHO FORMAL POR CORREO
+--------------------------------------------------------------------------------
+Asunto (Subject): despacho agregar [7; 2; DESP-NOTAS-2026-01; DIGITAL_CORREO]
+Cuerpo: despacho
+Resultado: El documento final firmado se despacha por correo al estudiante.
+
+
+PASO 12: AUDITAR TIEMPOS DE ATENCION (SLA 72 HORAS HABILES)
+--------------------------------------------------------------------------------
+Asunto (Subject): sla verificar [7]
+Cuerpo: sla
+Resultado: El sistema confirma que el tramite se resolvio en estado EN_TIEMPO (0.04h transcurridas).
+
+================================================================================
+LISTA DIRECTA PARA COPIAR Y PEGAR:
+================================================================================
+1.  tramite agregar [3; Solicitud de Certificado de Notas Legalizado]
+2.  tramite listar
+3.  documento agregar [7; 1; Historial_Academico_2026.pdf; PDF; http://expedientes.uagrm.edu.bo/docs/historial_7.pdf]
+4.  observacion agregar [7; 2; OBSERVADO; Falta adjuntar la matricula universitaria vigente]
+5.  observacion listar
+6.  observacion subsanar [2; Se adjunto la matricula universitaria vigente escaneada]
+7.  flujo avanzar [7; REVISION_LEGAL; 2]
+8.  bitacora consultar [7]
+9.  firma consolidada [7; 1; CERT-VIC-2026-NOTAS]
+10. certificado generar [7; 1; Certificado Oficial de Calificaciones]
+11. despacho agregar [7; 2; DESP-NOTAS-2026-01; DIGITAL_CORREO]
+12. sla verificar [7]
+================================================================================
